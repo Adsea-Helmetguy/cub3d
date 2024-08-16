@@ -96,12 +96,12 @@ static void	draw_boxes(t_game *game)
 
 static void	draw_player(t_game *game)
 {
-	int	array;
-	int	width;
-	int	height;
+	//int	array;
+	//int	width;
+	//int	height;
 
-	width = 0;
-	height = 0;
+	//width = 0;
+	//height = 0;
 	//we have both player width and height at this point, use mlx?
 	mlxpixel(game, game->player.width, game->player.height, 0x000000ff);
 }
