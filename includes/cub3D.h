@@ -51,7 +51,7 @@
 //define screen size
 # define SCREEN_WIDTH 1900 // screen width
 # define SCREEN_HEIGHT 1000 // screen height
-# define TILE_SIZE 30 // tile size
+# define TILE_SIZE 100 // tile size
 
 //define player
 //# define FOV 60 // field of view
