@@ -96,14 +96,23 @@ static void	draw_boxes(t_game *game)
 
 static void	draw_player(t_game *game)
 {
-	//int	array;
-	//int	width;
-	//int	height;
+	int	width;
+	int	height;
 
-	//width = 0;
-	//height = 0;
-	//we have both player width and height at this point, use mlx?
-	mlxpixel(game, game->player.width, game->player.height, 0x000000ff);
+	//thanks to init_variable_player, we have player width and height
+	mlxpixel(game, game->player.width, game->player.height, 0x00FFFF00);
+	height = (game->player.height - (TILE_SIZE / 10));
+	while (height <= game->player.height + (TILE_SIZE / 10))
+	{
+		width = (game->player.width - (TILE_SIZE / 10));
+		while (width <= game->player.width + (TILE_SIZE / 10))
+		{
+			mlxpixel(game, width, height, 0x00FFFF00);
+			width++;
+		}
+		height++;
+	}
+	
 }
 
 void	draw_display(t_game *game)
