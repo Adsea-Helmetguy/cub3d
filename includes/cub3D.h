@@ -114,8 +114,10 @@ typedef struct s_data //the data structure
 
 typedef struct s_player
 {
-	int		width;
-	int		height;
+//	int		width;
+//	int		height;
+	int		pixel_x;// player x(width) pixel position in the map
+	int		pixel_y;// player y(height) pixel position in the map
 //	int		steps_taken;
 //	int		rot; // rotation flag
 //	int		l_r; // left right flag

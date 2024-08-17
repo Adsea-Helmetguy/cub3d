@@ -32,8 +32,8 @@ void	init_variables(t_game *game)
 	game->elements.west_texture = NULL;
 	game->elements.east_texture = NULL;
 	//for player
-	game->player.width = 0;
-	game->player.height = 0;
+	game->player.pixel_x = 0;
+	game->player.pixel_y = 0;
 	//for mlx
 	game->mlx.addr = NULL;
 	game->mlx.bits_per_pixel = 0;
@@ -43,10 +43,10 @@ void	init_variables(t_game *game)
 
 void	init_variable_player(t_game *game)
 {
-	game->player.width = game->data.p_x * TILE_SIZE + TILE_SIZE / 2;
-	game->player.height = game->data.p_y * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_x = game->data.p_x * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_y = game->data.p_y * TILE_SIZE + TILE_SIZE / 2;
 	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
-	printf("player width: %d\nplayer height: %d\n", game->player.width, game->player.height);
+	printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
 	//player field of view and angle
 	//game->player.fov_rd = (FOV * M_PI) / 180;
 	//game->player.angle = M_PI;

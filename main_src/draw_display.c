@@ -101,12 +101,12 @@ static void	draw_player(t_game *game)
 	int	height;
 
 	//thanks to init_variable_player, we have player width and height
-	mlxpixel(game, game->player.width, game->player.height, 0x00FFFF00);
-	height = (game->player.height - (TILE_SIZE / 10));
-	while (height <= game->player.height + (TILE_SIZE / 10))
+	mlxpixel(game, game->player.pixel_x, game->player.pixel_y, 0x00FFFF00);
+	height = (game->player.pixel_y - (TILE_SIZE / 10));
+	while (height <= game->player.pixel_y + (TILE_SIZE / 10))
 	{
-		width = (game->player.width - (TILE_SIZE / 10));
-		while (width <= game->player.width + (TILE_SIZE / 10))
+		width = (game->player.pixel_x - (TILE_SIZE / 10));
+		while (width <= game->player.pixel_x + (TILE_SIZE / 10))
 		{
 			mlxpixel(game, width, height, 0x00FFFF00);
 			width++;
