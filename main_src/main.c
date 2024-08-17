@@ -28,6 +28,7 @@ int	start_the_game(char **argv)
 		return (1);
 	invalid_window_size_checker(&game);
 	mlxpixel_on_screen(&game);
+	//mlximage_on_screen(&game);//new add-on for the xpm.files
 	if (game.error_code != 0)
 		return (game_checkerror_exit("image_testmap", &game));
 //
@@ -66,21 +67,3 @@ int	main(int argc, char **argv)
 		return (1);
 	return (0);
 }
-//
-//
-/*
-int	main(void)
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-
-	mlx_ptr = mlx_init();
-	if (!mlx_ptr)
-		return (1);
-	win_ptr = mlx_new_window (mlx_ptr, 300, 300, "Hello World");
-	if (!win_ptr)
-		return (2);
-	mlx_loop(mlx_ptr);
-	return (0);
-}
-*/

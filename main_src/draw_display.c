@@ -12,6 +12,7 @@
 
 #include "../includes/cub3D.h"
 
+
 static void	draw_background(t_game *game)
 {
 	int	width;
@@ -114,12 +115,26 @@ static void	draw_player(t_game *game)
 	}
 	
 }
+//
+/*
+static void	draw_picture()
+{
+	int	index;
+	int	array;
+
+	index = 0;
+	array = 0;
+}
+*/
 
 void	draw_display(t_game *game)
 {
+	//(void)game;
 	draw_background(game);
 	draw_boxes(game);
 	draw_player(game);
+	
+	
 	//add others
 }
 /*

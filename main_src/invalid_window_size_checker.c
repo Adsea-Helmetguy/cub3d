@@ -17,8 +17,10 @@ void	invalid_window_size_checker(t_game *game)
 	int	window_x;
 	int	window_y;
 
-	window_x = game->data.map_w * TILE_SIZE;
-	window_y = game->data.map_h * TILE_SIZE;
+	//window_x = game->data.map_w * TILE_SIZE;
+	//window_y = game->data.map_h * TILE_SIZE;
+	window_x = 1920;
+	window_y = 1080;
 	game->screen_x = 0;
 	game->screen_y = 0;
 	mlx_get_screen_size(game->mlx.mlx_ptr, &game->screen_x, 

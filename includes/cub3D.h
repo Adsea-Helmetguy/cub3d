@@ -100,7 +100,6 @@ typedef struct s_element //the data structure
 	int		ceiling_color[3];//R,G,B colors in range [0,255]: 0, 255, 255
 }				t_element;
 
-
 typedef struct s_data //the data structure
 {
 	int		is_map_valid;//checking if map is even valid
@@ -213,6 +212,8 @@ int	game_checkerror_exit(char *message, t_game *game);
 //mlxpixel.c
 void	mlxpixel(t_game *game, int x, int y, int color);
 void	mlxpixel_on_screen(t_game *game);
+//mlximage.c
+void	mlximage_on_screen(t_game *game);
 
 //draw_display.c
 void	draw_display(t_game *game);
