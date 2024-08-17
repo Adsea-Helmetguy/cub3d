@@ -68,6 +68,7 @@ SRC_FILE_NAMES = main.c \
 		exit_function.c \
 		mousekey_hook.c \
 		mlxpixel.c \
+		mlximage.c \
 		draw_display.c \
 		exit_utils.c \
 		

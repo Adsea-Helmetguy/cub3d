@@ -33,6 +33,7 @@ void	mlxpixel(t_game *game, int x, int y, int color)
 //int offset = (y * line_length + mx * (bits_per_pixel / 8)); //use this in future
 void	mlxpixel_on_screen(t_game *game)
 {
+
 	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, 1900, 1000);
 	//Now, we have an image but no pixels
 	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
@@ -42,6 +43,6 @@ void	mlxpixel_on_screen(t_game *game)
 	//mlx_loop_hook()
 	//function display draw everything
 	draw_display(game);
-	//mlxpixel(game, 500, 500, 0x00FF0000);
+	mlxpixel(game, 500, 500, 0x00FF0000);//wait when does this happen/used???
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 }
