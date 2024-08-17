@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_variable.c                                  :+:      :+:    :+:   */
+/*   init_variables.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 17:59:13 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/10 18:32:35 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/17 18:13:10 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	init_variables(t_game *game)
 	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
-	game->data.p_x = 0;
-	game->data.p_y = 0;
+	game->player.p_x = 0;
+	game->player.p_y = 0;
 	game->data.map_w = 0;
 	game->data.map_h = 0;
 	game->data.fd = 0;
