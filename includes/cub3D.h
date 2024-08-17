@@ -105,8 +105,6 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
-	int		p_x;// player x(width) position in the map
-	int		p_y;// player y(height) position in the map
 	int		map_w;// map width
 	int		map_h;// map height
 	int		fd;
@@ -116,6 +114,8 @@ typedef struct s_player
 {
 	int		width;
 	int		height;
+	int		p_x;// player x(width) position in the map
+	int		p_y;// player y(height) position in the map
 //	int		steps_taken;
 //	int		rot; // rotation flag
 //	int		l_r; // left right flag
