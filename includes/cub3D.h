@@ -16,7 +16,7 @@
 # include "../other_srcs/libft_project/libft.h"
 # include "../other_srcs/printf_project/libftprintf.h"
 # include "../other_srcs/get_next_line_project/get_next_line_bonus.h"
-# include "../minilibx_stuff/minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>

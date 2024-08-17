@@ -38,11 +38,11 @@ GNL_FLAGS = -L $(GNL_SRC_DIR) -lft_get_next_line
 # -I : where to look for .h file
 
 #MLX file names and paths
-MLX_DIR = ./minilibx_stuff/minilibx-linux
+MLX_DIR = ./minilibx-linux
 MLX_LIB = $(MLX_DIR)/libmlx.a #could be /usr/lib, 
 
 #MLX_INC_HEADER_DIR = -I/usr/include -I $(MLX_DIR)
-MLX_FLAGS  = -L $(MLX_LIB) -L/minilibx_stuff/mlx -L/usr/lib/X11 -lXext -lX11
+MLX_FLAGS  = -L $(MLX_LIB) -L/minilibx-linux/mlx -L/usr/lib/X11 -lXext -lX11
 #MLX_FLAGS  = -L $(MLX_LIB) -L/minilibx_stuff/mlx -L/usr/lib/X11 -L/minilibx_stuff/Xext -L/minilibx_stuff/X11
 #-lmlx -L/usr/lib/X11 -lXext -lX11 got issues
 
