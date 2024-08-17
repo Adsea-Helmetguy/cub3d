@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2023/11/21 18:00:15 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/17 17:50:49 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@
 # define UP 2
 # define DOWN 3
 
-
+#define FOV_ANGLE 60
 
 
 
@@ -121,8 +121,8 @@ typedef struct s_player
 //	int		rot; // rotation flag
 //	int		l_r; // left right flag
 //	int		u_d; // up down flag
-//	double	angle;  // player angle
-//	float	fov_rd; // field of view in radians
+	double	angle;  // player angle
+	float	fov_rd; // field of view in radians
 	void	*start;
 	void	**location;
 }				t_player;
@@ -136,10 +136,10 @@ typedef struct	s_mlx
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-	
+
 }				t_mlx;
 
-typedef struct s_game 
+typedef struct s_game
 {
 	t_data		data;
 	t_element	elements;
@@ -224,6 +224,6 @@ void	draw_display(t_game *game);
 #include <stdlib.h> // exit()
 #include <fcntl.h> //open()
 #include <sys/wait.h> // wait() / waitpid()
-#include <sys/types.h> //for wait() / fork() / pid_t() / wait() / waitpid() 
-#include <errno.h> // for perror() 
+#include <sys/types.h> //for wait() / fork() / pid_t() / wait() / waitpid()
+#include <errno.h> // for perror()
 */

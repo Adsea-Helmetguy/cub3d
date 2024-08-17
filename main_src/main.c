@@ -3,14 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:57:56 by mlow              #+#    #+#             */
-/*   Updated: 2024/07/15 16:59:13 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/17 18:15:21 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
+
+double h_collision(t_game *game, double angle)
+{
+	double x_intercept;
+	double y_intercept;
+	double x_step;
+	double y_step;
+	double x_check;
+	double y_check;
+
+	y_intercept = floor(game->player.y / TILE_SIZE) * TILE_SIZE;
+	y_intercept += game->player.is_facing_down ? TILE_SIZE : 0;
+	x_intercept = game->player.x + (y_intercept - game->player.y) / tan(angle);
+	y_step = TILE_SIZE;
+	y_step *= game->player.is_facing_up ? -1 : 1;
+	x_step = TILE_SIZE / tan(angle);
+	x_step *= (game->player.is_facing_left && x_step > 0) ? -1 : 1;
+	x_step *= (game->player.is_facing_right && x_step < 0) ? -1 : 1;
+	x_check = x_intercept;
+	y_check = y_intercept;
+	while (x_check >= 0 && x_check <= game->data.map_w * TILE_SIZE && y_check >= 0 && y_check <= game->data.map_h * TILE_SIZE)
+	{
+		if (has_wall_at(game, x_check, y_check))
+			return (distance(game->player.x, game->player.y, x_check, y_check));
+		x_check += x_step;
+		y_check += y_step;
+	}
+	return (INT_MAX);
+}
+
+void raycasting(t_game *game)
+{
+	double h_col;
+	double v_col;
+	double angle;
+
+	angle = game->player.angle - (FOV_ANGLE / 2);
+	while (angle < game->player.angle + (FOV_ANGLE / 2))
+	{
+		h_col = h_collision(game, angle);
+		v_col = v_collision(game, angle);
+		if (h_col < v_col)
+		{
+			//draw vertical line
+		}
+		else
+		{
+			//draw horizontal line
+		}
+		angle += (FOV_ANGLE / SCREEN_WIDTH);
+	}
+}
+
+int gameplay(t_game *game)
+{
+	raycasting(game);
+}
 
 int	start_the_game(char **argv)
 {
