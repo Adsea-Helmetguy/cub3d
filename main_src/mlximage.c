@@ -19,6 +19,11 @@ void	mlximage_on_screen(t_game *game)
 
 	size = 10;
 	img = mlx_xpm_file_to_image(game->mlx.mlx_ptr, game->elements.south_texture, &size, &size);
+	if (img == NULL)
+	{
+		ft_putstr_fd("player unable to find XPM file", 1);
+		return ;
+	}
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, img, 20, 20);
 	// the location of where to put the image can be changed, right now i put it as
 	//20, 20(x, y);
