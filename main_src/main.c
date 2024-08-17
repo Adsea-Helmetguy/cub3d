@@ -32,7 +32,9 @@ int	start_the_game(char **argv)
 	if (game.error_code != 0)
 		return (game_checkerror_exit("image_testmap", &game));
 //
-//these two needs fixing
+//
+	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
+	// game loop continuously call a specified function to update the game state and render the frames.
 	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
 	mlx_loop(game.mlx.mlx_ptr);

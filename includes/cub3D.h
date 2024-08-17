@@ -112,6 +112,7 @@ typedef struct s_data //the data structure
 
 typedef struct s_player
 {
+
 	int		width;
 	int		height;
 	int		p_x;// player x(width) position in the map
