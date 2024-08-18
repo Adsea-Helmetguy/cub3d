@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:35:29 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/17 18:13:12 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/06 18:04:22 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 		ftps_free(tmp_map);
 		return (0);
 	}
-	map_floodfill(&tmp_map, game, game->player.p_x, game->player.p_y);
-	map_floodfill2(&tmp_map, game, game->player.p_x, game->player.p_y);
+	map_floodfill(&tmp_map, game, game->data.p_x, game->data.p_y);
+	map_floodfill2(&tmp_map, game, game->data.p_x, game->data.p_y);
 //floodfill completed!
 //check if map is unclosed, creating tmp_map2
 	tmp_map2 = tmp_map2_helper(game, tmp_map);

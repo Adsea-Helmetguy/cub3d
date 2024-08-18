@@ -51,7 +51,7 @@
 //define screen size
 # define SCREEN_WIDTH 1900 // screen width
 # define SCREEN_HEIGHT 1000 // screen height
-# define TILE_SIZE 100 // tile size
+# define TILE_SIZE 30 // tile size
 
 //define player
 //# define FOV 60 // field of view
@@ -105,6 +105,8 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
+	int		p_x;// player x(width) position in the map
+	int		p_y;// player y(height) position in the map
 	int		map_w;// map width
 	int		map_h;// map height
 	int		fd;
@@ -115,8 +117,8 @@ typedef struct s_player
 
 	int		width;
 	int		height;
-	int		p_x;// player x(width) position in the map
-	int		p_y;// player y(height) position in the map
+	int		pixel_x;
+	int		pixel_y;
 //	int		steps_taken;
 //	int		rot; // rotation flag
 //	int		l_r; // left right flag
