@@ -90,7 +90,7 @@ GNL_OBJ_FILE_PATHS = $(GNL_FILE_PATHS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(MLX_LIB) $(OBJ_FILE_PATHS) $(LIBFT) $(PRINTF) $(GNL)
-	$(CC) $(CFLAGS) $(OBJ_FILE_PATHS) $(MLX_LIB) -Lminilibx-linux -L$(MLX_FLAGS) $(LIB_FLAGS) $(PRINTF_FLAGS) $(GNL_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ_FILE_PATHS) $(MLX_LIB) -Lminilibx-linux -lm -L$(MLX_FLAGS) $(LIB_FLAGS) $(PRINTF_FLAGS) $(GNL_FLAGS) -o $(NAME)
 
 $(LIBFT): 
 	@make -sC $(LIBFT_SRC_DIR)

@@ -49,7 +49,7 @@
 # define ESC 65307
 
 //define screen size
-# define SCREEN_WIDTH 1900 // screen width
+# define SCREEN_WIDTH 1600 // screen width
 # define SCREEN_HEIGHT 1000 // screen height
 # define TILE_SIZE 30 // tile size
 
@@ -110,6 +110,8 @@ typedef struct s_data //the data structure
 	int		map_w;// map width
 	int		map_h;// map height
 	int		fd;
+	double	distance;
+	int 	flag;
 }				t_data;
 
 typedef struct s_player
