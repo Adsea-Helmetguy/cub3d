@@ -17,7 +17,7 @@ typedef struct	s_data {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
-	int		line_length;
+	int		line_length;z
 	int		endian;
 }				t_data;
 */
@@ -33,7 +33,6 @@ void	mlxpixel(t_game *game, int x, int y, int color)
 //int offset = (y * line_length + mx * (bits_per_pixel / 8)); //use this in future
 void	mlxpixel_on_screen(t_game *game)
 {
-
 	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, 1900, 1000);
 	//Now, we have an image but no pixels
 	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
