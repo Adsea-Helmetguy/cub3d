@@ -13,6 +13,15 @@
 #include "../includes/cub3D.h"
 # include <math.h>
 
+float nor_angle(float angle) // normalize the angle
+{
+	if (angle < 0)
+		angle += 360;
+	if (angle > 360)
+		angle -= 360;
+	return (angle);
+}
+
 int x_positive(double angle) //facing right true facing left false
 {
 	if (angle > 90 || angle < 270)
@@ -129,7 +138,7 @@ void raycasting(t_game *game)
 			game->data.flag = 1;
 		}
 		// printf("distance: %f\n", game->data.distance);
-		render_wall(game, ray, angle); // render the wall
+		// render_wall(game, ray, angle); // render the wall
 		ray++; // next ray
 		angle += increment;
 		angle = nor_angle(angle);
