@@ -25,6 +25,8 @@ void	init_variables(t_game *game)
 	game->data.p_y = 0;
 	game->data.map_w = 0;
 	game->data.map_h = 0;
+	game->data.map_w_in_pixels = 0;
+	game->data.map_h_in_pixels = 0;
 	game->data.fd = 0;
 	//elements
 	game->elements.north_texture = NULL;
@@ -34,7 +36,25 @@ void	init_variables(t_game *game)
 	//for player
 	game->player.pixel_x = 0;
 	game->player.pixel_y = 0;
+	game->player.dir_x = 0;
+	game->player.dir_y = 0;
+	game->player.plane_x = 0;
+	game->player.plane_y = 0;
+	game->player.sidedir_x = 0;
+	game->player.sidedir_y= 0;
+	game->player.raydir_x = 0;
+	game->player.raydir_y = 0;
+	game->player.step_x = 0;
+	game->player.step_y = 0;
+	game->player.rotation = 0;
+	game->player.left_right = 0;
+	game->player.up_down = 0;
+	game->player.angle = 0;
+	game->player.fov_rd = 0;
 	//for mlx
+	game->mlx.mlx_ptr = NULL;
+	game->mlx.win_ptr = NULL;
+	game->mlx.img_ptr = NULL;
 	game->mlx.addr = NULL;
 	game->mlx.bits_per_pixel = 0;
 	game->mlx.line_length = 0;
@@ -46,7 +66,7 @@ void	init_variable_player(t_game *game)
 	game->player.pixel_x = game->data.p_x * TILE_SIZE + TILE_SIZE / 2;
 	game->player.pixel_y = game->data.p_y * TILE_SIZE + TILE_SIZE / 2;
 	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
-	printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
+	printf("player width: %f\nplayer height: %f\n", game->player.pixel_x, game->player.pixel_y);
 	//player field of view and angle
 	//game->player.fov_rd = (FOV * M_PI) / 180;
 	//game->player.angle = M_PI;

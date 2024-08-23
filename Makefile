@@ -62,7 +62,9 @@ SRC_FILE_NAMES = main.c \
 		get_variables.c \
 		search_value_color.c \
 		init_variables.c \
-		invalid_window_size_checker.c \
+		player.c \
+		player_movement.c \
+		window_screen_creation.c \
 		ft_strcmp.c \
 		print_msg.c \
 		exit_function.c \
@@ -70,7 +72,9 @@ SRC_FILE_NAMES = main.c \
 		mlxpixel.c \
 		mlximage.c \
 		draw_display.c \
+		redraw_mlx.c \
 		exit_utils.c \
+		debug.c \
 		
 		
 		

@@ -13,6 +13,134 @@
 #include "../includes/cub3D.h"
 # include <math.h>
 
+static void	starting_view(t_game *game)
+{
+	game->mlx.mlx_ptr = mlx_init();
+	if (!(game->mlx.mlx_ptr))
+	{
+		game->error_code = 1;
+		return ;
+	}
+	player_set_direction(game);
+	window_screen_creation(game);
+	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//if ((!game.mlx.img_ptr))
+	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
+				&game->mlx.line_length, &game->mlx.endian);
+	mlxpixel_on_screen(game);
+	//mlximage_on_screen(&game);//new add-on for the xpm.files
+}
+
+static void	starting_game(t_game *game)
+{
+	int	map_x;
+	int	map_y;
+
+	map_x = (int)game->player.pixel_x;
+	map_y = (int)game->player.pixel_y;
+//
+//
+	player_raydir_get(game);
+	player_deltadist_get(game);
+	player_sidedist_get(game, map_x, map_y);
+	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, closehook, game);
+	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
+	//mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
+}
+
+int	start_the_game(char **argv)
+{
+	t_game		game;
+
+	init_variables(&game);
+	open_testmap(&game, argv[1]);
+	init_variable_player(&game);
+//
+//game start!!
+	starting_view(&game);//mlx_init is here
+	if (game.error_code != 0)
+		return (game_checkerror_exit("cub3d testmap", &game));
+	starting_game(&game);
+	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
+	//game loop continuously call a specified function to update the game state and render the frames.
+	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
+	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
+	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
+	mlx_loop(game.mlx.mlx_ptr);
+	close(game.data.fd);
+	//free the element_values() here
+	free_end_exit("just for valgrind\n", 0, &game, NULL);
+	return (0);
+}
+
+//./cub3D ./map/maplocation (only 1 argument)
+//e.g make re && ./cub3D assets/cub_maps/valid_cub/valid3.cub
+//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
+//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
+//e.g //make re && valgrind --leak-check=full --show-leak-kinds=all ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
+//(success!)
+//use this:
+//https://medium.com/@afatir.ahmedfatir/cub3d-tutorial-af5dd31d2fcf
+//check game first before doing the mlx, look at notion map creation!
+//https://www.notion.so/How-to-do-the-map-5a032dfe0f5549139bbd458b021a3175
+int	main(int argc, char **argv)
+{
+	if (argc != 2)
+	{
+		printf("Error, not enough arguments");
+		return (1);
+	}
+	else if (ft_strncmp(argv[1] + (ft_strlen(argv[1]) - 4), ".cub", 4))
+	{
+		printf("File must end with \".cub\" extension.\n");
+		return (0);
+	}
+	printf("\n-----------\nSuccess! It is a \".cub\" file!!!\n-----------\n");
+	if (start_the_game(argv))
+		return (1);
+	return (0);
+}
+//
+/*
+int	start_the_game(char **argv)
+{
+	t_game		game;
+
+	init_variables(&game);
+	open_testmap(&game, argv[1]);
+	init_variable_player(&game);
+//
+//game start!!
+	game.error_code = starting_view(&game);//mlx_init is here
+//	game.mlx.mlx_ptr = mlx_init();
+//	if (!(game.mlx.mlx_ptr))
+//		return (1);
+//	window_screen_creation(&game);
+	game.mlx.img_ptr = mlx_new_image(game.mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//Now, we have an image but no pixels
+	game.mlx.addr = mlx_get_data_addr(game.mlx.img_ptr, &game.mlx.bits_per_pixel,
+				&game.mlx.line_length, &game.mlx.endian);
+	//gameplay(&game);
+	mlxpixel_on_screen(&game);
+	//mlximage_on_screen(&game);//new add-on for the xpm.files
+	if (game.error_code != 0)
+		return (game_checkerror_exit("image_testmap", &game));
+//
+//
+	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
+	// game loop continuously call a specified function to update the game state and render the frames.
+	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
+	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
+	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
+	mlx_loop(game.mlx.mlx_ptr);
+	close(game.data.fd);
+	//free the element_values() here
+	free_end_exit("just for valgrind\n", 0, &game, NULL);
+	return (0);
+}
+*/
+//
+/*
 float nor_angle(float angle) // normalize the angle
 {
 	if (angle < 0)
@@ -153,67 +281,4 @@ int gameplay(t_game *game)
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 	return (0);
 }
-
-//check game first before doing the mlx, look at notion map creation!
-//https://www.notion.so/How-to-do-the-map-5a032dfe0f5549139bbd458b021a3175
-int	start_the_game(char **argv)
-{
-	t_game		game;
-
-	init_variables(&game);
-	open_testmap(&game, argv[1]);
-	init_variable_player(&game);
-//
-//game start!!
-	game.mlx.mlx_ptr = mlx_init();
-	if (!(game.mlx.mlx_ptr))
-		return (1);
-	invalid_window_size_checker(&game);
-	game.mlx.img_ptr = mlx_new_image(game.mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//Now, we have an image but no pixels
-	game.mlx.addr = mlx_get_data_addr(game.mlx.img_ptr, &game.mlx.bits_per_pixel,
-				&game.mlx.line_length, &game.mlx.endian);
-	//gameplay(&game);
-	//mlxpixel_on_screen(&game);
-	//mlximage_on_screen(&game);//new add-on for the xpm.files
-	if (game.error_code != 0)
-		return (game_checkerror_exit("image_testmap", &game));
-//
-//
-	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
-	// game loop continuously call a specified function to update the game state and render the frames.
-	mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
-	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
-	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
-	mlx_loop(game.mlx.mlx_ptr);
-	close(game.data.fd);
-	//free the element_values() here
-	free_end_exit("just for valgrind\n", 0, &game, NULL);
-	return (0);
-}
-
-//./cub3D ./map/maplocation (only 1 argument)
-//e.g make re && ./cub3D assets/cub_maps/valid_cub/valid3.cub
-//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
-//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
-//e.g //make re && valgrind --leak-check=full --show-leak-kinds=all ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
-//(success!)
-//use this:
-//https://medium.com/@afatir.ahmedfatir/cub3d-tutorial-af5dd31d2fcf
-int	main(int argc, char **argv)
-{
-	if (argc != 2)
-	{
-		printf("Error, not enough arguments");
-		return (1);
-	}
-	else if (ft_strncmp(argv[1] + (ft_strlen(argv[1]) - 4), ".cub", 4))
-	{
-		printf("File must end with \".cub\" extension.\n");
-		return (0);
-	}
-	printf("\n-----------\nSuccess! It is a \".cub\" file!!!\n-----------\n");
-	if (start_the_game(argv))
-		return (1);
-	return (0);
-}
+*/

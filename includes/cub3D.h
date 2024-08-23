@@ -18,6 +18,7 @@
 # include "../other_srcs/get_next_line_project/get_next_line_bonus.h"
 # include "../minilibx-linux/mlx.h"
 # include <stdio.h>
+# include <stdbool.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
@@ -51,18 +52,16 @@
 //define screen size
 # define SCREEN_WIDTH 1600 // screen width
 # define SCREEN_HEIGHT 1000 // screen height
-# define TILE_SIZE 30 // tile size
+# define TILE_SIZE 100 // tile size
 
 //define player
-//# define FOV 60 // field of view
-//# define ROTATION_SPEED 0.045 // rotation speed
-//# define PLAYER_SPEED 4 // player speed
+# define FOV_ANGLE 60 //how the player views the world
+# define ROTATE_SPEED 0.045 // rotation speed
+# define MOVE_SPEED 4 // player speed
 # define RIGHT 0
 # define LEFT 1
 # define UP 2
 # define DOWN 3
-
-#define FOV_ANGLE 60
 
 
 
@@ -109,6 +108,8 @@ typedef struct s_data //the data structure
 	int		p_y;// player y(height) position in the map
 	int		map_w;// map width
 	int		map_h;// map height
+	double		map_w_in_pixels;
+	double		map_h_in_pixels;
 	int		fd;
 	double	distance;
 	int 	flag;
@@ -116,15 +117,23 @@ typedef struct s_data //the data structure
 
 typedef struct s_player
 {
-
-	int		width;
-	int		height;
-	int		pixel_x;
-	int		pixel_y;
+	char		direction;//start direction
+	double		pixel_x;//location of player in x in DOUBLE
+	double		pixel_y;//location of player in y in DOUBLE
+	double		dir_x;//where the direction player faces in x
+	double		dir_y;//where the direction player faces in y
+	double		plane_x;//the plane in x
+	double		plane_y;//the plane in y
+	double		sidedir_x;
+	double		sidedir_y;
+	double		raydir_x;
+	double		raydir_y;
+	int		step_x;
+	int		step_y;
 //	int		steps_taken;
-//	int		rot; // rotation flag
-//	int		l_r; // left right flag
-//	int		u_d; // up down flag
+	int		rotation; // rotation flag
+	int		left_right; // left right flag
+	int		up_down; // up down flag
 	double	angle;  // player angle
 	float	fov_rd; // field of view in radians
 	void	*start;
@@ -161,7 +170,6 @@ int	start_the_game(char **argv);
 //testmap.c
 void	open_testmap(t_game *game, char *map_path);
 
-
 //check.c
 int	check_cub_valid_or_not(t_game *game, char **readmap);
 
@@ -194,8 +202,18 @@ char	*search_for_value(char **split_map, char *var_name);
 void	init_variables(t_game *game);
 void	init_variable_player(t_game *game);
 
-//invalid_window_size_checker.c
-void	invalid_window_size_checker(t_game *game);
+//player.c
+void	player_sidedist_get(t_game *game, int map_x, int map_y);
+void	player_deltadist_get(t_game *game);
+void	player_raydir_get(t_game *game);
+void	player_set_direction(t_game *game);
+
+//player_movement
+int	rotate(double *x, double *y, double angle);
+int	move(t_game *game, double dx, double dy);
+
+//window_screen_creation.c
+void	window_screen_creation(t_game *game);
 
 //ft_strcmp.c
 int	ft_strcmp(char *s1, char *s2);
@@ -208,6 +226,7 @@ void	end_exit(char *message, int exit_code, t_game *game);
 void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
 
 //mousekey_hook.c
+int	closehook(t_game *game);
 int	keyhook(int keycode, t_game *game);
 
 //exit_utils.c
@@ -215,6 +234,7 @@ int	x_close_window(t_game *game);
 int	game_checkerror_exit(char *message, t_game *game);
 
 //mlxpixel.c
+int	mixpixel_render(t_game *game);
 void	mlxpixel(t_game *game, int x, int y, int color);
 void	mlxpixel_on_screen(t_game *game);
 //mlximage.c
@@ -222,6 +242,12 @@ void	mlximage_on_screen(t_game *game);
 
 //draw_display.c
 void	draw_display(t_game *game);
+
+//render_mlx.c
+void	redraw_player(t_game *game);
+
+//debug.c
+void	debug_check(t_game *game);
 
 #endif
 /*

@@ -13,14 +13,24 @@
 #include "../includes/cub3D.h"
 
 /*
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;z
-	int		endian;
-}				t_data;
+int	render_images(t_data *data)
+{
+	init_texture_pixels(data);
+	calc_raycast(data);
+	render_frame(data);
+	mlx_put_image_to_window(data->view.mlx, data->view.win, \
+	data->view.screen.img, 0, 0);
+	return (0);
+}
 */
+int	mixpixel_render(t_game *game)
+{
+	//redraw_player(game);
+	draw_display(game);
+	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
+	return (0);
+}
+
 
 void	mlxpixel(t_game *game, int x, int y, int color)
 {
@@ -42,6 +52,6 @@ void	mlxpixel_on_screen(t_game *game)
 	//mlx_loop_hook()
 	//function display draw everything
 	draw_display(game);
-	mlxpixel(game, 500, 500, 0x00FF0000);//wait when does this happen/used???
+	//mlxpixel(game, 500, 500, 0x00FF0000);//wait when does this happen/used???
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 }

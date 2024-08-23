@@ -113,7 +113,6 @@ static void	draw_player(t_game *game)
 		}
 		height++;
 	}
-	
 }
 //
 /*

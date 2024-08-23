@@ -85,6 +85,7 @@ int	fill_space_tab(t_game *game, char ***tmp_map)
 				gottem += 1;
 				game->data.p_x = index;//width
 				game->data.p_y = array;//height
+				game->player.direction = (*tmp_map)[array][index];
 			}
 		}
 	}
