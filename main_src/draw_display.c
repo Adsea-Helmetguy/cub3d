@@ -13,7 +13,7 @@
 #include "../includes/cub3D.h"
 
 
-static void	draw_background(t_game *game)
+void	draw_background(t_game *game)
 {
 	int	width;
 	int	height;
@@ -26,6 +26,7 @@ static void	draw_background(t_game *game)
 			mlxpixel(game, width, height, 0x00000000);
 	}
 }
+
 
 static int	drawlines_width(int width, int index, int array, t_game *game)
 {
@@ -114,78 +115,11 @@ static void	draw_player(t_game *game)
 		height++;
 	}
 }
-//
-/*
-static void	draw_picture()
-{
-	int	index;
-	int	array;
-
-	index = 0;
-	array = 0;
-}
-*/
 
 void	draw_display(t_game *game)
 {
-	//(void)game;
-	draw_background(game);
+	//draw_background(game);
 	draw_boxes(game);
 	draw_player(game);
-	
-	
 	//add others
 }
-/*
-------------------
-|Original working|
-------------------
-static void	draw_boxes(t_game *game)
-{
-	int	index;
-	int	array;
-	int	width;
-	int	height;
-
-	if (game->data.map2d)
-	{
-		array = 0;
-		while (game->data.map2d[array])
-		{
-			width = 0;
-			index = 0;
-			while (game->data.map2d[array][index])
-			{
-				while (width <= ((index + 1) * TILE_SIZE))
-				{
-					height = (array * TILE_SIZE);
-					while (height < (array + 1) * TILE_SIZE)
-					{
-						if (game->data.map2d[array][index] == '1')
-							mlxpixel(game, width, height, 0x00ffffff);
-						height++;
-					}
-					if (game->data.map2d[array][index] == '1')
-					{
-						mlxpixel(game, width, (array * TILE_SIZE), 0x000000ff);
-						mlxpixel(game, width, ((array + 1) * TILE_SIZE), 0x000000ff);
-					}
-					width++;
-				}
-				height = (array * TILE_SIZE);
-				while (height <= ((array + 1) * TILE_SIZE))
-				{
-					if (game->data.map2d[array][index] == '1')
-					{
-						mlxpixel(game, (index * TILE_SIZE), height, 0x000000ff);
-						mlxpixel(game, ((index + 1) * TILE_SIZE), height, 0x000000ff);
-					}
-					height++;
-				}
-				index++;
-			}
-			array++;
-		}
-	}
-}
-*/

@@ -6,7 +6,7 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:57:18 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/21 13:19:39 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/28 21:39:26 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,67 @@
 //############################## THE MOUVEMENT CODE ##############################//
 //################################################################################//
 
+void	player_dda_get(t_game *game)
+{
+	double	deltaDistX;
+	double	deltaDistY;
+	int		hit;
+	double		line;
+
+	hit = 0;
+	deltaDistX = game->ray.deltadist_x;
+	deltaDistY = game->ray.deltadist_y;
+	game->ray.p_x = game->data.p_x;
+	game->ray.p_y = game->data.p_y;
+	game->ray.perpwalldist = 0;
+	line = 0;
+	while (hit == 0)
+	{
+		//jump to next map square, either in x-direction, or in y-direction
+		//if sideDistX finds the end width of the box first
+		if (game->player.sidedir_x < game->player.sidedir_y)
+		{
+			game->player.sidedir_x += deltaDistX;
+			game->ray.p_x += game->player.step_x;
+			game->ray.hit_side = EAST_WEST_SIDE;
+		}
+		else//if sideDistY finds the end height of the box first
+		{
+			game->player.sidedir_y += deltaDistY;
+			game->ray.p_y += game->player.step_y;
+			game->ray.hit_side = NORTH_SOUTH_SIDE;
+		}
+		if (game->data.map2d[game->ray.p_y][game->ray.p_x] == '1')
+		{
+			hit = 1;
+		}
+	}
+/*
+	//printf("value of game->player.sidedir_y: %f\n", game->player.sidedir_y);
+	if (game->ray.hit_side == NORTH_SOUTH_SIDE)
+	{
+		line = game->player.pixel_y;
+		while (++line < game->player.sidedir_y * TILE_SIZE)
+			mlxpixel(game, game->player.pixel_x, line, 0x00FF0000);
+	}
+	else if (game->ray.hit_side == EAST_WEST_SIDE)
+	{
+		line = game->player.pixel_x;
+		while (++line < game->player.sidedir_x * TILE_SIZE)
+			mlxpixel(game, line, game->player.pixel_y, 0x00FF0000);
+	}	
+*/
+	if (game->ray.hit_side == EAST_WEST_SIDE)
+	{
+		game->ray.perpwalldist = (game->player.sidedir_x - deltaDistX);
+	}
+	else
+	{
+		game->ray.perpwalldist = (game->player.sidedir_y - deltaDistY);
+	}
+}
+
+//calculate step and initial sideDist
 void	player_sidedist_get(t_game *game, int map_x, int map_y)
 {
 	double	rayDirX;
@@ -22,16 +83,16 @@ void	player_sidedist_get(t_game *game, int map_x, int map_y)
 	double	deltaDistX;
 	double	deltaDistY;
 
-	rayDirX = game->player.raydir_x;
-	rayDirY = game->player.raydir_y;
-	deltaDistX = game->player.raydir_x;
-	deltaDistY = game->player.raydir_y;
+	rayDirX = game->ray.dir_x;
+	rayDirY = game->ray.dir_y;
+	deltaDistX = game->ray.deltadist_x;
+	deltaDistY = game->ray.deltadist_y;
 	if (rayDirX < 0)
 	{
 		game->player.step_x = -1;
 		game->player.sidedir_x = (game->player.pixel_x - map_x) * deltaDistX;
 	}
-	else if (rayDirX > 0)
+	else
 	{
 		game->player.step_x = 1;
 		game->player.sidedir_x = (map_x + 1 - game->player.pixel_x) * deltaDistX;
@@ -41,13 +102,12 @@ void	player_sidedist_get(t_game *game, int map_x, int map_y)
 		game->player.step_y = -1;
 		game->player.sidedir_y = (game->player.pixel_y - map_y) * deltaDistY;
 	}
-	else if (rayDirY > 0)
+	else
 	{
 		game->player.step_y = 1;
 		game->player.sidedir_y = (map_y + 1 - game->player.pixel_y) * deltaDistY;
 	}
 }
-
 
 void	player_deltadist_get(t_game *game)
 {
@@ -56,8 +116,8 @@ void	player_deltadist_get(t_game *game)
 	double	deltaDistX;
 	double	deltaDistY;
 
-	rayDirX = game->player.raydir_x;
-	rayDirY = game->player.raydir_y;
+	rayDirX = game->ray.dir_x;
+	rayDirY = game->ray.dir_y;
 	deltaDistX = 0;
 	deltaDistY = 0;
 	if (rayDirX == 0)
@@ -68,40 +128,12 @@ void	player_deltadist_get(t_game *game)
 		deltaDistY = 1e30;
 	else if (rayDirY != 0)
 		deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
-	game->player.raydir_x = deltaDistX;
-	game->player.raydir_y = deltaDistY;
-	if (deltaDistX == 1e30)
-		game->player.raydir_x = 0;
-	if (deltaDistY == 1e30)
-		game->player.raydir_y = 0;
-	printf("Value of deltaDistX: %f\n", game->player.raydir_x);
-	printf("Value of deltaDistY: %f\n", game->player.raydir_y);
-}
-
-
-void	player_raydir_get(t_game *game)
-{
-	double	camera_x;
-	double	raydir_x;
-	double	raydir_y;
-	double	w;
-	double	x;
-
-	w = (double)SCREEN_WIDTH;
-	printf("Value of w: %f\n", w);
-	x = game->player.pixel_x - 1;// or x = -1;
-	while (++x < w)
-	{
-		//calculate ray position and direction
-		camera_x = 2 * game->player.pixel_x / w - 1;//x-coordinate in camera space
-		raydir_x = game->player.dir_x + game->player.plane_x * camera_x;
-		raydir_y = game->player.dir_y + game->player.plane_y * camera_x;
-	}
-	game->player.raydir_x = raydir_x;
-	game->player.raydir_y = raydir_y;
-	printf("Value of x: %f\n", x);
-	printf("Value of raydir_x: %f\n", game->player.raydir_x);
-	printf("Value of raydir_y: %f\n", game->player.raydir_y);
+	game->ray.deltadist_x = deltaDistX;
+	game->ray.deltadist_y = deltaDistY;
+	//if (deltaDistX == 1e30)//detele this mistake later!
+	//	game->ray.deltadist_x = 0;
+	//if (deltaDistY == 1e30)
+	//	game->ray.deltadist_y = 0;
 }
 
 void	player_set_direction(t_game *game)
@@ -126,9 +158,6 @@ void	player_set_direction(t_game *game)
 		game->player.dir_y = 1;
 		game->player.plane_y = 0.66;
 	}
-	printf("Player_direction = %c\n", game->player.direction);
-	printf("Plane_x: %f\n", game->player.plane_x);
-	printf("Plane_y: %f\n", game->player.plane_y);
 }
 
 

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:57:56 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/17 18:15:21 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:45:30 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
-# include <math.h>
 
 static void	starting_view(t_game *game)
 {
@@ -33,19 +32,10 @@ static void	starting_view(t_game *game)
 
 static void	starting_game(t_game *game)
 {
-	int	map_x;
-	int	map_y;
-
-	map_x = (int)game->player.pixel_x;
-	map_y = (int)game->player.pixel_y;
-//
-//
-	player_raydir_get(game);
-	player_deltadist_get(game);
-	player_sidedist_get(game, map_x, map_y);
 	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, closehook, game);
 	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
-	//mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
+	mlx_hook(game->mlx.win_ptr, 03, 1L<<1, keyhook_release, game);
+	mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
 }
 
 int	start_the_game(char **argv)
@@ -61,10 +51,6 @@ int	start_the_game(char **argv)
 	if (game.error_code != 0)
 		return (game_checkerror_exit("cub3d testmap", &game));
 	starting_game(&game);
-	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
-	//game loop continuously call a specified function to update the game state and render the frames.
-	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
-	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
 	mlx_loop(game.mlx.mlx_ptr);
 	close(game.data.fd);

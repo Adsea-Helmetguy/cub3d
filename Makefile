@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mlow <marvin@42.fr>                        +#+  +:+       +#+         #
+#    By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/27 18:14:15 by mlow              #+#    #+#              #
-#    Updated: 2023/11/29 16:11:30 by mlow             ###   ########.fr        #
+#    Updated: 2024/08/28 17:00:33 by mlow             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ MLX_FLAGS  = -L $(MLX_LIB) -L/minilibx-linux/mlx -L/usr/lib/X11 -lXext -lX11
 
 
 # ************************************************************************** */
-#	SOURCE                                                               */
+#	SOURCE                                                                   */
 # ************************************************************************** */
 #List of SOURCE(SRC) files
 SRC_FILE_NAMES = main.c \
@@ -62,6 +62,7 @@ SRC_FILE_NAMES = main.c \
 		get_variables.c \
 		search_value_color.c \
 		init_variables.c \
+		raycasting_calculation.c \
 		player.c \
 		player_movement.c \
 		window_screen_creation.c \
@@ -72,7 +73,6 @@ SRC_FILE_NAMES = main.c \
 		mlxpixel.c \
 		mlximage.c \
 		draw_display.c \
-		redraw_mlx.c \
 		exit_utils.c \
 		debug.c \
 		

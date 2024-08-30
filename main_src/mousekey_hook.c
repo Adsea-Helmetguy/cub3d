@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mousekey_hook.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:48:30 by mlow              #+#    #+#             */
-/*   Updated: 2023/12/05 15:48:38 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/28 20:53:01 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@ int	closehook(t_game *game)
 	exit(0);
 }
 
-static void	keyhook_movement(int keycode, t_game *game)
+void	keyhook_movement(t_game *game)
 {
 	int		x;
 	int		y;
 
 	x = game->player.pixel_x;
 	y = game->player.pixel_y;
-	if (keycode == W_KEY)
+	if (game->key.w_pressed)
 		move(game, game->player.dir_x, game->player.dir_y);
-	if (keycode == S_KEY)
+	if (game->key.s_pressed)
 		move(game, -(game->player.dir_x), -(game->player.dir_y));
-	if (keycode == A_KEY)
+	if (game->key.a_pressed)
 	{
 		rotate(&game->player.dir_x, &game->player.dir_y, -ROTATE_SPEED);
 		rotate(&game->player.plane_x, &game->player.plane_y, -ROTATE_SPEED);
 	}
-	if (keycode == D_KEY)
+	if (game->key.d_pressed)
 	{
 		rotate(&game->player.dir_x, &game->player.dir_y, ROTATE_SPEED);
 		rotate(&game->player.plane_x, &game->player.plane_y, ROTATE_SPEED);
@@ -49,14 +49,58 @@ static void	keyhook_movement(int keycode, t_game *game)
 	debug_check(game);//@debug.c file but basically it printf all current values.
 }
 
+int	keyhook_release(int keycode, t_game *game)
+{
+	if (keycode == W_KEY)
+	{
+		game->key.w_pressed = 0;
+		printf("KEY W RELEASED = %d!!!\n", game->key.w_pressed);
+	}
+	if (keycode == A_KEY)
+	{
+		game->key.a_pressed = 0;
+		printf("KEY A RELEASED = %d!!!\n", game->key.a_pressed);
+	}
+	if (keycode == S_KEY)
+	{
+		game->key.s_pressed = 0;
+		printf("KEY S RELEASED = %d!!!\n", game->key.s_pressed);
+	}
+	if (keycode == D_KEY)
+	{
+		game->key.d_pressed = 0;
+		printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
+	}
+	return (0);
+}
+
 int	keyhook(int keycode, t_game *game)
 {
 //
-	if (keycode == W_KEY || keycode == A_KEY 
-		|| keycode == S_KEY || keycode == D_KEY)
+	if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY)
 	{
-		keyhook_movement(keycode, game);
-		mixpixel_render(game);
+		if (keycode == W_KEY)
+		{
+			game->key.w_pressed = 1;
+			printf("game->key.w_pressed = %d!!!\n", game->key.w_pressed);
+		}
+		if (keycode == A_KEY)
+		{
+			game->key.a_pressed = 1;
+			printf("game->key.a_pressed = %d!!!\n", game->key.a_pressed);
+		}
+		if (keycode == S_KEY)
+		{
+			game->key.s_pressed = 1;
+			printf("game->key.s_pressed = %d!!!\n", game->key.s_pressed);
+		}
+		if (keycode == D_KEY)
+		{
+			game->key.d_pressed = 1;
+			printf("game->key.d_pressed = %d!!!\n", game->key.d_pressed);
+		}
+		keyhook_movement(game);
+		//mixpixel_render(game);
 	}
 //
 	if (keycode == ESC)

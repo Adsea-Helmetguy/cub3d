@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/17 17:50:49 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/08/28 19:30:08 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@
 # define ESC 65307
 
 //define screen size
-# define SCREEN_WIDTH 1600 // screen width
-# define SCREEN_HEIGHT 1000 // screen height
+# define SCREEN_WIDTH 900 // screen width
+# define SCREEN_HEIGHT 900 // screen height
 # define TILE_SIZE 100 // tile size
 
 //define player
@@ -63,23 +63,17 @@
 # define UP 2
 # define DOWN 3
 
+//define dda_wall hit which
+# define NORTH_SOUTH_SIDE 1
+# define EAST_WEST_SIDE 0
 
 
 //strutures
 /*
-typedef struct s_img {
+typedef struct s_texture {
 	int	x;
 	int	y;
-}				t_img;
-*/
-
-/*
-typedef struct s_raycasting //the ray structure
-{
-	double	ray_ngl; // ray angle
-	double	distance; // distance to the wall
-	int		flag;  // flag for the wall
-}				t_raycasting;
+}				t_texture;
 */
 
 typedef struct s_element //the data structure
@@ -106,8 +100,8 @@ typedef struct s_data //the data structure
 	char	**map2d;// the map
 	int		p_x;// player x(width) position in the map
 	int		p_y;// player y(height) position in the map
-	int		map_w;// map width
-	int		map_h;// map height
+	int		map_w;// map width/later player location
+	int		map_h;// map height/later player location
 	double		map_w_in_pixels;
 	double		map_h_in_pixels;
 	int		fd;
@@ -126,8 +120,6 @@ typedef struct s_player
 	double		plane_y;//the plane in y
 	double		sidedir_x;
 	double		sidedir_y;
-	double		raydir_x;
-	double		raydir_y;
 	int		step_x;
 	int		step_y;
 //	int		steps_taken;
@@ -139,6 +131,36 @@ typedef struct s_player
 	void	*start;
 	void	**location;
 }				t_player;
+
+typedef struct s_raycasting //the ray structure
+{
+	double	camera_x;
+	double	dir_x;
+	double	dir_y;
+	int		map_w;
+	int		map_h;
+	double	deltadist_x;
+	double	deltadist_y;
+	int		p_x;// player x(width) position in the map
+	int		p_y;// player y(height) position in the map
+	int		hit_side;
+	double	perpwalldist;
+	double	line_height;
+	double	draw_start;
+	double	draw_end;
+	double	wall_x;
+	
+}				t_raycasting;
+
+typedef struct	s_key
+{
+	int		w_pressed;
+	int		a_pressed;
+	int		s_pressed;
+	int		d_pressed;
+//	int		toggle_state;
+//	int		keystate[65600];
+}				t_key;
 
 typedef struct	s_mlx
 {
@@ -157,7 +179,8 @@ typedef struct s_game
 	t_data		data;
 	t_element	elements;
 	t_player	player;
-//	t_raycasting	*ray;
+	t_raycasting	ray;
+	t_key		key;
 	t_mlx		mlx;
 	int			error_code;
 	int			screen_x;
@@ -202,10 +225,14 @@ char	*search_for_value(char **split_map, char *var_name);
 void	init_variables(t_game *game);
 void	init_variable_player(t_game *game);
 
+//ray_calculation.c
+int	raycasting_calculation(t_game *game, int map_x, int map_y);
+void	ray_calculate_lineheight(t_game *game, t_player player);
+
 //player.c
+void	player_dda_get(t_game *game);
 void	player_sidedist_get(t_game *game, int map_x, int map_y);
 void	player_deltadist_get(t_game *game);
-void	player_raydir_get(t_game *game);
 void	player_set_direction(t_game *game);
 
 //player_movement
@@ -227,6 +254,7 @@ void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
 
 //mousekey_hook.c
 int	closehook(t_game *game);
+int	keyhook_release(int keycode, t_game *game);
 int	keyhook(int keycode, t_game *game);
 
 //exit_utils.c
@@ -241,6 +269,7 @@ void	mlxpixel_on_screen(t_game *game);
 void	mlximage_on_screen(t_game *game);
 
 //draw_display.c
+void	draw_background(t_game *game);
 void	draw_display(t_game *game);
 
 //render_mlx.c

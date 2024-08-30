@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_variable.c                                  :+:      :+:    :+:   */
+/*   init_variables.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 17:59:13 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/10 18:32:35 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:43:58 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
+//what are the things we need for the game to work.
 void	init_variables(t_game *game)
 {
-	//what are the things we need for the game to work?
 	game->screen_x = 0;
 	game->screen_y = 0;
 	game->error_code = 0;
@@ -42,8 +42,6 @@ void	init_variables(t_game *game)
 	game->player.plane_y = 0;
 	game->player.sidedir_x = 0;
 	game->player.sidedir_y= 0;
-	game->player.raydir_x = 0;
-	game->player.raydir_y = 0;
 	game->player.step_x = 0;
 	game->player.step_y = 0;
 	game->player.rotation = 0;
@@ -51,6 +49,21 @@ void	init_variables(t_game *game)
 	game->player.up_down = 0;
 	game->player.angle = 0;
 	game->player.fov_rd = 0;
+	//for raycasting
+	game->ray.camera_x = 0;
+	game->ray.dir_x = 0;
+	game->ray.dir_y = 0;
+	game->ray.map_w = 0;
+	game->ray.map_h = 0;
+	game->ray.deltadist_x = 0;
+	game->ray.deltadist_y = 0;
+	game->ray.hit_side = 0;
+	//for key.c
+	game->key.w_pressed = 0;
+	game->key.a_pressed = 0;
+	game->key.s_pressed = 0;
+	game->key.d_pressed = 0;
+	//game->key.toggle_state = 0;
 	//for mlx
 	game->mlx.mlx_ptr = NULL;
 	game->mlx.win_ptr = NULL;
@@ -74,4 +87,6 @@ void	init_variable_player(t_game *game)
 		game->error_code = 1;
 	else
 		game->error_code = 0;
+	game->ray.map_w = 0;
+	game->ray.map_h = 0;
 }

@@ -12,18 +12,41 @@
 
 #include "../includes/cub3D.h"
 
-static void	debug_ray(t_player r)
+static void	debug_map(t_data data)
 {
+	printf("\n-------------------");
+	printf("\n****Map details****\n");
+	printf("-------------------\n");
+	printf("map_w: %d\n", data.map_w);
+	printf("map_h: %d\n", data.map_h);
+	printf("map_w_in_pixels: %f\n", data.map_w_in_pixels);
+	printf("map_h_in_pixels: %f\n", data.map_h_in_pixels);
+	printf("PlayerX Location in int: %d\n", data.p_x);
+	printf("PlayerY location in int: %d\n", data.p_y);
+}
+
+static void	debug_ray(t_player p, t_raycasting ray)
+{
+	printf("\n-------------------");
 	printf("\n****player-Ray****\n");
+	printf("-------------------\n");
+	printf("value of player.pixel_x: %f\n", p.pixel_x);
+	printf("value of player.pixel_y: %f\n", p.pixel_y);
+	printf("value of player.plane_x: %f\n", p.plane_x);
+	printf("value of player.plane_y: %f\n", p.plane_y);
+	printf("Player rotation: %d\n", p.rotation);
+	printf("Player dir_x: %f\n", p.dir_x);
+	printf("Player dir_y: %f\n", p.dir_y);
+	printf("Player step_x: %d\n", p.step_x);
+	printf("Player step_y: %d\n", p.step_y);
+	printf("Player side_dist_x:%f\n", p.sidedir_x);
+	printf("Player side_dist_y:%f\n", p.sidedir_y);
+	printf("Value of game->ray.deltadist_x: %f\n", ray.deltadist_x);
+	printf("Value of game->ray.deltadist_y: %f\n", ray.deltadist_y);
+	printf("Value of raydir_x: %f\n", ray.dir_x);
+	printf("Value of raydir_y: %f\n", ray.dir_y);
+	printf("perpenducular wall distance = %f\n", ray.perpwalldist);
 	//printf("multiplier: %f\n", r->multiplier);
-	printf("dir_x: %f\n", r.dir_x);
-	printf("dir_y: %f\n", r.dir_y);
-	printf("step_x: %d\n", r.step_x);
-	printf("step_y: %d\n", r.step_y);
-	printf("side_dist_x:%f\nside_dist_y:%f\n", r.sidedir_x, r.sidedir_y);
-	//printf("delta_dist_x: %f\n", r->delta_dist_x);
-	//printf("delta_dist_y: %f\n", r->delta_dist_y);
-	//printf("perp_dist: %f\n", r->perp_dist);
 	//printf("wall_x: %f\n", r->wall_x);
 	//printf("hit_side: %d\n", r->hit_side);
 	//printf("line_height: %d\n", r->line_height);
@@ -31,6 +54,13 @@ static void	debug_ray(t_player r)
 	//printf("draw_end: %d\n", r->draw_end);
 }
 
+void	debug_check(t_game *game)
+{
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	//debug_text(game->elements);
+	debug_map(game->data);
+	debug_ray(game->player, game->ray);
+}
 //
 /*
 static void	debug_text(t_element e)
@@ -48,26 +78,4 @@ static void	debug_text(t_element e)
 	//printf("step: %f\n", elements->step);
 }
 */
-
-static void	debug_player(t_player p)
-{
-	printf("\n****Player****\n");
-	//printf("dir: %c\n", p.dir);
-	printf("pixel_x: %f\n", p.pixel_x);
-	printf("pixel_y: %f\n", p.pixel_y);
-	printf("dir_x: %f\n", p.dir_x);
-	printf("dir_y: %f\n", p.dir_y);
-	printf("plane_x: %f\n", p.plane_x);
-	printf("plane_y: %f\n", p.plane_y);
-	//printf("move_x: %d\n", p.move_x);
-	//printf("move_y: %d\n", p.move_y);
-	//printf("has_moved: %d\n", p.has_moved);
-	printf("rotate: %d\n", p.rotation);
-}
-
-void	debug_check(t_game *game)
-{
-	//debug_text(game->elements);
-	debug_player(game->player);
-	debug_ray(game->player);
-}
+//
