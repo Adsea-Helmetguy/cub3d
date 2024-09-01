@@ -22,6 +22,7 @@ int	mixpixel_render(t_game *game)
 	map_y = (int)game->player.pixel_y;
 	draw_background(game);
 	raycasting_calculation(game, map_x, map_y);
+	ray_calculate_lineheight(game, game->player);
 	draw_display(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 	return (0);

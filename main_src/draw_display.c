@@ -116,10 +116,58 @@ static void	draw_player(t_game *game)
 	}
 }
 
+
+static void	draw_ray(t_game *game)
+{
+//	int	x_end;
+//	int	y_end;
+	int	x_start;
+	int	y_start;
+
+//	x_end = game->data.p_x + game->ray.dir_x;
+//	y_end = game->data.p_y + game->ray.dir_y;
+	x_start = game->player.pixel_x;
+	y_start = game->player.pixel_y;
+
+	//this works and avoids all the walls
+	while (y_start > 0 && game->data.map2d[y_start / TILE_SIZE][x_start / TILE_SIZE] != '1')
+		mlxpixel(game, x_start, --y_start, 0x00FF0000);
+	y_start = game->player.pixel_y;
+	while (x_start > 0 && game->data.map2d[y_start / TILE_SIZE][x_start / TILE_SIZE] != '1')
+		mlxpixel(game, --x_start, y_start, 0x00FF0000);
+	x_start = game->player.pixel_x;
+	while (x_start < SCREEN_WIDTH
+		&& game->data.map2d[y_start / TILE_SIZE][x_start / TILE_SIZE] != '1')
+		mlxpixel(game, ++x_start, y_start, 0x00FF0000);
+	x_start = game->player.pixel_x;
+	while (y_start < SCREEN_HEIGHT 
+		&& game->data.map2d[y_start / TILE_SIZE][x_start / TILE_SIZE] != '1')
+		mlxpixel(game, x_start, ++y_start, 0x00FF0000);
+
+//
+/*
+	//this works by showing the current blank
+	while (y_start > (game->data.p_y) * TILE_SIZE)
+		mlxpixel(game, x_start, --y_start, 0x00FF0000);
+	y_start = game->player.pixel_y;
+	while (x_start > (game->data.p_x) * TILE_SIZE)
+		mlxpixel(game, --x_start, y_start, 0x00FF0000);
+	x_start = game->player.pixel_x;
+	while (x_start < (game->data.p_x + 1) * TILE_SIZE)
+		mlxpixel(game, ++x_start, y_start, 0x00FF0000);
+	x_start = game->player.pixel_x;
+	while (y_start < (game->data.p_y + 1) * TILE_SIZE)
+		mlxpixel(game, x_start, ++y_start, 0x00FF0000);
+*/
+
+}
+
+
 void	draw_display(t_game *game)
 {
 	//draw_background(game);
 	draw_boxes(game);
 	draw_player(game);
+	draw_ray(game);
 	//add others
 }

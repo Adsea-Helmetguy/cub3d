@@ -34,7 +34,6 @@ static void	debug_ray(t_player p, t_raycasting ray)
 	printf("value of player.pixel_y: %f\n", p.pixel_y);
 	printf("value of player.plane_x: %f\n", p.plane_x);
 	printf("value of player.plane_y: %f\n", p.plane_y);
-	printf("Player rotation: %d\n", p.rotation);
 	printf("Player dir_x: %f\n", p.dir_x);
 	printf("Player dir_y: %f\n", p.dir_y);
 	printf("Player step_x: %d\n", p.step_x);
@@ -56,7 +55,8 @@ static void	debug_ray(t_player p, t_raycasting ray)
 
 void	debug_check(t_game *game)
 {
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+//	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n");
 	//debug_text(game->elements);
 	debug_map(game->data);
 	debug_ray(game->player, game->ray);

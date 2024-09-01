@@ -27,21 +27,20 @@ int	closehook(t_game *game)
 
 void	keyhook_movement(t_game *game)
 {
-	int		x;
-	int		y;
-
-	x = game->player.pixel_x;
-	y = game->player.pixel_y;
 	if (game->key.w_pressed)
 		move(game, game->player.dir_x, game->player.dir_y);
 	if (game->key.s_pressed)
 		move(game, -(game->player.dir_x), -(game->player.dir_y));
 	if (game->key.a_pressed)
+		move(game, -(game->player.plane_x), -(game->player.plane_y));
+	if (game->key.d_pressed)
+		move(game, game->player.plane_x, game->player.plane_y);
+	if (game->key.left_rotate)
 	{
 		rotate(&game->player.dir_x, &game->player.dir_y, -ROTATE_SPEED);
 		rotate(&game->player.plane_x, &game->player.plane_y, -ROTATE_SPEED);
 	}
-	if (game->key.d_pressed)
+	if (game->key.right_rotate)
 	{
 		rotate(&game->player.dir_x, &game->player.dir_y, ROTATE_SPEED);
 		rotate(&game->player.plane_x, &game->player.plane_y, ROTATE_SPEED);
@@ -71,38 +70,39 @@ int	keyhook_release(int keycode, t_game *game)
 		game->key.d_pressed = 0;
 		printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
 	}
+	if (keycode == LEFT_KEY)
+	{
+		game->key.left_rotate = 0;
+		printf("KEY D RELEASED = %d!!!\n", game->key.left_rotate);
+	}
+	if (keycode == RIGHT_KEY)
+	{
+		game->key.right_rotate = 0;
+		printf("KEY D RELEASED = %d!!!\n", game->key.right_rotate);
+	}
 	return (0);
 }
 
 int	keyhook(int keycode, t_game *game)
 {
 //
-	if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY)
+	if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
+		|| keycode == LEFT_KEY || keycode == RIGHT_KEY)
 	{
 		if (keycode == W_KEY)
-		{
 			game->key.w_pressed = 1;
-			printf("game->key.w_pressed = %d!!!\n", game->key.w_pressed);
-		}
 		if (keycode == A_KEY)
-		{
 			game->key.a_pressed = 1;
-			printf("game->key.a_pressed = %d!!!\n", game->key.a_pressed);
-		}
 		if (keycode == S_KEY)
-		{
 			game->key.s_pressed = 1;
-			printf("game->key.s_pressed = %d!!!\n", game->key.s_pressed);
-		}
 		if (keycode == D_KEY)
-		{
 			game->key.d_pressed = 1;
-			printf("game->key.d_pressed = %d!!!\n", game->key.d_pressed);
-		}
+		if (keycode == LEFT_KEY)
+			game->key.left_rotate = 1;
+		if (keycode == RIGHT_KEY)
+			game->key.right_rotate = 1;
 		keyhook_movement(game);
-		//mixpixel_render(game);
 	}
-//
 	if (keycode == ESC)
 		x_close_window(game);
 	printf("%d, %c\n", keycode, keycode);

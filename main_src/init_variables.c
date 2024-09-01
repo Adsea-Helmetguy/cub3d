@@ -6,7 +6,7 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 17:59:13 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/26 16:43:58 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/31 15:53:25 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	init_variables(t_game *game)
 	game->player.pixel_y = 0;
 	game->player.dir_x = 0;
 	game->player.dir_y = 0;
-	game->player.plane_x = 0;
-	game->player.plane_y = 0;
+	//game->player.plane_x = 0;
+	//game->player.plane_y = 0;
 	game->player.sidedir_x = 0;
 	game->player.sidedir_y= 0;
 	game->player.step_x = 0;
@@ -63,6 +63,8 @@ void	init_variables(t_game *game)
 	game->key.a_pressed = 0;
 	game->key.s_pressed = 0;
 	game->key.d_pressed = 0;
+	game->key.left_rotate = 0;
+	game->key.right_rotate = 0;
 	//game->key.toggle_state = 0;
 	//for mlx
 	game->mlx.mlx_ptr = NULL;

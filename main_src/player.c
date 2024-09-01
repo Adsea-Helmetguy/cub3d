@@ -6,7 +6,7 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:57:18 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/28 21:39:26 by mlow             ###   ########.fr       */
+/*   Updated: 2024/08/31 15:55:33 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,15 @@ void	player_dda_get(t_game *game)
 {
 	double	deltaDistX;
 	double	deltaDistY;
-	int		hit;
 	double		line;
 
-	hit = 0;
 	deltaDistX = game->ray.deltadist_x;
 	deltaDistY = game->ray.deltadist_y;
 	game->ray.p_x = game->data.p_x;
 	game->ray.p_y = game->data.p_y;
 	game->ray.perpwalldist = 0;
 	line = 0;
-	while (hit == 0)
+	while (1)
 	{
 		//jump to next map square, either in x-direction, or in y-direction
 		//if sideDistX finds the end width of the box first
@@ -45,34 +43,17 @@ void	player_dda_get(t_game *game)
 			game->ray.p_y += game->player.step_y;
 			game->ray.hit_side = NORTH_SOUTH_SIDE;
 		}
+		if (game->ray.p_y < 0 || game->ray.p_x < 0 
+			|| !(game->data.map2d[game->ray.p_y])
+			|| !(game->data.map2d[game->ray.p_y][game->ray.p_x]))
+			break ;
 		if (game->data.map2d[game->ray.p_y][game->ray.p_x] == '1')
-		{
-			hit = 1;
-		}
+			break ;
 	}
-/*
-	//printf("value of game->player.sidedir_y: %f\n", game->player.sidedir_y);
-	if (game->ray.hit_side == NORTH_SOUTH_SIDE)
-	{
-		line = game->player.pixel_y;
-		while (++line < game->player.sidedir_y * TILE_SIZE)
-			mlxpixel(game, game->player.pixel_x, line, 0x00FF0000);
-	}
-	else if (game->ray.hit_side == EAST_WEST_SIDE)
-	{
-		line = game->player.pixel_x;
-		while (++line < game->player.sidedir_x * TILE_SIZE)
-			mlxpixel(game, line, game->player.pixel_y, 0x00FF0000);
-	}	
-*/
 	if (game->ray.hit_side == EAST_WEST_SIDE)
-	{
 		game->ray.perpwalldist = (game->player.sidedir_x - deltaDistX);
-	}
 	else
-	{
 		game->ray.perpwalldist = (game->player.sidedir_y - deltaDistY);
-	}
 }
 
 //calculate step and initial sideDist
@@ -141,22 +122,22 @@ void	player_set_direction(t_game *game)
 	if (game->player.direction == 'N')
 	{
 		game->player.dir_y = -1;
-		game->player.plane_y = -0.66;
+		game->player.plane_x = 0.66;
 	}
 	if (game->player.direction == 'E')
 	{
 		game->player.dir_x = 1;
-		game->player.plane_x = 0.66;
+		game->player.plane_y = 0.66;
 	}
 	if (game->player.direction == 'W')
 	{
 		game->player.dir_x = -1;
-		game->player.plane_x = -0.66;
+		game->player.plane_y = -0.66;
 	}
 	if (game->player.direction == 'S')
 	{
 		game->player.dir_y = 1;
-		game->player.plane_y = 0.66;
+		game->player.plane_x = -0.66;
 	}
 }
 

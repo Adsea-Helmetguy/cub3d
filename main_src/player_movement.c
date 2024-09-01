@@ -28,24 +28,6 @@ int	rotate(double *x, double *y, double angle)
 	return (0);
 }
 
-/*
-static void	key_bind(int keycode, void *param)
-{
-	int key_states[256] = {0};
-
-	key_states[119] = 1; // Mark the key as pressed
-	return (0);
-}
-
-static void	key_release(int keycode, void *param)
-{
-	int key_states[256] = {0};
-
-	key_states[119] = 1; // Mark the key as pressed
-	return (0);
-}
-*/
-
 int	move(t_game *game, double dx, double dy)
 {
 	double	new_pos_x;
@@ -65,3 +47,21 @@ int	move(t_game *game, double dx, double dy)
 	game->data.p_y = (int)(new_pos_y / TILE_SIZE);
 	return (0);
 }
+//
+/*
+static void	key_bind(int keycode, void *param)
+{
+	int key_states[256] = {0};
+
+	key_states[119] = 1; // Mark the key as pressed
+	return (0);
+}
+
+static void	key_release(int keycode, void *param)
+{
+	int key_states[256] = {0};
+
+	key_states[119] = 1; // Mark the key as pressed
+	return (0);
+} 
+*/

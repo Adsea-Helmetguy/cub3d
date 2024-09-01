@@ -57,7 +57,7 @@
 //define player
 # define FOV_ANGLE 60 //how the player views the world
 # define ROTATE_SPEED 0.045 // rotation speed
-# define MOVE_SPEED 4 // player speed
+# define MOVE_SPEED 10 // player speed
 # define RIGHT 0
 # define LEFT 1
 # define UP 2
@@ -70,10 +70,14 @@
 
 //strutures
 /*
-typedef struct s_texture {
-	int	x;
-	int	y;
-}				t_texture;
+typedef struct		s_img
+{
+	void		*ptr;
+	char		*addr;		// In my code I changed this to int *, which I will explain in a second
+	int		bitsinpixel;	//when using ARGB this value is always 32
+	int		line_bytes;	//This value represents (your image width) * 4 which I will also explain after
+	int		endian;		//This value can be either 0 or 1 and will indicate how the ARGB bytes are organized (from front to back or back to front)
+}			t_img;
 */
 
 typedef struct s_element //the data structure
@@ -158,6 +162,8 @@ typedef struct	s_key
 	int		a_pressed;
 	int		s_pressed;
 	int		d_pressed;
+	int		left_rotate;
+	int		right_rotate;
 //	int		toggle_state;
 //	int		keystate[65600];
 }				t_key;

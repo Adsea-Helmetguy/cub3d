@@ -49,14 +49,19 @@ void	ray_calculate_lineheight(t_game *game, t_player player)
 	game->ray.draw_end = game->ray.line_height / 2 + SCREEN_HEIGHT / 2;
 	if (game->ray.draw_end >= SCREEN_HEIGHT)
 		game->ray.draw_end = SCREEN_HEIGHT - 1;
+//
+//
 /*
-	if (game->ray.hit_side == EAST_WEST_NOHIT)
+	if (game->ray.hit_side == EAST_WEST_SIDE)
 		game->ray.wall_x = player.pixel_y + game->ray.perpwalldist * game->ray.dir_y;
 	else
 		game->ray.wall_x = player.pixel_x + game->ray.perpwalldist * game->ray.dir_x;
 	game->ray.wall_x -= floor(game->ray.wall_x);
+	//printf("Value of ray.wall_x = %f\n", game->ray.wall_x);
 */
 }
+//
+//
 //
 /*
 void	set_image_pixel(t_img *image, int x, int y, int color)
