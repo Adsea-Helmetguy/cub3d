@@ -47,7 +47,7 @@ static void	ray_calculate_lineheight(t_game *game, t_player player, int x)
 //printf("ray.draw_start= %d\n", game->ray.draw_start);
 //printf("ray.draw_end= %d\n", game->ray.draw_end);
 //
-	printf("X = %d\n", x);
+	// printf("X = %d\n", x);
 	counter = game->ray.draw_start;
 	while (counter < game->ray.draw_end)
 	{
@@ -94,87 +94,3 @@ int	create_trgb(int t, int r, int g, int b)
 }
 
 //https://github.com/gleal42/cub3d?tab=readme-ov-file
-/*
-int	render_frame(t_game *game)
-{
-	int	color_of_texture;
-	int	width;
-	int	height;
-
-	color_of_texture = 0;
-	game->pink_cube.addr = (int *)mlx_get_data_addr(game->pink_cube.img_ptr \
-		, &game->pink_cube.bitsinpixel, &game->pink_cube.line_bytes \
-		, &game->pink_cube.endian);
-	color_of_texture = create_trgb(0, 255, 218, 233);//== 0x00ffdae9
-	height = 0;
-	while (height < 3)
-	{
-		width = 0;
-		while (width < 3)
-		{
-			game->pink_cube.addr[height * 3 + width] = color_of_texture;
-			width++;
-		}
-		height++;
-	}
-	return (0);
-}
-*/
-//
-//
-//
-/*
-void	set_image_pixel(t_img *image, int x, int y, int color)
-{
-	int	pixel;
-
-	pixel = y * (image->size_line / 4) + x;
-	image->addr[pixel] = color;
-}
-
-int	render_frame(t_data *d)
-{
-	d->view.y = 0;
-	while (d->view.y < HEIGHT)
-	{
-		d->view.x = 0;
-		while (d->view.x < WIDTH)
-		{
-			if (d->texture_pixels[d->view.y][d->view.x] > 0)
-				d->view.color = d->texture_pixels[d->view.y][d->view.x];
-			else if (d->view.y < HEIGHT / 2)
-				d->view.color = d->texture_det.hex_ceiling;
-			else if (d->view.y < HEIGHT - 1)
-				d->view.color = d->texture_det.hex_floor;
-			set_image_pixel(&d->view.screen, d->view.x, \
-			d->view.y, d->view.color);
-			d->view.x++;
-		}
-		d->view.y++;
-	}
-	return (SUCCESS);
-}
-*/
-//
-/*
-////v1
-		counter = draw_start
-		while (counter < draw_end)
-		{
-			mlxpixel(counter);
-			counter++;
-		}
-		////
-		////
-*/
-//
-/*
-	////v2
-	counter = 0;
-	while (counter < game->ray.line_height)
-	{
-		mlxpixel(game, x, SCREEN_HEIGHT/2 + counter, 0x00FF0000);
-		mlxpixel(game, x, SCREEN_HEIGHT/2 - counter, 0x00FF0000);
-		counter++;
-	}
-*/

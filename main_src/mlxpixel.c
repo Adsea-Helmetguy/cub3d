@@ -78,7 +78,7 @@ void	mlxpixel(t_game *game, int x, int y, int color)
 //int offset = (y * line_length + mx * (bits_per_pixel / 8)); //use this in future
 void	mlxpixel_on_screen(t_game *game)
 {
-	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, SCREEN_HEIGHT, SCREEN_WIDTH);
+	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//if (game->mlx.img_ptr == NULL)
 	//	exit_and_free(data, error_msg(ERR_MLX_IMG, 20));
 	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
