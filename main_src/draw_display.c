@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   draw_display.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:36:24 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/12 15:53:18 by mlow             ###   ########.fr       */
+/*   Updated: 2024/09/03 16:25:07 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,20 @@ void	draw_background(t_game *game)
 	int	width;
 	int	height;
 
-	height = -1;
+/*
+//doesnt refresh everything
 	while (++height < (game->data.map_h * TILE_SIZE))
 	{
 		width = -1;
 		while (++width < (game->data.map_w * TILE_SIZE))
+			mlxpixel(game, width, height, 0x00000000);
+	}
+*/
+	height = -1;
+	while (++height < (SCREEN_HEIGHT))
+	{
+		width = -1;
+		while (++width < (SCREEN_WIDTH))
 			mlxpixel(game, width, height, 0x00000000);
 	}
 }
@@ -124,8 +133,8 @@ static void	draw_ray(t_game *game)
 	int	x_start;
 	int	y_start;
 
-//	x_end = game->data.p_x + game->ray.dir_x;
-//	y_end = game->data.p_y + game->ray.dir_y;
+//	x_end = game->player.p_x + game->ray.dir_x;
+//	y_end = game->player.p_y + game->ray.dir_y;
 	x_start = game->player.pixel_x;
 	y_start = game->player.pixel_y;
 
@@ -143,20 +152,19 @@ static void	draw_ray(t_game *game)
 	while (y_start < SCREEN_HEIGHT 
 		&& game->data.map2d[y_start / TILE_SIZE][x_start / TILE_SIZE] != '1')
 		mlxpixel(game, x_start, ++y_start, 0x00FF0000);
-
 //
 /*
 	//this works by showing the current blank
-	while (y_start > (game->data.p_y) * TILE_SIZE)
+	while (y_start > (game->player.p_y) * TILE_SIZE)
 		mlxpixel(game, x_start, --y_start, 0x00FF0000);
 	y_start = game->player.pixel_y;
-	while (x_start > (game->data.p_x) * TILE_SIZE)
+	while (x_start > (game->player.p_x) * TILE_SIZE)
 		mlxpixel(game, --x_start, y_start, 0x00FF0000);
 	x_start = game->player.pixel_x;
-	while (x_start < (game->data.p_x + 1) * TILE_SIZE)
+	while (x_start < (game->player.p_x + 1) * TILE_SIZE)
 		mlxpixel(game, ++x_start, y_start, 0x00FF0000);
 	x_start = game->player.pixel_x;
-	while (y_start < (game->data.p_y + 1) * TILE_SIZE)
+	while (y_start < (game->player.p_y + 1) * TILE_SIZE)
 		mlxpixel(game, x_start, ++y_start, 0x00FF0000);
 */
 

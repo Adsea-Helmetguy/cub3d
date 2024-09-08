@@ -21,7 +21,7 @@ static char	*search_for_color(char **split_map, char *var_name)
 	get_color = NULL;
 	element_color = NULL;
 	array = -1;
-	printf("\n----------%s------------------\n", var_name);
+//	printf("\n----------%s------------------\n", var_name);
 	while(split_map && split_map[++array] && array < 6)
 	{
 		if (get_color)
@@ -48,7 +48,7 @@ void	getting_color(char **map, char *var_name, int color[3])
 
 	game_color = NULL;
 	element_color = search_for_color(map, var_name);
-	printf("value of element_color: %s\n", element_color);
+//	printf("value of element_color: %s\n", element_color);
 	if (element_color)
 	{
 		game_color = ft_split(element_color, ',');
@@ -79,11 +79,11 @@ void	getting_color(char **map, char *var_name, int color[3])
 			color[++index] = ft_atoi(game_color[array]);
 		ftps_free(game_color);
 //can detele
-		index = -1;
-		while (color && ++index < 3)
-		{
-			printf("while loop[%d] game_color! : %d\n", index, color[index]);
-		}
+//		index = -1;
+//		while (color && ++index < 3)
+//		{
+//			printf("while loop[%d] game_color! : %d\n", index, color[index]);
+//		}
 //
 	}
 }
@@ -97,7 +97,7 @@ char	*search_for_value(char **split_map, char *var_name)
 	get_texture = NULL;
 	element_value = NULL;
 	array = -1;
-	printf("\n----------%s-----------------\n", var_name);
+//	printf("\n----------%s-----------------\n", var_name);
 	while(split_map && split_map[++array] && array < 6)
 	{
 		if (get_texture)

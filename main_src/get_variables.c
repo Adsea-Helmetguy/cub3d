@@ -35,7 +35,7 @@ char	*get_variable_cub(t_game *game)
 			free(newline);
 		}
 	}
-	printf("\n\n---Readmap---\n%s\n---readmap end---\n\n\n", readmap);
+	//printf("\n\n---Readmap---\n%s\n---readmap end---\n\n\n", readmap);
 	return (readmap);
 }
 
@@ -49,18 +49,18 @@ void	get_variable_map(t_game *game, char **split_map)
 	while (split_map && split_map[++array])
 		row++;
 	game->data.map2d = malloc(sizeof(char *) * (row + 1));
-	printf("\n----------map!---------------\n");
-	printf("Inside the split_map while loop!\n");
+//	printf("\n----------map!---------------\n");
+//	printf("Inside the split_map while loop!\n");
 	array = 5;
 	row = -1;
 	while(split_map && split_map[++array])
 	{
 		game->data.map2d[++row] = strdup(split_map[array]);
-		printf("game->data.map2d[%d]->%s\n", row, game->data.map2d[row]);
+//		printf("game->data.map2d[%d]->%s\n", row, game->data.map2d[row]);
 	}
 	game->data.map2d[++row] = NULL;
 	game->data.map_h = row;
-	printf("game->data.map2d[%d]->(null)\n", row);
+//	printf("game->data.map2d[%d]->(null)\n", row);
 }
 
 int	get_variable_element(t_game *game, char **readmap)
@@ -71,28 +71,28 @@ int	get_variable_element(t_game *game, char **readmap)
 	value_return = 1;
 	split_map = ft_split(*readmap, '\n');
 	game->elements.north_texture = search_for_value(split_map, "NO");
-	printf("game->elements.north_texture value: %s\n", game->elements.north_texture);
-	printf("-----------------------------\n\n");
+//	printf("game->elements.north_texture value: %s\n", game->elements.north_texture);
+//	printf("-----------------------------\n\n");
 	game->elements.south_texture = search_for_value(split_map, "SO");
-	printf("game->elements.south_texture: %s\n", game->elements.south_texture);
-	printf("-----------------------------\n\n");
+//	printf("game->elements.south_texture: %s\n", game->elements.south_texture);
+//	printf("-----------------------------\n\n");
 	game->elements.west_texture = search_for_value(split_map, "WE");
-	printf("game->elements.west_texture: %s\n", game->elements.west_texture);
-	printf("-----------------------------\n\n");
+//	printf("game->elements.west_texture: %s\n", game->elements.west_texture);
+//	printf("-----------------------------\n\n");
 	game->elements.east_texture = search_for_value(split_map, "EA");
-	printf("game->elements.game->elements.east_texture: %s\n", game->elements.east_texture);
-	printf("-----------------------------\n\n");
+//	printf("game->elements.game->elements.east_texture: %s\n", game->elements.east_texture);
+//	printf("-----------------------------\n\n");
 	if (!(game->elements.north_texture) || !(game->elements.south_texture)
 		|| !(game->elements.west_texture) || !(game->elements.east_texture))
 	{
-		printf("There was an error in either NO/SO/WE or EA\n");
+//		printf("There was an error in either NO/SO/WE or EA\n");
 		ftps_free(split_map);
 		return (0);
 	}
 	getting_color(split_map, "F", game->elements.floor_color);
-	printf("-----------------------------\n\n");
+//	printf("-----------------------------\n\n");
 	getting_color(split_map, "C", game->elements.ceiling_color);
-	printf("-----------------------------\n\n");
+//	printf("-----------------------------\n\n");
 //make a if condition for this in case it doesnt get the correct colors!
 //mod(256) if the number is bigger 
 //	if (!game->elements.floor_color

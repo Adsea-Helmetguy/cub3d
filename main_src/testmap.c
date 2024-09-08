@@ -27,8 +27,8 @@ void	open_testmap(t_game *game, char *map_path)
 	if (!get_variable_element(game, &readmap))
 		free_end_exit("Error\n", 1, game, &readmap);
 	printf("\n\nVariable values:\n=========================================\n");
-	printf("player_width(x): %d\nplayer_height(y): %d\nmap_width: %d\nmap_height: %d\n"
-		, game->data.p_x, game->data.p_y, game->data.map_w, game->data.map_h);
+	printf("player_width(x): %f\nplayer_height(y): %f\ngame->data.map_w: %d\ngame->data.map_h: %d\n"
+		, game->player.p_x, game->player.p_y, game->data.map_w, game->data.map_h);
 	printf("==========NOW for player details=========\n");
 	free(readmap);
 	//close(game->data.fd);

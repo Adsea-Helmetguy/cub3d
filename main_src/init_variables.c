@@ -12,6 +12,31 @@
 
 #include "../includes/cub3D.h"
 
+void	reset_ray(t_game *game)
+{
+	game->ray.camera_x = 0;
+	game->ray.dir_x = 0;
+	game->ray.dir_y = 0;
+	game->ray.map_w = 0;
+	game->ray.map_h = 0;
+	game->ray.deltadist_x = 0;
+	game->ray.deltadist_y = 0;
+	game->ray.hit_side = 0;
+}
+
+void	reset_player(t_game *game)
+{
+	game->player.sidedir_x = 0;
+	game->player.sidedir_y= 0;
+	game->player.step_x = 0;
+	game->player.step_y = 0;
+	// game->player.rotation = 0;
+	// game->player.left_right = 0;
+	// game->player.up_down = 0;
+	// // game->player.angle = 0;
+	// // game->player.fov_rd = 0;
+}
+
 //what are the things we need for the game to work.
 void	init_variables(t_game *game)
 {
@@ -21,8 +46,6 @@ void	init_variables(t_game *game)
 	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
-	game->data.p_x = 0;
-	game->data.p_y = 0;
 	game->data.map_w = 0;
 	game->data.map_h = 0;
 	game->data.map_w_in_pixels = 0;
@@ -36,10 +59,12 @@ void	init_variables(t_game *game)
 	//for player
 	game->player.pixel_x = 0;
 	game->player.pixel_y = 0;
+	game->player.p_x = 0;
+	game->player.p_y = 0;
 	game->player.dir_x = 0;
 	game->player.dir_y = 0;
-	//game->player.plane_x = 0;
-	//game->player.plane_y = 0;
+	game->player.plane_x = 0;
+	game->player.plane_y = 0;
 	game->player.sidedir_x = 0;
 	game->player.sidedir_y= 0;
 	game->player.step_x = 0;
@@ -78,8 +103,8 @@ void	init_variables(t_game *game)
 
 void	init_variable_player(t_game *game)
 {
-	game->player.pixel_x = game->data.p_x * TILE_SIZE + TILE_SIZE / 2;
-	game->player.pixel_y = game->data.p_y * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_x = game->player.p_x * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_y = game->player.p_y * TILE_SIZE + TILE_SIZE / 2;
 	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
 	printf("player width: %f\nplayer height: %f\n", game->player.pixel_x, game->player.pixel_y);
 	//player field of view and angle

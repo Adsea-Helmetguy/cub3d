@@ -49,7 +49,7 @@ static	char	*check_beforemap(char *findmap)
 		{
 			correct_lines++;
 			index = count_till_newline(findmap);
-			printf("new index = %d\n", index);
+			//printf("new index = %d\n", index);
 			findmap += index;
 		}
 		else
@@ -58,12 +58,12 @@ static	char	*check_beforemap(char *findmap)
 			break ;
 		}
 	}
-	printf("Correct lines = %d\n", correct_lines);
+	//printf("Correct lines = %d\n", correct_lines);
 	if (correct_lines == 6)
 	{
 		while (ft_strncmp(findmap, "\n", 1) == 0)//might need to edit this
 			findmap++;//incase if the above uses break and correct lines arent 6
-		printf("findmap[0] = %c\n", findmap[0]);
+		//printf("findmap[0] = %c\n", findmap[0]);
 		map_get = ft_strdup(findmap);
 	}
 	return (map_get);
@@ -86,7 +86,7 @@ static int	check_any_newlines_inbetween(char *map)
 		else
 			return (0);
 	}
-	printf("\n---------no newlines inbetween maps, GOOD!--------\n");
+	//printf("\n---------no newlines inbetween maps, GOOD!--------\n");
 	return (1);
 }
 
@@ -104,7 +104,7 @@ int	check_cub_valid_or_not(t_game *game, char **readmap)
 		free(map_stuff);
 		return (0);
 	}
-	printf("\n\n\nstartmap\n----------\n%s\n----------\n", map_stuff);
+	//printf("\n\n\nstartmap\n----------\n%s\n----------\n", map_stuff);
 	if (map_stuff && !check_any_newlines_inbetween(map_stuff))
 	{
 		free(map_stuff);

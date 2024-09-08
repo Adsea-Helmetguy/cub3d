@@ -6,11 +6,66 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:57:56 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/28 16:45:30 by mlow             ###   ########.fr       */
+/*   Updated: 2024/09/03 16:25:53 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
+
+void	init_texture_img(t_game *game, t_img *tmp, char *path)
+{
+	tmp->img = mlx_xpm_file_to_image(game->mlx.mlx_ptr, path,
+			&(game->texture_size), &(game->texture_size));
+	//if (image->img == NULL)
+	//	exit_and_free(data, error_msg(ERR_MLX_IMG, 21));
+	tmp->addr = (int *)mlx_get_data_addr(tmp->img, &tmp->pixel_bits,
+			&tmp->size_line, &tmp->endian);
+	return ;
+}
+
+
+static int	*xpm_to_img(t_game *game, char *path)
+{
+	t_img	tmp;
+	int		*buffer;
+	int		x;
+	int		y;
+
+	init_texture_img(game, &tmp, path);//tmp is updated here to be used
+//	buffer = ft_calloc(1,
+//			sizeof * buffer * data->texture_det.size * data->texture_det.size);
+	buffer = malloc(sizeof(int) * (game->texture_size * game->texture_size));
+	//if (!buffer)
+	//	exit_and_free(data, error_msg(ERR_MALC, 25));
+	y = 0;
+	while (y < game->texture_size)
+	{
+		x = 0;
+		while (x < game->texture_size)
+		{
+			buffer[y * game->texture_size + x]
+				= tmp.addr[y * game->texture_size + x];
+			++x;
+		}
+		y++;
+	}
+	//mlx_destroy_image(data->view.mlx, tmp.img);
+	return (buffer);
+}
+
+static void	setup_texture(t_game *game)
+{
+	game->textures = malloc(sizeof(int *) * 5);
+	//if (!data->textures)
+	//	exit_and_free;
+	game->texture_size = 225;//cause my textures are 225 in size
+	//north=0,south=1,east=2,west=3,final=null;
+	game->textures[NORTH] = xpm_to_img(game, game->elements.north_texture);
+	game->textures[SOUTH] = xpm_to_img(game, game->elements.south_texture);
+	game->textures[EAST] = xpm_to_img(game, game->elements.east_texture);
+	game->textures[WEST] = xpm_to_img(game, game->elements.west_texture);
+	game->textures[5] = NULL;
+}
 
 static void	starting_view(t_game *game)
 {
@@ -20,14 +75,10 @@ static void	starting_view(t_game *game)
 		game->error_code = 1;
 		return ;
 	}
+	setup_texture(game);//draw texture here
 	player_set_direction(game);
 	window_screen_creation(game);
-	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//if ((!game.mlx.img_ptr))
-	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
-				&game->mlx.line_length, &game->mlx.endian);
 	mlxpixel_on_screen(game);
-	//mlximage_on_screen(&game);//new add-on for the xpm.files
 }
 
 static void	starting_game(t_game *game)
@@ -35,7 +86,8 @@ static void	starting_game(t_game *game)
 	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, closehook, game);
 	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
 	mlx_hook(game->mlx.win_ptr, 03, 1L<<1, keyhook_release, game);
-	mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
+	mixpixel_render(game);
+	//mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
 }
 
 int	start_the_game(char **argv)
@@ -86,185 +138,3 @@ int	main(int argc, char **argv)
 		return (1);
 	return (0);
 }
-//
-/*
-int	start_the_game(char **argv)
-{
-	t_game		game;
-
-	init_variables(&game);
-	open_testmap(&game, argv[1]);
-	init_variable_player(&game);
-//
-//game start!!
-	game.error_code = starting_view(&game);//mlx_init is here
-//	game.mlx.mlx_ptr = mlx_init();
-//	if (!(game.mlx.mlx_ptr))
-//		return (1);
-//	window_screen_creation(&game);
-	game.mlx.img_ptr = mlx_new_image(game.mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//Now, we have an image but no pixels
-	game.mlx.addr = mlx_get_data_addr(game.mlx.img_ptr, &game.mlx.bits_per_pixel,
-				&game.mlx.line_length, &game.mlx.endian);
-	//gameplay(&game);
-	mlxpixel_on_screen(&game);
-	//mlximage_on_screen(&game);//new add-on for the xpm.files
-	if (game.error_code != 0)
-		return (game_checkerror_exit("image_testmap", &game));
-//
-//
-	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
-	// game loop continuously call a specified function to update the game state and render the frames.
-	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
-	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
-	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
-	mlx_loop(game.mlx.mlx_ptr);
-	close(game.data.fd);
-	//free the element_values() here
-	free_end_exit("just for valgrind\n", 0, &game, NULL);
-	return (0);
-}
-*/
-//
-/*
-float nor_angle(float angle) // normalize the angle
-{
-	if (angle < 0)
-		angle += 360;
-	if (angle > 360)
-		angle -= 360;
-	return (angle);
-}
-
-int x_positive(double angle) //facing right true facing left false
-{
-	if (angle > 90 || angle < 270)
-		return (0);
-	return (1);
-}
-
-int y_positive(double angle) //facing down true facing up false
-{
-	if (angle > 0 || angle < 180)
-		return (1);
-	return (0);
-}
-
-int distance(double x1, double y1, double x2, double y2)
-{
-	return (sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
-}
-
-int has_wall_at(t_game *game, double x, double y)
-{
-	int map_x;
-	int map_y;
-
-	if (x < 0 || x > game->data.map_w * TILE_SIZE || y < 0 || y > game->data.map_h * TILE_SIZE)
-		return (1);
-	map_x = floor(x / TILE_SIZE);
-	map_y = floor(y / TILE_SIZE);
-	if (game->data.map2d[map_y][map_x] == '1')
-		return (1);
-	return (0);
-}
-
-double v_collision(t_game *game, double angle)
-{
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-
-	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE); //floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
-	if (x_positive(angle))
-		x_intercept += TILE_SIZE;
-	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x) * tan(angle);
-	x_step = TILE_SIZE;
-	if (!x_positive(angle))
-		x_step *= -1;
-	y_step = TILE_SIZE * tan(angle);
-	if ((!y_positive(angle) && y_step > 0) || (y_positive(angle) && y_step < 0))
-		y_step *= -1;
-	while (x_intercept >= 0 && x_intercept <= game->data.map_w * TILE_SIZE && y_intercept >= 0 && y_intercept <= game->data.map_h * TILE_SIZE)
-	{
-		if (has_wall_at(game, x_intercept, y_intercept))
-			return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
-		x_intercept += x_step;
-		y_intercept += y_step;
-	}
-	return (200);
-}
-
-double h_collision(t_game *game, double angle)
-{
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-
-	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE); //floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
-	if (y_positive(angle))
-		y_intercept += TILE_SIZE;
-	x_intercept = game->player.pixel_x + (y_intercept - game->player.pixel_y) / tan(angle);
-	y_step = TILE_SIZE;
-	if (!y_positive(angle))
-		y_step *= -1;
-	x_step = TILE_SIZE / tan(angle);
-	if ((!x_positive(angle) && x_step > 0) || (x_positive(angle) && x_step < 0))
-		x_step *= -1;
-	while (x_intercept >= 0 && x_intercept <= game->data.map_w * TILE_SIZE && y_intercept >= 0 && y_intercept <= game->data.map_h * TILE_SIZE)
-	{
-		if (has_wall_at(game, x_intercept, y_intercept))
-			return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
-		x_intercept += x_step;
-		y_intercept += y_step;
-	}
-	return (200);
-}
-
-void raycasting(t_game *game)
-{
-	double h_col;
-	double v_col;
-	double angle;
-	double increment;
-	int ray;
-
-	ray= 0;
-	angle = nor_angle(game->player.angle - (FOV_ANGLE / 2));
-	increment = ((double)FOV_ANGLE / (double)SCREEN_WIDTH);
-
-	// while (angle < nor_angle(game->player.angle + (FOV_ANGLE / 2)))
-	while (ray < SCREEN_WIDTH)
-	{
-		// printf("angle: %f increment: %f\n", angle, increment);
-		h_col = h_collision(game, angle);
-		v_col = v_collision(game, angle);
-		// printf("h_col: %f\nv_col: %f\n", h_col, v_col);
-		if (h_col < v_col)
-		{
-			game->data.distance = h_col;
-		}
-		else
-		{
-			game->data.distance = v_col;
-			game->data.flag = 1;
-		}
-		// printf("distance: %f\n", game->data.distance);
-		// render_wall(game, ray, angle); // render the wall
-		ray++; // next ray
-		angle += increment;
-		angle = nor_angle(angle);
-	}
-}
-
-int gameplay(t_game *game)
-{
-	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	raycasting(game);
-	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
-	return (0);
-}
-*/

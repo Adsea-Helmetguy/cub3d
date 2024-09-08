@@ -6,7 +6,7 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/28 19:30:08 by mlow             ###   ########.fr       */
+/*   Updated: 2024/09/05 09:55:08 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 
 //Images used for the maps
+# define TEXTURE_SIZE 225
 # define RICK_XPM "./assets/images/rick.xpm"
 # define WALL_XPM "./assets/images/wall.xpm"
 # define COIN_XPM "./assets/images/coin.xpm"
@@ -50,18 +51,24 @@
 # define ESC 65307
 
 //define screen size
-# define SCREEN_WIDTH 900 // screen width
-# define SCREEN_HEIGHT 900 // screen height
+# define SCREEN_WIDTH 1280 // screen width 640
+# define SCREEN_HEIGHT 960 // screen height 480
 # define TILE_SIZE 100 // tile size
 
 //define player
 # define FOV_ANGLE 60 //how the player views the world
 # define ROTATE_SPEED 0.045 // rotation speed
-# define MOVE_SPEED 10 // player speed
+# define MOVE_SPEED 5.6 // player speed
 # define RIGHT 0
 # define LEFT 1
 # define UP 2
 # define DOWN 3
+
+//define textures
+# define NORTH 0
+# define SOUTH 1
+# define EAST 2
+# define WEST 3
 
 //define dda_wall hit which
 # define NORTH_SOUTH_SIDE 1
@@ -69,16 +76,6 @@
 
 
 //strutures
-/*
-typedef struct		s_img
-{
-	void		*ptr;
-	char		*addr;		// In my code I changed this to int *, which I will explain in a second
-	int		bitsinpixel;	//when using ARGB this value is always 32
-	int		line_bytes;	//This value represents (your image width) * 4 which I will also explain after
-	int		endian;		//This value can be either 0 or 1 and will indicate how the ARGB bytes are organized (from front to back or back to front)
-}			t_img;
-*/
 
 typedef struct s_element //the data structure
 {
@@ -102,8 +99,6 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
-	int		p_x;// player x(width) position in the map
-	int		p_y;// player y(height) position in the map
 	int		map_w;// map width/later player location
 	int		map_h;// map height/later player location
 	double		map_w_in_pixels;
@@ -118,6 +113,8 @@ typedef struct s_player
 	char		direction;//start direction
 	double		pixel_x;//location of player in x in DOUBLE
 	double		pixel_y;//location of player in y in DOUBLE
+	double		p_x;// player x(width) position in the map
+	double		p_y;// player y(height) position in the map
 	double		dir_x;//where the direction player faces in x
 	double		dir_y;//where the direction player faces in y
 	double		plane_x;//the plane in x
@@ -149,15 +146,17 @@ typedef struct s_raycasting //the ray structure
 	int		p_y;// player y(height) position in the map
 	int		hit_side;
 	double	perpwalldist;
-	double	line_height;
-	double	draw_start;
-	double	draw_end;
+	int	line_height;
+	int	draw_start;
+	int	draw_end;
 	double	wall_x;
 	
 }				t_raycasting;
 
 typedef struct	s_key
 {
+	int		map_x;
+	int		map_y;
 	int		w_pressed;
 	int		a_pressed;
 	int		s_pressed;
@@ -177,8 +176,24 @@ typedef struct	s_mlx
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-
+	int				color;
 }				t_mlx;
+
+
+typedef struct s_img
+{
+	void			*img;
+	int				*addr;
+	int				pixel_bits;
+	int				size_line;
+	int				endian;
+}					t_img;
+//
+/*
+typedef struct		s_texture
+{
+}
+*/
 
 typedef struct s_game
 {
@@ -188,6 +203,12 @@ typedef struct s_game
 	t_raycasting	ray;
 	t_key		key;
 	t_mlx		mlx;
+	t_img		img;
+//images for textures
+	int			**textures;
+	int			**texture_pixels;
+	int			texture_size;
+//
 	int			error_code;
 	int			screen_x;
 	int			screen_y;
@@ -228,16 +249,18 @@ void	getting_color(char **map, char *var_name, int color[3]);
 char	*search_for_value(char **split_map, char *var_name);
 
 //init_variables.c
+void	reset_ray(t_game *game);
+void	reset_player(t_game *game);
 void	init_variables(t_game *game);
 void	init_variable_player(t_game *game);
 
 //ray_calculation.c
-int	raycasting_calculation(t_game *game, int map_x, int map_y);
-void	ray_calculate_lineheight(t_game *game, t_player player);
+int	raycasting_calculation(t_game *game);
+int	create_trgb(int t, int r, int g, int b);
 
 //player.c
 void	player_dda_get(t_game *game);
-void	player_sidedist_get(t_game *game, int map_x, int map_y);
+void	player_sidedist_get(t_game *game);
 void	player_deltadist_get(t_game *game);
 void	player_set_direction(t_game *game);
 

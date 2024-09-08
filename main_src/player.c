@@ -15,16 +15,20 @@
 //############################## THE MOUVEMENT CODE ##############################//
 //################################################################################//
 
-void	player_dda_get(t_game *game)
+//
+/*
+void	player_dda_get(t_game *game, int map_x, int map_y)
 {
 	double	deltaDistX;
 	double	deltaDistY;
 	double		line;
 
+	(void)map_x;
+	(void)map_y;
 	deltaDistX = game->ray.deltadist_x;
 	deltaDistY = game->ray.deltadist_y;
-	game->ray.p_x = game->data.p_x;
-	game->ray.p_y = game->data.p_y;
+	game->ray.p_x = game->player.p_x;
+	game->ray.p_y = game->player.p_y;
 	game->ray.perpwalldist = 0;
 	line = 0;
 	while (1)
@@ -55,38 +59,72 @@ void	player_dda_get(t_game *game)
 	else
 		game->ray.perpwalldist = (game->player.sidedir_y - deltaDistY);
 }
-
-//calculate step and initial sideDist
-void	player_sidedist_get(t_game *game, int map_x, int map_y)
+*/
+//
+void	player_dda_get(t_game *game)
 {
-	double	rayDirX;
-	double	rayDirY;
 	double	deltaDistX;
 	double	deltaDistY;
 
-	rayDirX = game->ray.dir_x;
-	rayDirY = game->ray.dir_y;
 	deltaDistX = game->ray.deltadist_x;
 	deltaDistY = game->ray.deltadist_y;
-	if (rayDirX < 0)
+	//game->ray.perpwalldist = 0;
+	while (1)
+	{
+		//jump to next map square, either in x-direction, or in y-direction
+		//if sideDistX finds the end width of the box first
+		if (game->player.sidedir_x < game->player.sidedir_y)
+		{
+			game->player.sidedir_x += deltaDistX;
+			game->ray.p_x += game->player.step_x;
+			game->ray.hit_side = EAST_WEST_SIDE;
+		}
+		else//if sideDistY finds the end height of the box first
+		{
+			game->player.sidedir_y += deltaDistY;
+			game->ray.p_y += game->player.step_y;
+			game->ray.hit_side = NORTH_SOUTH_SIDE;
+		}
+		if (game->ray.p_y < 0 || game->ray.p_x < 0 //HEIGHT AND WIDTH OF MAP EDIT THIS!!
+			|| game->ray.p_y >= game->data.map_h || game->ray.p_x >= game->data.map_w)
+			break ;
+		if (game->data.map2d[game->ray.p_y][game->ray.p_x] == '1')
+			break ;
+	}
+	if (game->ray.hit_side == EAST_WEST_SIDE)
+		game->ray.perpwalldist = (game->player.sidedir_x - deltaDistX);
+	else
+		game->ray.perpwalldist = (game->player.sidedir_y - deltaDistY);
+	if (game->ray.perpwalldist <= 0)
+		printf("game->ray.perpwalldist: %f", game->ray.perpwalldist);
+}
+
+void	player_sidedist_get(t_game *game)
+{
+	double	deltaDistX;
+	double	deltaDistY;
+
+	deltaDistX = game->ray.deltadist_x;
+	deltaDistY = game->ray.deltadist_y;
+	if (game->ray.dir_x < 0)
 	{
 		game->player.step_x = -1;
-		game->player.sidedir_x = (game->player.pixel_x - map_x) * deltaDistX;
+		game->player.sidedir_x = ((game->player.pixel_x / TILE_SIZE) - game->ray.p_x) * deltaDistX;
 	}
 	else
 	{
 		game->player.step_x = 1;
-		game->player.sidedir_x = (map_x + 1 - game->player.pixel_x) * deltaDistX;
+		game->player.sidedir_x = (game->ray.p_x + 1.0 - (game->player.pixel_x / TILE_SIZE)) * deltaDistX;
 	}
-	if (rayDirY < 0)
+	if (game->ray.dir_y < 0)
 	{
 		game->player.step_y = -1;
-		game->player.sidedir_y = (game->player.pixel_y - map_y) * deltaDistY;
+		game->player.sidedir_y = ((game->player.pixel_y / TILE_SIZE) - game->ray.p_y) * deltaDistY;
 	}
 	else
 	{
 		game->player.step_y = 1;
-		game->player.sidedir_y = (map_y + 1 - game->player.pixel_y) * deltaDistY;
+		game->player.sidedir_y = (game->ray.p_y + 1.0 - (game->player.pixel_y / TILE_SIZE)) * deltaDistY;
 	}
 }
 
@@ -99,22 +137,16 @@ void	player_deltadist_get(t_game *game)
 
 	rayDirX = game->ray.dir_x;
 	rayDirY = game->ray.dir_y;
-	deltaDistX = 0;
-	deltaDistY = 0;
 	if (rayDirX == 0)
 		deltaDistX = 1e30;
-	else if (rayDirX != 0)
-		deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
+	else
+		deltaDistX = fabs(1.0 / rayDirX);
 	if (rayDirY == 0)
 		deltaDistY = 1e30;
-	else if (rayDirY != 0)
-		deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
+	else
+		deltaDistY = fabs(1.0 / rayDirY);
 	game->ray.deltadist_x = deltaDistX;
 	game->ray.deltadist_y = deltaDistY;
-	//if (deltaDistX == 1e30)//detele this mistake later!
-	//	game->ray.deltadist_x = 0;
-	//if (deltaDistY == 1e30)
-	//	game->ray.deltadist_y = 0;
 }
 
 void	player_set_direction(t_game *game)

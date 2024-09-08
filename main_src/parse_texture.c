@@ -1,21 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window_screen_creation.c                           :+:      :+:    :+:   */
+/*   parse_texture.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/10 19:53:44 by mlow              #+#    #+#             */
-/*   Updated: 2024/09/03 14:40:15 by mlow             ###   ########.fr       */
+/*   Created: 2024/09/02 16:38:26 by mlow              #+#    #+#             */
+/*   Updated: 2024/09/02 16:50:45 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
-void	window_screen_creation(t_game *game)
-{
-	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr, SCREEN_WIDTH,
-			SCREEN_HEIGHT, "Cub3d");
-	game->data.map_w_in_pixels = (double)SCREEN_WIDTH;
-	game->data.map_h_in_pixels = (double)SCREEN_HEIGHT;
-}
+

@@ -21,8 +21,6 @@ static void	debug_map(t_data data)
 	printf("map_h: %d\n", data.map_h);
 	printf("map_w_in_pixels: %f\n", data.map_w_in_pixels);
 	printf("map_h_in_pixels: %f\n", data.map_h_in_pixels);
-	printf("PlayerX Location in int: %d\n", data.p_x);
-	printf("PlayerY location in int: %d\n", data.p_y);
 }
 
 static void	debug_ray(t_player p, t_raycasting ray)
@@ -32,6 +30,8 @@ static void	debug_ray(t_player p, t_raycasting ray)
 	printf("-------------------\n");
 	printf("value of player.pixel_x: %f\n", p.pixel_x);
 	printf("value of player.pixel_y: %f\n", p.pixel_y);
+	printf("PlayerX Location in int: %f\n", p.p_x);
+	printf("PlayerY location in int: %f\n", p.p_y);
 	printf("value of player.plane_x: %f\n", p.plane_x);
 	printf("value of player.plane_y: %f\n", p.plane_y);
 	printf("Player dir_x: %f\n", p.dir_x);

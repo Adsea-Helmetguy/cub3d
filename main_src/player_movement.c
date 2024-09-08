@@ -43,8 +43,9 @@ int	move(t_game *game, double dx, double dy)
 	}
 	game->player.pixel_x = new_pos_x;
 	game->player.pixel_y = new_pos_y;
-	game->data.p_x = (int)(new_pos_x / TILE_SIZE);
-	game->data.p_y = (int)(new_pos_y / TILE_SIZE);
+	game->player.p_x = (int)(new_pos_x / TILE_SIZE);
+	game->player.p_y = (int)(new_pos_y / TILE_SIZE);
+	//printf("\n\nnewpos x = %f, y = %f\n\n", new_pos_x, new_pos_y);
 	return (0);
 }
 //

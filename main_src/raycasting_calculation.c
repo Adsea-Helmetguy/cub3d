@@ -6,38 +6,31 @@
 /*   By: mlow <mlow@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:19:38 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/28 19:14:46 by mlow             ###   ########.fr       */
+/*   Updated: 2024/09/05 11:16:07 by mlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
-int	raycasting_calculation(t_game *game, int map_x, int map_y)
+//look at raycasting_calcuation;
+//after mallocing the space for colors at texture_pixeels, 
+//now we need to give value to texpos so that we can color them.
+/*
+void	update_texpos(t_game *game)
 {
-	double	w;
-	double	x;
-	double	camera_x;
+	int	i;
 
-	w = (double)SCREEN_WIDTH;
-	x = -1;// or x = -1;
-	while (++x < w)
-	{
-		//calculate ray position and direction
-		game->ray.camera_x = 2 * x / w - 1;//x-coordinate in camera space
-		camera_x = game->ray.camera_x;
-		game->ray.dir_x = game->player.dir_x + game->player.plane_x * camera_x;
-		game->ray.dir_y = game->player.dir_y + game->player.plane_y * camera_x;
-		//these three thingies below need to while loop!
-		player_deltadist_get(game);
-		player_sidedist_get(game, map_x, map_y);
-		player_dda_get(game);
-	}
-	return (0);//success if 0!
+	i = 0;
 }
+*/
 
 //edit the value SCREEN_HEIGHT or change it to (game->data.map_h * TILE_SIZE)
-void	ray_calculate_lineheight(t_game *game, t_player player)
+static void	ray_calculate_lineheight(t_game *game, t_player player, int x)
 {
+	int	counter;
+
+	//(void)counter;
+	//(void)x;
 	//line height
 	(void)player;
 	game->ray.line_height = (int)(SCREEN_HEIGHT / game->ray.perpwalldist);
@@ -50,16 +43,83 @@ void	ray_calculate_lineheight(t_game *game, t_player player)
 	if (game->ray.draw_end >= SCREEN_HEIGHT)
 		game->ray.draw_end = SCREEN_HEIGHT - 1;
 //
+//printf("\n\n\n\n\n\n\n\n\n\n\n\nLine.height= %d\n", game->ray.line_height);
+//printf("ray.draw_start= %d\n", game->ray.draw_start);
+//printf("ray.draw_end= %d\n", game->ray.draw_end);
 //
-/*
-	if (game->ray.hit_side == EAST_WEST_SIDE)
-		game->ray.wall_x = player.pixel_y + game->ray.perpwalldist * game->ray.dir_y;
-	else
-		game->ray.wall_x = player.pixel_x + game->ray.perpwalldist * game->ray.dir_x;
-	game->ray.wall_x -= floor(game->ray.wall_x);
-	//printf("Value of ray.wall_x = %f\n", game->ray.wall_x);
-*/
+	printf("X = %d\n", x);
+	counter = game->ray.draw_start;
+	while (counter < game->ray.draw_end)
+	{
+		mlxpixel(game, x, counter, 0xa7bed3);
+		counter++;
+	}
 }
+
+int	raycasting_calculation(t_game *game)
+{
+	int	x;
+
+	//reset_ray(game);
+	//reset_player(game);
+	x = -1;
+	// Clear the screen before redrawing
+	mlx_clear_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
+	while (++x < SCREEN_WIDTH)
+	{
+		//calculate ray position and direction
+		game->ray.camera_x = 2 * x / (double)SCREEN_WIDTH - 1;//x-coordinate in camera space
+		game->ray.dir_x = game->player.dir_x + game->player.plane_x * game->ray.camera_x;
+		game->ray.dir_y = game->player.dir_y + game->player.plane_y * game->ray.camera_x;
+		game->ray.p_x = (int)game->player.p_x;
+		game->ray.p_y = (int)game->player.p_y;
+		//printf("game->ray.p_x: %d\n", game->ray.p_x);
+		//printf("game->ray.p_y: %d\n", game->ray.p_y);
+		//these three thingies below need to be in while loop!
+		player_deltadist_get(game);
+		player_sidedist_get(game);
+		player_dda_get(game);
+		ray_calculate_lineheight(game, game->player, x);
+		//these three thingies above need to be in while loop!
+		//update_texpos(d, &d->texture_det, &d->ray, d->view.x);
+	}
+	return (0);//success if 0!
+}
+//
+//0x00FF0000
+//means A = 00, R = FF, G = 00 & B = 00.
+int	create_trgb(int t, int r, int g, int b)
+{
+	return(t << 24 | r << 16 | g << 8 | b);
+}
+
+//https://github.com/gleal42/cub3d?tab=readme-ov-file
+/*
+int	render_frame(t_game *game)
+{
+	int	color_of_texture;
+	int	width;
+	int	height;
+
+	color_of_texture = 0;
+	game->pink_cube.addr = (int *)mlx_get_data_addr(game->pink_cube.img_ptr \
+		, &game->pink_cube.bitsinpixel, &game->pink_cube.line_bytes \
+		, &game->pink_cube.endian);
+	color_of_texture = create_trgb(0, 255, 218, 233);//== 0x00ffdae9
+	height = 0;
+	while (height < 3)
+	{
+		width = 0;
+		while (width < 3)
+		{
+			game->pink_cube.addr[height * 3 + width] = color_of_texture;
+			width++;
+		}
+		height++;
+	}
+	return (0);
+}
+*/
 //
 //
 //
@@ -97,53 +157,24 @@ int	render_frame(t_data *d)
 */
 //
 /*
-static void	get_texture_index(t_data *data, t_ray *ray)
-{
-	if (ray->hit_side == false)
-	{
-		if (ray->dir_x < 0)
-			data->texture_det.index = WEST;
-		else
-			data->texture_det.index = EAST;
-	}
-	else
-	{
-		if (ray->dir_y > 0)
-			data->texture_det.index = SOUTH;
-		else
-			data->texture_det.index = NORTH;
-	}
-}
-
-void	update_text_pixels(t_data *data, t_texture_det *tex, t_ray *r, int x)
-{
-	int			y;
-	int			color;
-
-	get_texture_index(data, r);
-	tex->x = (int)(r->wall_x * tex->size);
-	if ((r->hit_side == false && r->dir_x < 0) || (r->hit_side == true
-			&& r->dir_y > 0))
-		tex->x = tex->size - tex->x - 1;
-	tex->step = 1.0 * tex->size / r->line_height;
-	tex->pos = (r->draw_start - HEIGHT / 2 + r->line_height / 2) * tex->step;
-	y = r->draw_start;
-	while (y < r->draw_end)
-	{
-		tex->y = (int)tex->pos & (tex->size - 1);
-		tex->pos += tex->step;
-		color = data->textures[tex->index][tex->size * tex->y + tex->x];
-		if (tex->index == NORTH || tex->index == EAST)
-			color = (color >> 1) & 8355711;
-		if (color > 0)
-			data->texture_pixels[y][x] = color;
-		y++;
-	}
-}
+////v1
+		counter = draw_start
+		while (counter < draw_end)
+		{
+			mlxpixel(counter);
+			counter++;
+		}
+		////
+		////
 */
 //
 /*
-void	raycasting_wall_drawing(t_game *game)
-{
-}
+	////v2
+	counter = 0;
+	while (counter < game->ray.line_height)
+	{
+		mlxpixel(game, x, SCREEN_HEIGHT/2 + counter, 0x00FF0000);
+		mlxpixel(game, x, SCREEN_HEIGHT/2 - counter, 0x00FF0000);
+		counter++;
+	}
 */
