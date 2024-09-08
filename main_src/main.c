@@ -214,7 +214,7 @@ void raycasting(t_game *game)
 		// printf("angle: %f increment: %f\n", angle, increment);
 		h_col = h_collision(game, angle);
 		v_col = v_collision(game, angle);
-		printf("angle:%f h_col: %f v_col: %f\n",angle,h_col, v_col);
+		// printf("angle:%f h_col: %f v_col: %f\n",angle,h_col, v_col);
 		if (h_col < v_col)
 		{
 			game->data.distance = h_col;
