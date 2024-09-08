@@ -26,6 +26,7 @@ void	init_variables(t_game *game)
 	game->data.map_w = 0;
 	game->data.map_h = 0;
 	game->data.fd = 0;
+	game->data.radfov = FOV_ANGLE * M_PI / 180;
 	//elements
 	game->elements.north_texture = NULL;
 	game->elements.south_texture = NULL;
@@ -34,6 +35,7 @@ void	init_variables(t_game *game)
 	//for player
 	game->player.pixel_x = 0;
 	game->player.pixel_y = 0;
+	game->player.angle = 90 * M_PI / 180;
 	//for mlx
 	game->mlx.addr = NULL;
 	game->mlx.bits_per_pixel = 0;
