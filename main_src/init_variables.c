@@ -21,8 +21,8 @@ void	init_variables(t_game *game)
 	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
-	game->data.p_x = 0;
-	game->data.p_y = 0;
+	game->player.p_x = 0;
+	game->player.p_y = 0;
 	game->data.map_w = 0;
 	game->data.map_h = 0;
 	game->data.fd = 0;
@@ -45,8 +45,8 @@ void	init_variables(t_game *game)
 
 void	init_variable_player(t_game *game)
 {
-	game->player.pixel_x = game->data.p_x * TILE_SIZE + TILE_SIZE / 2;
-	game->player.pixel_y = game->data.p_y * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_x = game->player.p_x * TILE_SIZE + TILE_SIZE / 2;
+	game->player.pixel_y = game->player.p_y * TILE_SIZE + TILE_SIZE / 2;
 	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
 	printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
 	//player field of view and angle

@@ -180,7 +180,7 @@ void drawrayonmap(t_game *game, double angle, double distance)
 	double x_step;
 	double y_step;
 
-	printf("angle: %f distance: %f\n", angle, distance);
+	// printf("angle: %f distance: %f\n", angle, distance);
 
 	x = game->player.pixel_x;
 	y = game->player.pixel_y;
@@ -205,6 +205,7 @@ void raycasting(t_game *game)
 
 	ray= 0;
 	angle = nor_angle(game->player.angle - (game->data.radfov / 2));
+	// printf("pixel x: %d pixel y: %d angle:%f \n", game->player.pixel_x, game->player.pixel_y, angle);
 	increment = (double)game->data.radfov / (double)SCREEN_WIDTH;
 
 	// while (angle < nor_angle(game->player.angle + (FOV_ANGLE / 2)))
@@ -214,7 +215,7 @@ void raycasting(t_game *game)
 		// printf("angle: %f increment: %f\n", angle, increment);
 		h_col = h_collision(game, angle);
 		v_col = v_collision(game, angle);
-		printf("angle:%f h_col: %f v_col: %f\n",angle,h_col, v_col);
+		// printf("angle:%f h_col: %f v_col: %f\n",angle,h_col, v_col);
 		if (h_col < v_col)
 		{
 			game->data.distance = h_col;
@@ -243,6 +244,30 @@ int gameplay(t_game *game)
 	return (0);
 }
 
+void	player_set_direction(t_game *game)
+{
+	if (game->player.direction == 'N')
+	{
+		game->player.dir_y = -1;
+		game->player.plane_x = 0.66;
+	}
+	if (game->player.direction == 'E')
+	{
+		game->player.dir_x = 1;
+		game->player.plane_y = 0.66;
+	}
+	if (game->player.direction == 'W')
+	{
+		game->player.dir_x = -1;
+		game->player.plane_y = -0.66;
+	}
+	if (game->player.direction == 'S')
+	{
+		game->player.dir_y = 1;
+		game->player.plane_x = -0.66;
+	}
+}
+
 int	start_the_game(char **argv)
 {
 	t_game		game;
@@ -252,6 +277,7 @@ int	start_the_game(char **argv)
 	//https://www.notion.so/How-to-do-the-map-5a032dfe0f5549139bbd458b021a3175
 	open_testmap(&game, argv[1]);
 	init_variable_player(&game);
+	player_set_direction(&game);
 //
 //game start!!
 	game.mlx.mlx_ptr = mlx_init();
@@ -270,9 +296,11 @@ int	start_the_game(char **argv)
 //
 	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
 	// game loop continuously call a specified function to update the game state and render the frames.
-	gameplay(&game);
-	// mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
+	// gameplay(&game);
+	mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
 	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
+	mlx_hook(game.mlx.win_ptr, 02, 1L<<0, keyhook, &game);
+	mlx_hook(game.mlx.win_ptr, 03, 1L<<1, keyhook_release, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
 	mlx_loop(game.mlx.mlx_ptr);
 	close(game.data.fd);

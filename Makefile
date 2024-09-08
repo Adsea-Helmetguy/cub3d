@@ -71,6 +71,7 @@ SRC_FILE_NAMES = main.c \
 		mlximage.c \
 		draw_display.c \
 		exit_utils.c \
+		player_movement.c \
 		
 		
 		

@@ -29,7 +29,7 @@
 //# include "MLX/MLX42.h" // include the mlx library
 
 
-//Images used for the maps
+# define TEXTURE_SIZE 225
 # define RICK_XPM "./assets/images/rick.xpm"
 # define WALL_XPM "./assets/images/wall.xpm"
 # define COIN_XPM "./assets/images/coin.xpm"
@@ -49,39 +49,31 @@
 # define ESC 65307
 
 //define screen size
-# define SCREEN_WIDTH 1600 // screen width
-# define SCREEN_HEIGHT 1000 // screen height
-# define TILE_SIZE 30 // tile size
+# define SCREEN_WIDTH 1280 // screen width 640
+# define SCREEN_HEIGHT 960 // screen height 480
+# define TILE_SIZE 100 // tile size
 
 //define player
-//# define FOV 60 // field of view
-//# define ROTATION_SPEED 0.045 // rotation speed
-//# define PLAYER_SPEED 4 // player speed
+# define FOV_ANGLE 60 //how the player views the world
+# define ROTATE_SPEED 0.045 // rotation speed
+# define MOVE_SPEED 20 // player speed
 # define RIGHT 0
 # define LEFT 1
 # define UP 2
 # define DOWN 3
 
-#define FOV_ANGLE 60
+//define textures
+# define NORTH 0
+# define SOUTH 1
+# define EAST 2
+# define WEST 3
 
+//define dda_wall hit which
+# define NORTH_SOUTH_SIDE 1
+# define EAST_WEST_SIDE 0
 
 
 //strutures
-/*
-typedef struct s_img {
-	int	x;
-	int	y;
-}				t_img;
-*/
-
-/*
-typedef struct s_raycasting //the ray structure
-{
-	double	ray_ngl; // ray angle
-	double	distance; // distance to the wall
-	int		flag;  // flag for the wall
-}				t_raycasting;
-*/
 
 typedef struct s_element //the data structure
 {
@@ -105,10 +97,10 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
-	int		p_x;// player x(width) position in the map
-	int		p_y;// player y(height) position in the map
-	int		map_w;// map width
-	int		map_h;// map height
+	int		map_w;// map width/later player location
+	int		map_h;// map height/later player location
+	double		map_w_in_pixels;
+	double		map_h_in_pixels;
 	int		fd;
 	double	distance;
 	int 	flag;
@@ -117,19 +109,61 @@ typedef struct s_data //the data structure
 
 typedef struct s_player
 {
-
-	int		width;
-	int		height;
-	int		pixel_x;
-	int		pixel_y;
+	char		direction;//start direction
+	int		pixel_x;//location of player in x in DOUBLE
+	int		pixel_y;//location of player in y in DOUBLE
+	double		p_x;// player x(width) position in the map
+	double		p_y;// player y(height) position in the map
+	double		dir_x;//where the direction player faces in x
+	double		dir_y;//where the direction player faces in y
+	double		plane_x;//the plane in x
+	double		plane_y;//the plane in y
+	double		sidedir_x;
+	double		sidedir_y;
+	int		step_x;
+	int		step_y;
 //	int		steps_taken;
-//	int		rot; // rotation flag
-//	int		l_r; // left right flag
-//	int		u_d; // up down flag
+	int		rotation; // rotation flag
+	int		left_right; // left right flag
+	int		up_down; // up down flag
 	double	angle;  // player angle
 	void	*start;
 	void	**location;
 }				t_player;
+
+typedef struct s_raycasting //the ray structure
+{
+	double	camera_x;
+	double	dir_x;
+	double	dir_y;
+	int		map_w;
+	int		map_h;
+	double	deltadist_x;
+	double	deltadist_y;
+	int		p_x;// player x(width) position in the map
+	int		p_y;// player y(height) position in the map
+	int		hit_side;
+	double	perpwalldist;
+	int	line_height;
+	int	draw_start;
+	int	draw_end;
+	double	wall_x;
+	
+}				t_raycasting;
+
+typedef struct	s_key
+{
+	int		map_x;
+	int		map_y;
+	int		w_pressed;
+	int		a_pressed;
+	int		s_pressed;
+	int		d_pressed;
+	int		left_rotate;
+	int		right_rotate;
+//	int		toggle_state;
+//	int		keystate[65600];
+}				t_key;
 
 typedef struct	s_mlx
 {
@@ -140,16 +174,39 @@ typedef struct	s_mlx
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-
+	int				color;
 }				t_mlx;
+
+
+typedef struct s_img
+{
+	void			*img;
+	int				*addr;
+	int				pixel_bits;
+	int				size_line;
+	int				endian;
+}					t_img;
+//
+/*
+typedef struct		s_texture
+{
+}
+*/
 
 typedef struct s_game
 {
 	t_data		data;
 	t_element	elements;
 	t_player	player;
-//	t_raycasting	*ray;
+	t_raycasting	ray;
+	t_key		key;
 	t_mlx		mlx;
+	t_img		img;
+//images for textures
+	int			**textures;
+	int			**texture_pixels;
+	int			texture_size;
+//
 	int			error_code;
 	int			screen_x;
 	int			screen_y;
@@ -210,6 +267,7 @@ void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
 
 //mousekey_hook.c
 int	keyhook(int keycode, t_game *game);
+int	keyhook_release(int keycode, t_game *game);
 
 //exit_utils.c
 int	x_close_window(t_game *game);
@@ -223,6 +281,11 @@ void	mlximage_on_screen(t_game *game);
 
 //draw_display.c
 void	draw_display(t_game *game);
+
+
+int	rotate(double *x, double *y, double angle);
+int	move(t_game *game, double dx, double dy);
+
 
 #endif
 /*

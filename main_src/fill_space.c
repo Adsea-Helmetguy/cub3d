@@ -83,13 +83,13 @@ int	fill_space_tab(t_game *game, char ***tmp_map)
 				|| (*tmp_map)[array][index] == 'E' || (*tmp_map)[array][index] == 'W')
 			{
 				gottem += 1;
-				game->data.p_x = index;//width
-				game->data.p_y = array;//height
+				game->player.p_x = index;//width
+				game->player.p_y = array;//height
 			}
 		}
 	}
 	if (gottem != 1)
 		printf("map fails, wrong number of either \"N,S,E,W\"!!! Found(%d).\n", gottem);
-	printf("game->data.p_y: %d\ngame->data.p_x: %d\n", game->data.p_y, game->data.p_x);
+	// printf("game->player.p_y: %d\ngame->player.p_x: %d\n", game->player.p_y, game->player.p_x);
 	return (gottem);
 }

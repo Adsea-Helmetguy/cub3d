@@ -109,8 +109,8 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 		ftps_free(tmp_map);
 		return (0);
 	}
-	map_floodfill(&tmp_map, game, game->data.p_x, game->data.p_y);
-	map_floodfill2(&tmp_map, game, game->data.p_x, game->data.p_y);
+	map_floodfill(&tmp_map, game, game->player.p_x, game->player.p_y);
+	map_floodfill2(&tmp_map, game, game->player.p_x, game->player.p_y);
 //floodfill completed!
 //check if map is unclosed, creating tmp_map2
 	tmp_map2 = tmp_map2_helper(game, tmp_map);
