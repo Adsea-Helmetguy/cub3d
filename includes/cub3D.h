@@ -112,6 +112,7 @@ typedef struct s_data //the data structure
 	int		fd;
 	double	distance;
 	int 	flag;
+	double	radfov;
 }				t_data;
 
 typedef struct s_player
@@ -126,7 +127,6 @@ typedef struct s_player
 //	int		l_r; // left right flag
 //	int		u_d; // up down flag
 	double	angle;  // player angle
-	float	fov_rd; // field of view in radians
 	void	*start;
 	void	**location;
 }				t_player;
@@ -157,6 +157,7 @@ typedef struct s_game
 
 //main.c
 int	start_the_game(char **argv);
+
 
 //testmap.c
 void	open_testmap(t_game *game, char *map_path);
