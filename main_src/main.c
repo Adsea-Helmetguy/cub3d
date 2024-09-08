@@ -27,11 +27,6 @@ void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
 	// mlx_pixel_put(game->mlx.mlx_ptr, game->mlx.win_ptr, x, y, color); // put the pixel
 }
 
-double toradian(double angle)
-{
-	return (angle * (M_PI / 180));
-}
-
 double nor_angle(double angle) // normalize the angle
 {
 	if (angle >= 2 * M_PI)
@@ -41,73 +36,45 @@ double nor_angle(double angle) // normalize the angle
 	return (angle);
 }
 
-void draw_floor_ceiling(t_game *game, int ray, int t_pix, int b_pix) // draw the floor and the ceiling
-{
- int  i;
-
-	i = b_pix;
-	while (i < SCREEN_HEIGHT)
-	{
-		// printf("i: %d\n", i);
-		// printf("ray: %d\n", ray);
-		// printf("0x00ffffff\n");
-		my_mlx_pixel_put(game, ray, i++, 0xB99470FF); // floor
-	}
-	i = 0;
-	while (i < t_pix)
-	{
-		// printf("i: %d\n", i);
-		// printf("ray: %d\n", ray);
-		// printf("0x89CFF3FF\n");
-		my_mlx_pixel_put(game, ray, i++, 0x89CFF3FF); // ceiling
-	}
-}
-
-int get_color(double angle, int flag) // get the color of the wall
+int px_color(double angle, double px, int flag, double wall_height) // get the color of the wall
 {
 	angle = nor_angle(angle); // normalize the angle
-	if (flag == 0)
-	{
-		if (angle > 90 && angle < 3 * (90))
-			return (0xB5B5B5FF); // west wall
-		else
-			return (0xB5B5B5FF); // east wall
-	}
+	if (px < (SCREEN_HEIGHT - wall_height) / 2)
+		return (0x89CFF3FF); // ceiling
+	else if (px > (SCREEN_HEIGHT + wall_height) / 2)
+		return (0x000000FF); // floor
 	else
 	{
-		if (angle > 0 && angle < 180)
-			return (0xF5F5F5FF); // south wall
+		if (flag == 0)
+		{
+			if (angle > 90 && angle < 3 * (90))
+				return (0xB5B5B5FF); // west wall
+			else
+				return (0xB5B5B5FF); // east wall
+		}
 		else
-			return (0xF5F5F5FF); // north wall
+		{
+			if (angle > 0 && angle < 180)
+				return (0xF5F5F5FF); // south wall
+			else
+				return (0xF5F5F5FF); // north wall
+		}
 	}
 }
 
-void draw_wall(t_game *game, int ray, int t_pix, int b_pix, int flag, double angle) // draw the wall
+void render(t_game *game, int ray, double angle) // render the wall
 {
-	int color;
+	double wall_height;
+	double px;
 
-	color = get_color(flag, angle);
-	while (t_pix < b_pix)
-		my_mlx_pixel_put(game, ray, t_pix++, color);
-}
-
-void render_wall(t_game *game, int ray, double angle) // render the wall
-{
-	double wall_h;
-	double b_pix;
-	double t_pix;
-
-	// t_mlx *mlx = &game->mlx;
-	game->data.distance *= cos(nor_angle(angle - toradian(game->player.angle))); // fix the fisheye
-	wall_h = (TILE_SIZE / game->data.distance) * ((SCREEN_WIDTH / 2) / tan(toradian(FOV_ANGLE / 2))); // get the wall height
-	b_pix = (SCREEN_HEIGHT / 2) + (wall_h / 2); // get the bottom pixel
-	t_pix = (SCREEN_HEIGHT / 2) - (wall_h / 2); // get the top pixel
-	if (b_pix > SCREEN_HEIGHT) // check the bottom pixel
-		b_pix = SCREEN_HEIGHT;
-	if (t_pix < 0) // check the top pixel
-		t_pix = 0;
-	draw_wall(game, ray, t_pix, b_pix, game->data.flag, angle); // draw the wall
-	draw_floor_ceiling(game, ray, t_pix, b_pix); // draw the floor and the ceiling
+	game->data.distance *= cos(nor_angle(angle - game->player.angle)); 
+	wall_height = ((SCREEN_WIDTH / 2 ) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
+	px = 0;
+	while (px < SCREEN_HEIGHT)
+	{
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, game->data.flag, wall_height));
+		px++;
+	}
 }
 
 int x_positive(double angle) //facing right true facing left false
@@ -124,7 +91,7 @@ int y_positive(double angle) //facing down true facing up false
 	return (0);
 }
 
-int distance(double x1, double y1, double x2, double y2)
+double distance(double x1, double y1, double x2, double y2)
 {
 	return (sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
 }
@@ -183,7 +150,7 @@ double h_collision(t_game *game, double angle)
 	int 	adjust;
 
 	adjust = 0;
-	printf("angle: %f tan angle:%f \n", angle, tan(angle));
+	// printf("angle: %f tan angle:%f \n", angle, tan(angle));
 	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE); //floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
 	if (y_positive(angle))
 		y_intercept += TILE_SIZE;
@@ -237,12 +204,13 @@ void raycasting(t_game *game)
 	int ray;
 
 	ray= 0;
-	angle = nor_angle(toradian(game->player.angle) - toradian(FOV_ANGLE / 2));
-	increment = toradian((double)FOV_ANGLE / (double)SCREEN_WIDTH);
+	angle = nor_angle(game->player.angle - (game->data.radfov / 2));
+	increment = (double)game->data.radfov / (double)SCREEN_WIDTH;
 
 	// while (angle < nor_angle(game->player.angle + (FOV_ANGLE / 2)))
 	while (ray < SCREEN_WIDTH)
 	{
+		game->data.flag = 0;
 		// printf("angle: %f increment: %f\n", angle, increment);
 		h_col = h_collision(game, angle);
 		v_col = v_collision(game, angle);
@@ -258,7 +226,7 @@ void raycasting(t_game *game)
 		}
 		// printf("distance: %f\n", game->data.distance);
 		// drawrayonmap(game, angle, game->data.distance);
-		render_wall(game, ray, angle); // render the wall
+		render(game, ray, angle); // render the wall
 		ray++; // next ray
 		angle += increment;
 		angle = nor_angle(angle);
@@ -270,6 +238,7 @@ int gameplay(t_game *game)
 	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
 	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
 	raycasting(game);
+	// cast_rays(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 	return (0);
 }
