@@ -46,7 +46,72 @@ int	rotate2(double *x, double *y, double angle, t_game *game)
 	return (0);
 }
 
-void	keyhook_movement(t_game *game)
+void	rotate_player(t_game *game, int i)	// rotate the player
+{
+	if (i == 1)
+	{
+		game->player.angle += ROTATE_SPEED; // rotate right
+		if (game->player.angle > 2 * M_PI)
+			game->player.angle -= 2 * M_PI;
+	}
+	else
+	{
+		game->player.angle -= ROTATE_SPEED; // rotate left
+		if (game->player.angle < 0)
+			game->player.angle += 2 * M_PI;
+	}
+}
+
+void	move_player(t_game *game, double move_x, double move_y)	// move the player
+{
+	int		map_grid_y;
+	int		map_grid_x;
+	int		new_x;
+	int		new_y;
+
+	new_x = roundf(game->player.pixel_x + move_x); // get the new x position
+	new_y = roundf(game->player.pixel_y + move_y); // get the new y position
+	map_grid_x = (new_x / TILE_SIZE); // get the x position in the map
+	map_grid_y = (new_y / TILE_SIZE); // get the y position in the map
+	if (game->data.map2d[map_grid_y][map_grid_x] != '1' && \
+	(game->data.map2d[map_grid_y][game->player.pixel_x / TILE_SIZE] != '1' && \
+	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] != '1')) // check the wall hit and the diagonal wall hit
+	{
+		game->player.pixel_x= new_x; // move the player
+		game->player.pixel_y= new_y; // move the player
+	}
+}
+
+void	khook(t_game *game, double move_x, double move_y)	// hook the player
+{
+	if (game->key.right_rotate == 1) //rotate right
+		rotate_player(game, 1);
+	if (game->key.left_rotate == 1) //rotate left
+		rotate_player(game, 0);
+	if (game->key.d_pressed == 1) //move right
+	{
+		move_x = -sin(game->player.angle) * MOVE_SPEED;
+		move_y = cos(game->player.angle) * MOVE_SPEED;
+	}
+	if (game->key.a_pressed == 1) //move left
+	{
+		move_x = sin(game->player.angle) * MOVE_SPEED;
+		move_y = -cos(game->player.angle) * MOVE_SPEED;
+	}
+	if (game->key.w_pressed == 1) //move up
+	{
+		move_x = cos(game->player.angle) * MOVE_SPEED;
+		move_y = sin(game->player.angle) * MOVE_SPEED;
+	}
+	if (game->key.s_pressed == 1) //move down
+	{
+		move_x = -cos(game->player.angle) * MOVE_SPEED;
+		move_y = -sin(game->player.angle) * MOVE_SPEED;
+	}
+	move_player(game, move_x, move_y); // move the player
+}
+
+void	keyhook_movement2(t_game *game)
 {
 	printf("presed\n");
 	if (game->key.w_pressed)
@@ -124,7 +189,7 @@ int	keyhook(int keycode, t_game *game)
 			game->key.left_rotate = 1;
 		if (keycode == RIGHT_KEY)
 			game->key.right_rotate = 1;
-		keyhook_movement(game);
+		khook(game, 0, 0);
 		// mixpixel_render(game);
 	}
 	if (keycode == ESC)
