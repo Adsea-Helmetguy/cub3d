@@ -36,7 +36,17 @@ double nor_angle(double angle) // normalize the angle
 	return (angle);
 }
 
-int px_color(double angle, double px, int flag, double wall_height) // get the color of the wall
+int get_wall_color(t_game *game, double px, int ray, int face)
+{
+	int x;
+	int y;
+
+	x = (int)px % game->texture_size;
+	y = (int)(ray % game->texture_size);
+	return game->textures[face][y * game->texture_size + x];
+}
+
+int px_color(double angle, double px, int flag, double wall_height, int ray, t_game *game) // get the color of the wall
 {
 	angle = nor_angle(angle); // normalize the angle
 	if (px < (SCREEN_HEIGHT - wall_height) / 2)
@@ -48,16 +58,16 @@ int px_color(double angle, double px, int flag, double wall_height) // get the c
 		if (flag == 0)
 		{
 			if (angle > 90 && angle < 3 * (90))
-				return (0xB5B5B5FF); // west wall
+				return (get_wall_color(game,px,ray,WEST)); // west wall
 			else
-				return (0xB5B5B5FF); // east wall
+				return (get_wall_color(game,px,ray,EAST)); // east wall
 		}
 		else
 		{
 			if (angle > 0 && angle < 180)
-				return (0xF5F5F5FF); // south wall
+				return (get_wall_color(game,px,ray,SOUTH)); // south wall
 			else
-				return (0xF5F5F5FF); // north wall
+				return (get_wall_color(game,px,ray,NORTH)); // north wall
 		}
 	}
 }
@@ -72,7 +82,7 @@ void render(t_game *game, int ray, double angle) // render the wall
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
-		my_mlx_pixel_put(game, ray, px, px_color(angle, px, game->data.flag, wall_height));
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, game->data.flag, wall_height, ray, game)); // put the pixel
 		px++;
 	}
 }
