@@ -110,8 +110,8 @@ typedef struct s_data //the data structure
 typedef struct s_player
 {
 	char		direction;//start direction
-	int		pixel_x;//location of player in x in DOUBLE
-	int		pixel_y;//location of player in y in DOUBLE
+	int		pixel_x;//location of player in x in INT
+	int		pixel_y;//location of player in y in INT
 	double		p_x;// player x(width) position in the map
 	double		p_y;// player y(height) position in the map
 	double		dir_x;//where the direction player faces in x
@@ -255,6 +255,23 @@ void	init_variable_player(t_game *game);
 //invalid_window_size_checker.c
 void	invalid_window_size_checker(t_game *game);
 
+//
+//--------new additions----------
+//window_screen_creation.c
+void	window_screen_creation(t_game *game);
+
+//texture.c
+void	setup_texture(t_game *game);
+void	init_texture_pixels(t_game *game);
+void	init_texture_img(t_game *game, t_img *tmp, char *path);
+
+//mousekey_hook.c
+int	closehook(t_game *game);
+//game
+int gameplay(t_game *game);
+//--------new additions----------
+//
+
 //ft_strcmp.c
 int	ft_strcmp(char *s1, char *s2);
 
@@ -276,6 +293,7 @@ int	game_checkerror_exit(char *message, t_game *game);
 //mlxpixel.c
 void	mlxpixel(t_game *game, int x, int y, int color);
 void	mlxpixel_on_screen(t_game *game);
+
 //mlximage.c
 void	mlximage_on_screen(t_game *game);
 

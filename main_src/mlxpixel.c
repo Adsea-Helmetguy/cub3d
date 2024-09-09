@@ -35,14 +35,13 @@ void	mlxpixel_on_screen(t_game *game)
 {
 
 	game->mlx.img_ptr = mlx_new_image(game->mlx.mlx_ptr, 1900, 1000);
+	//if (!game->mlx.img_ptr)
+	//	exit_and_free(game);
 	//Now, we have an image but no pixels
 	game->mlx.addr = mlx_get_data_addr(game->mlx.img_ptr, &game->mlx.bits_per_pixel,
 				&game->mlx.line_length, &game->mlx.endian);
 	//Now we have the image address, but still no pixels.
 	//cause bytes are not aligned, line_length differs from window width.
-	//mlx_loop_hook()
 	//function display draw everything
-	draw_display(game);
-	mlxpixel(game, 500, 500, 0x00FF0000);//wait when does this happen/used???
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 }

@@ -238,34 +238,35 @@ int gameplay(t_game *game)
 {
 	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
 	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
+	init_texture_pixels(game); //drawing the texture first before game
 	raycasting(game);
 	// cast_rays(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
 	return (0);
 }
 
-void	player_set_direction(t_game *game)
+static void	starting_view(t_game *game)
 {
-	if (game->player.direction == 'N')
+	game->mlx.mlx_ptr = mlx_init();
+	if (!(game->mlx.mlx_ptr))
 	{
-		game->player.dir_y = -1;
-		game->player.plane_x = 0.66;
+		game->error_code = 1;
+		return ;
 	}
-	if (game->player.direction == 'E')
-	{
-		game->player.dir_x = 1;
-		game->player.plane_y = 0.66;
-	}
-	if (game->player.direction == 'W')
-	{
-		game->player.dir_x = -1;
-		game->player.plane_y = -0.66;
-	}
-	if (game->player.direction == 'S')
-	{
-		game->player.dir_y = 1;
-		game->player.plane_x = -0.66;
-	}
+	setup_texture(game);//draw texture here
+	window_screen_creation(game);
+	mlxpixel_on_screen(game);
+}
+
+static void	starting_game(t_game *game)
+{
+	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, closehook, game);
+	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
+	mlx_hook(game->mlx.win_ptr, 03, 1L<<1, keyhook_release, game);
+	gameplay(game);
+	//mlx_loop_hook(game->mlx.mlx_ptr, &gameplay, game);
+	//mixpixel_render(game);
+	//mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
 }
 
 int	start_the_game(char **argv)
@@ -277,28 +278,14 @@ int	start_the_game(char **argv)
 	//https://www.notion.so/How-to-do-the-map-5a032dfe0f5549139bbd458b021a3175
 	open_testmap(&game, argv[1]);
 	init_variable_player(&game);
-	player_set_direction(&game);
-//
-//game start!!
-	game.mlx.mlx_ptr = mlx_init();
-	if (!(game.mlx.mlx_ptr))
-		return (1);
-	invalid_window_size_checker(&game);
-	game.mlx.img_ptr = mlx_new_image(game.mlx.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//Now, we have an image but no pixels
-	game.mlx.addr = mlx_get_data_addr(game.mlx.img_ptr, &game.mlx.bits_per_pixel,
-				&game.mlx.line_length, &game.mlx.endian);
-	mlxpixel_on_screen(&game);
-	//mlximage_on_screen(&game);//new add-on for the xpm.files
+	starting_view(&game);//mlx_init is here
 	if (game.error_code != 0)
-		return (game_checkerror_exit("image_testmap", &game));
-//
-//
-	//mlx_loop_hook(mlx.mlx_p, &game_loop, &mlx);
-	// game loop continuously call a specified function to update the game state and render the frames.
-	// gameplay(&game);
-	mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
-	mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
+		return (game_checkerror_exit("cub3d testmap", &game));
+	starting_game(&game);
+	//if (game.error_code != 0)
+	//	return (game_checkerror_exit("image_testmap", &game));
+	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
+	//mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
 	mlx_hook(game.mlx.win_ptr, 02, 1L<<0, keyhook, &game);
 	mlx_hook(game.mlx.win_ptr, 03, 1L<<1, keyhook_release, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
