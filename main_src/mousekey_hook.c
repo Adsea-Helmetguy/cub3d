@@ -12,19 +12,6 @@
 
 #include "../includes/cub3D.h"
 
-int	closehook(t_game *game)
-{
-	if (game->mlx.img_ptr)
-		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	if (game->mlx.win_ptr)
-		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
-	if (game->mlx.mlx_ptr)
-		mlx_destroy_display(game->mlx.mlx_ptr);
-//	free_data(game);
-//	free(game.mlx.win_ptr);
-	exit(0);
-}
-
 void	rotate_player(t_game *game, int i)	// rotate the player
 {
 	if (i == 1)

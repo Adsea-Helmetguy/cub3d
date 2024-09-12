@@ -255,22 +255,26 @@ void	init_variable_player(t_game *game);
 //invalid_window_size_checker.c
 void	invalid_window_size_checker(t_game *game);
 
-//
+//----------------------------------------------------------
+//----------------------------------------------------------
 //--------new additions----------
 //window_screen_creation.c
 void	window_screen_creation(t_game *game);
-
 //texture.c
 void	setup_texture(t_game *game);
 void	init_texture_pixels(t_game *game);
 void	init_texture_img(t_game *game, t_img *tmp, char *path);
-
 //mousekey_hook.c
-int	closehook(t_game *game);
+int		keyhook(int keycode, t_game *game);
+int		keyhook_release(int keycode, t_game *game);
+void	khook(t_game *game, double move_x, double move_y);
+void	move_player(t_game *game, double move_x, double move_y);
+void	rotate_player(t_game *game, int i);
 //game
 int gameplay(t_game *game);
 //--------new additions----------
-//
+//----------------------------------------------------------
+//----------------------------------------------------------
 
 //ft_strcmp.c
 int	ft_strcmp(char *s1, char *s2);
@@ -279,12 +283,8 @@ int	ft_strcmp(char *s1, char *s2);
 void	print_msg(char *message, int exit_code);
 
 //exit_function.c
-void	end_exit(char *message, int exit_code, t_game *game);
+void	free_gameloop_end(char *message, int exit_code, t_game *game);
 void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
-
-//mousekey_hook.c
-int	keyhook(int keycode, t_game *game);
-int	keyhook_release(int keycode, t_game *game);
 
 //exit_utils.c
 int	x_close_window(t_game *game);
@@ -300,9 +300,6 @@ void	mlximage_on_screen(t_game *game);
 //draw_display.c
 void	draw_display(t_game *game);
 
-
-int	rotate(double *x, double *y, double angle);
-int	move(t_game *game, double dx, double dy);
 
 
 #endif

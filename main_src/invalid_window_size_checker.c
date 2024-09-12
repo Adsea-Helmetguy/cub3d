@@ -29,7 +29,8 @@ void	invalid_window_size_checker(t_game *game)
 	{
 		mlx_destroy_display(game->mlx.mlx_ptr);
 		free(game->mlx.mlx_ptr);
-		end_exit("Map size is too large.\n", 2, game);
+		print_msg("Map size is too large.\n", 2);
+		//end_exit("Map size is too large.\n", 2, game);
 	}
 	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr, window_x,
 			window_y, "testmap");
