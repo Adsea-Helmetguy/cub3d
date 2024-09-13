@@ -91,7 +91,11 @@ int	getting_color(char **map, char *var_name, int color[3])
 		free(get.rgb_colors);
 	}
 	if (get.all_digits == 0)
+	{
+		if (get.game_color)
+			ftps_free(get.game_color);
 		return (1);
+	}
 	if (get.game_color && get.all_digits)
 	{
 		get.array = -1;
@@ -113,7 +117,6 @@ char	*search_for_value(char **split_map, char *var_name)
 	get_texture = NULL;
 	element_value = NULL;
 	array = -1;
-//	printf("\n----------%s-----------------\n", var_name);
 	while(split_map && split_map[++array] && array < 6)
 	{
 		if (get_texture)

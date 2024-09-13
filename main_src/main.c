@@ -279,9 +279,12 @@ int	start_the_game(char **argv)
 	t_game		game;
 
 	init_variables(&game);
-	open_testmap(&game, argv[1]);
+	open_testmap(&game, argv[1]);	
 	init_variable_player(&game);
-/*
+
+
+
+
 	starting_view(&game); //mlx_init is here
 	if (game.error_code != 0)
 		return (game_checkerror_exit("cub3d testmap", &game));
@@ -290,7 +293,10 @@ int	start_the_game(char **argv)
 	//	return (game_checkerror_exit("image_testmap", &game));
 	mlx_loop(game.mlx.mlx_ptr);
 	//free_gameloop_end("Quitting game.\n", 0, &game); //free the element_values()
-*/
+
+
+
+
 	free_before_game("Quitting game.\n", 0, &game); //free the element_values()
 	return (0);
 }
