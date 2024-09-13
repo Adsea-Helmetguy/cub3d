@@ -16,9 +16,9 @@ void	print_msg(char *message, int exit_code)
 {
 	if (exit_code != 0)
 	{
-		ft_putstr_fd("\n--------exitcode != 0--------\n", 1);
+		ft_putstr_fd("\n--------exitcode != 0--------\n", 2);
 		ft_putstr_fd(message, 2);
-		ft_putstr_fd("-------------bad-------------\n", 1);
+		ft_putstr_fd("-------------bad-------------\n", 2);
 		exit(exit_code);
 	}
 	else

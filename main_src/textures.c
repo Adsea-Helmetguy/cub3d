@@ -23,25 +23,6 @@ void	init_texture_img(t_game *game, t_img *tmp, char *path)
 	return ;
 }
 
-void	init_texture_pixels(t_game *game)
-{
-	int	i;
-
-	//if (game->texture_pixels)
-	//	free_textures();
-	game->texture_pixels = malloc(sizeof(int *) * SCREEN_HEIGHT + 1);
-	//if (!data->texture_pixels)
-	//	exit_and_free(data, error_msg(ERR_MALC, 23));
-	i = 0;
-	while (i < SCREEN_HEIGHT)
-	{
-		game->texture_pixels[i] = malloc(sizeof(int *) * SCREEN_WIDTH + 1);
-		//if (!game->texture_pixels[i])
-		//	exit_and_free(data, error_msg(ERR_MALC, 24));
-		i++;
-	}
-}
-
 static int	*xpm_to_img(t_game *game, char *path)
 {
 	t_img	tmp;
@@ -52,6 +33,7 @@ static int	*xpm_to_img(t_game *game, char *path)
 	init_texture_img(game, &tmp, path);//tmp is updated here to be used
 //	buffer = ft_calloc(1,
 //			sizeof * buffer * data->texture_det.size * data->texture_det.size);
+	//buffer = malloc(sizeof(int) * (game->texture_size * game->texture_size));
 	buffer = malloc(sizeof(int) * (game->texture_size * game->texture_size));
 	//if (!buffer)
 	//	exit_and_free(data, error_msg(ERR_MALC, 25));
@@ -77,10 +59,10 @@ void	setup_texture(t_game *game)
 	//if (!data->textures)
 	//	exit_and_free;
 	game->texture_size = 225;//cause my textures are 225 in size
-	//north=0,south=1,east=2,west=3,final=null;
+	//north=0,south=1,east=2,west=3,(final)=4(null);
 	game->textures[NORTH] = xpm_to_img(game, game->elements.north_texture);
 	game->textures[SOUTH] = xpm_to_img(game, game->elements.south_texture);
 	game->textures[EAST] = xpm_to_img(game, game->elements.east_texture);
 	game->textures[WEST] = xpm_to_img(game, game->elements.west_texture);
-	game->textures[5] = NULL;
+	game->textures[4] = NULL;
 }

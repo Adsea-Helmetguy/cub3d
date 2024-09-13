@@ -35,7 +35,7 @@ char	*get_variable_cub(t_game *game)
 			free(newline);
 		}
 	}
-	printf("\n\n---Readmap---\n%s\n---readmap end---\n\n\n", readmap);
+//	printf("\n\n---Readmap---\n%s\n---readmap end---\n\n\n", readmap);
 	return (readmap);
 }
 
@@ -49,18 +49,18 @@ void	get_variable_map(t_game *game, char **split_map)
 	while (split_map && split_map[++array])
 		row++;
 	game->data.map2d = malloc(sizeof(char *) * (row + 1));
-	printf("\n----------map!---------------\n");
-	printf("Inside the split_map while loop!\n");
+//	printf("\n----------map!---------------\n");
+//	printf("Inside the split_map while loop!\n");
 	array = 5;
 	row = -1;
 	while(split_map && split_map[++array])
 	{
 		game->data.map2d[++row] = strdup(split_map[array]);
-		printf("game->data.map2d[%d]->%s\n", row, game->data.map2d[row]);
+//		printf("game->data.map2d[%d]->%s\n", row, game->data.map2d[row]);
 	}
 	game->data.map2d[++row] = NULL;
 	game->data.map_h = row;
-	printf("game->data.map2d[%d]->(null)\n", row);
+//	printf("game->data.map2d[%d]->(null)\n", row);
 }
 
 int	get_variable_element(t_game *game, char **readmap)
@@ -89,14 +89,27 @@ int	get_variable_element(t_game *game, char **readmap)
 		ftps_free(split_map);
 		return (0);
 	}
-	getting_color(split_map, "F", game->elements.floor_color);
-	printf("-----------------------------\n\n");
-	getting_color(split_map, "C", game->elements.ceiling_color);
-	printf("-----------------------------\n\n");
-//make a if condition for this in case it doesnt get the correct colors!
-//mod(256) if the number is bigger 
-//	if (!game->elements.floor_color
-//	if (!game->elements.ceiling_color
+
+
+
+
+
+	if (getting_color(split_map, "F", game->elements.floor_color) != 0)
+	{
+		printf("There was an error in getting \"F\" Floor_color\n");
+		ftps_free(split_map);
+		return (value_return);
+	}
+	if (getting_color(split_map, "C", game->elements.ceiling_color) != 0)
+	{
+		printf("There was an error in getting \"C\" Celling_color\n");
+		ftps_free(split_map);
+		return (value_return);
+	}
+
+
+
+
 	get_variable_map(game, split_map);
 	if (!checkmap_valid(game, game->data.map2d))
 		value_return = 0;

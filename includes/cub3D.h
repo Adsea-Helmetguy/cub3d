@@ -74,6 +74,17 @@
 
 
 //strutures
+typedef struct		s_getcolor
+{
+	char	*element_color;
+	char	**game_color;
+	int			array;
+	int			index;
+	int			all_digits;
+	int			before_mod;
+	char	*after_mod;
+
+}				t_getcolor;
 
 typedef struct s_element //the data structure
 {
@@ -186,12 +197,6 @@ typedef struct s_img
 	int				size_line;
 	int				endian;
 }					t_img;
-//
-/*
-typedef struct		s_texture
-{
-}
-*/
 
 typedef struct s_game
 {
@@ -204,7 +209,6 @@ typedef struct s_game
 	t_img		img;
 //images for textures
 	int			**textures;
-	int			**texture_pixels;
 	int			texture_size;
 //
 	int			error_code;
@@ -236,8 +240,8 @@ void	map_floodfill2(char ***tmp_map, t_game *game, int p_x, int p_y);
 void	map_floodfill_checker(char ***tmp_map, t_game *game, int p_x, int p_y);
 
 //freeing_struc.c
+void free_textures(int **game_textures);
 void	ftps_free(char **to_free);
-void	free_double_pointers(char **split_map, char **get_texture);
 
 //get_variables.c
 char	*get_variable_cub(t_game *game);
@@ -245,7 +249,7 @@ void	get_variable_map(t_game *game, char **split_map);
 int	get_variable_element(t_game *game, char **readmap);
 
 //search_value_color.c
-void	getting_color(char **map, char *var_name, int color[3]);
+int	getting_color(char **map, char *var_name, int color[3]);
 char	*search_for_value(char **split_map, char *var_name);
 
 //init_variables.c
@@ -262,7 +266,6 @@ void	invalid_window_size_checker(t_game *game);
 void	window_screen_creation(t_game *game);
 //texture.c
 void	setup_texture(t_game *game);
-void	init_texture_pixels(t_game *game);
 void	init_texture_img(t_game *game, t_img *tmp, char *path);
 //mousekey_hook.c
 int		keyhook(int keycode, t_game *game);

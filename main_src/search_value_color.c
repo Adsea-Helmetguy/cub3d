@@ -21,12 +21,13 @@ static char	*search_for_color(char **split_map, char *var_name)
 	get_color = NULL;
 	element_color = NULL;
 	array = -1;
-	printf("\n----------%s------------------\n", var_name);
 	while(split_map && split_map[++array] && array < 6)
 	{
 		if (get_color)
 			ftps_free(get_color);
 		get_color = ft_split(split_map[array], ' ');
+		if (!get_color || !get_color[1] || !get_color[0])
+			continue;
 		if (!get_color[2] && ft_strcmp(get_color[0], var_name) == 0
 			&& ft_isdigit(get_color[1][0]))
 		{
@@ -38,54 +39,70 @@ static char	*search_for_color(char **split_map, char *var_name)
 	return (element_color);
 }
 
-void	getting_color(char **map, char *var_name, int color[3])
+int	getting_color(char **map, char *var_name, int color[3])
 {
-	char	*element_color;
-	char	**game_color;
-	int	array;
-	int	index;
-	int	all_digits;
+	t_getcolor	get;
 
-	game_color = NULL;
-	element_color = search_for_color(map, var_name);
-	printf("value of element_color: %s\n", element_color);
-	if (element_color)
+	get.game_color = NULL;
+	get.element_color = search_for_color(map, var_name);
+//	printf("value of element_color: %s\n", element_color);
+	if (!get.element_color)
 	{
-		game_color = ft_split(element_color, ',');
-		free(element_color);
+		printf("Error: Color for %s not found in map file\n", var_name);
+		return (1);
 	}
-//check if they are all numbers/digits
-	array = -1;
-	all_digits = 1;
-	while(game_color && game_color[++array])
+	get.game_color = ft_split(get.element_color, ',');
+	free(get.element_color);
+	if (!(get.game_color))
 	{
-		index = -1;
-		while (game_color[array][++index])
+		// Handle split failure
+		printf("Error: Failed to split the color values\n");
+		return (1);
+	}
+
+
+
+	get.array = -1;
+	get.all_digits = 1;
+	//check if they are all numbers/digits
+	while (get.game_color && get.game_color[++(get.array)])
+	{
+		get.index = -1;
+		printf("for %s\n", var_name);
+		while (get.game_color[get.array][++(get.index)])
 		{
-			if (ft_isdigit(game_color[array][index] == 0))
+			//printf("game_color[%d][%d]: %c\n", get.array, get.index, get.game_color[get.array][get.index]);
+			if (ft_isdigit(get.game_color[get.array][get.index]) == 0)
 			{
-				all_digits = 0;
+				get.all_digits = 0;
 				break ;
 			}
+			//if (get.game_color[array] > 255)
+			//	get.game_color[array] %= 256;
 		}
-		if (!all_digits)
-			break ;
-	}
-	if (game_color && all_digits)
-	{
-		array = -1;
-		index = -1;
-		while (game_color && game_color[++array])
-			color[++index] = ft_atoi(game_color[array]);
-		ftps_free(game_color);
-//can detele
-		index = -1;
-		while (color && ++index < 3)
+		if (!(get.all_digits) || (get.array) >= 3)
 		{
-			printf("while loop[%d] game_color! : %d\n", index, color[index]);
+			get.all_digits = 0;
+			break ;
 		}
-//
+		get.before_mod = ft_atoi(get.game_color[get.array]);
+		get.before_mod %= 256;
+		//printf("get.before_mod AFTER doing 256!: %d\n", get.before_mod);
+		get.after_mod = ft_itoa(get.before_mod);
+		printf("get.after_mod value in string: %s\n", get.after_mod);
 	}
+	if (get.all_digits == 0)
+		return (1);
+	if (get.game_color && get.all_digits)
+	{
+		get.array = -1;
+		get.index = -1;
+		while (get.game_color && get.game_color[++(get.array)])
+			color[++(get.index)] = ft_atoi(get.game_color[get.array]);
+	}
+	if (get.game_color)
+		ftps_free(get.game_color);
+	return (0);
 }
 
 char	*search_for_value(char **split_map, char *var_name)
@@ -97,7 +114,7 @@ char	*search_for_value(char **split_map, char *var_name)
 	get_texture = NULL;
 	element_value = NULL;
 	array = -1;
-	printf("\n----------%s-----------------\n", var_name);
+//	printf("\n----------%s-----------------\n", var_name);
 	while(split_map && split_map[++array] && array < 6)
 	{
 		if (get_texture)

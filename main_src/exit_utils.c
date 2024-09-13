@@ -12,26 +12,17 @@
 
 #include "../includes/cub3D.h"
 
-/*
-void	free_sprites(t_game *game)
-{
-	mlx_destroy_image(game->mlx_ptr, game->map.coin);
-	mlx_destroy_image(game->mlx_ptr, game->map.wall);
-	mlx_destroy_image(game->mlx_ptr, game->player.start);
-	mlx_destroy_image(game->mlx_ptr, game->map.empty);
-	mlx_destroy_image(game->mlx_ptr, game->map.door_exit);
-}
-*/
-
 int	x_close_window(t_game *game)
 {
 	if (game->mlx.win_ptr)
 		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
 	if (game->mlx.img_ptr)
 		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	//if (game->mlx.mlx_ptr)
-	//	mlx_destroy_display(game->mlx.mlx_ptr);
-	free(game->mlx.mlx_ptr);
+	if (game->mlx.mlx_ptr)
+	{
+		//mlx_destroy_display(game->mlx.mlx_ptr);
+		free(game->mlx.mlx_ptr);
+	}
 	free_gameloop_end("Quitting game.\n", 0, game);
 	//end_exit("Quitting game.\n", 0, game);
 	return (0);

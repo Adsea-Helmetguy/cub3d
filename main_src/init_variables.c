@@ -48,7 +48,7 @@ void	init_variable_player(t_game *game)
 	game->player.pixel_x = game->player.p_x * TILE_SIZE + TILE_SIZE / 2;
 	game->player.pixel_y = game->player.p_y * TILE_SIZE + TILE_SIZE / 2;
 	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
-	printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
+//	printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
 	//player field of view and angle
 	//game->player.fov_rd = (FOV * M_PI) / 180;
 	//game->player.angle = M_PI;

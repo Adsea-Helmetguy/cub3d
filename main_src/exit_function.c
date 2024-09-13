@@ -60,6 +60,9 @@ void	free_gameloop_end(char *message, int exit_code, t_game *game)
 		free(game->elements.east_texture);
 	if (game->data.map2d)
 		ftps_free(game->data.map2d);
+	if (game->textures)
+		free_textures(game->textures);
+	close(game->data.fd);
 	print_msg(message, exit_code);
 }
 

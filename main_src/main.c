@@ -288,8 +288,7 @@ int	start_the_game(char **argv)
 	//if (game.error_code != 0)
 	//	return (game_checkerror_exit("image_testmap", &game));
 	mlx_loop(game.mlx.mlx_ptr);
-	close(game.data.fd);
-	free_gameloop_end("Quitting game.\n", 0, &game); //free the element_values()
+	//free_gameloop_end("Quitting game.\n", 0, &game); //free the element_values()
 	return (0);
 }
 
