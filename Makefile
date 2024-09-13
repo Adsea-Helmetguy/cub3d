@@ -13,7 +13,7 @@
 NAME = cub3D
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g
+#CFLAGS = -Wall -Werror -Wextra -g
 
 SRC_DIR = ./main_src
 INC_DIR = ./includes

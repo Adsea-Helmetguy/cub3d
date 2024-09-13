@@ -47,7 +47,9 @@ void	end_exit(char *message, int exit_code, t_game *game)
 	print_msg(message, exit_code);
 }
 */
-
+//	make re && clear && valgrind --leak-check=full --show-leak-kinds=all 
+//	--track-origins=yes 
+//	./cub3D assets/cub_maps/invalid_cub/invalid_rgb2.cub
 void	free_gameloop_end(char *message, int exit_code, t_game *game)
 {
 	if (game->elements.north_texture)
@@ -84,5 +86,23 @@ void	free_end_exit(char *message, int exit_code, t_game *game, char **str)
 	if (game->data.map2d)
 		ftps_free(game->data.map2d);
 	//end_exit(message, exit_code, game);
+	print_msg(message, exit_code);
+}
+
+void	free_before_game(char *message, int exit_code, t_game *game)
+{
+	if (game->elements.north_texture)
+		free(game->elements.north_texture);
+	if (game->elements.south_texture)
+		free(game->elements.south_texture);
+	if (game->elements.west_texture)
+		free(game->elements.west_texture);
+	if (game->elements.east_texture)
+		free(game->elements.east_texture);
+	if (game->data.map2d)
+		ftps_free(game->data.map2d);
+	//if (get->game_color)
+	//	ftps_free(get->game_color);
+	close(game->data.fd);
 	print_msg(message, exit_code);
 }

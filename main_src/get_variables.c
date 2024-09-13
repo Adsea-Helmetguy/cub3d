@@ -93,7 +93,6 @@ int	get_variable_element(t_game *game, char **readmap)
 
 
 
-
 	if (getting_color(split_map, "F", game->elements.floor_color) != 0)
 	{
 		printf("There was an error in getting \"F\" Floor_color\n");
@@ -107,7 +106,9 @@ int	get_variable_element(t_game *game, char **readmap)
 		return (value_return);
 	}
 
-
+	printf("color: %d\n", game->elements.floor_color[0]);
+	printf("color: %d\n", game->elements.floor_color[1]);
+	printf("color: %d\n", game->elements.floor_color[2]);
 
 
 	get_variable_map(game, split_map);

@@ -82,7 +82,7 @@ typedef struct		s_getcolor
 	int			index;
 	int			all_digits;
 	int			before_mod;
-	char	*after_mod;
+	char	*rgb_colors;
 
 }				t_getcolor;
 
@@ -288,6 +288,7 @@ void	print_msg(char *message, int exit_code);
 //exit_function.c
 void	free_gameloop_end(char *message, int exit_code, t_game *game);
 void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
+void	free_before_game(char *message, int exit_code, t_game *game);
 
 //exit_utils.c
 int	x_close_window(t_game *game);

@@ -71,14 +71,11 @@ int	getting_color(char **map, char *var_name, int color[3])
 		printf("for %s\n", var_name);
 		while (get.game_color[get.array][++(get.index)])
 		{
-			//printf("game_color[%d][%d]: %c\n", get.array, get.index, get.game_color[get.array][get.index]);
 			if (ft_isdigit(get.game_color[get.array][get.index]) == 0)
 			{
 				get.all_digits = 0;
 				break ;
 			}
-			//if (get.game_color[array] > 255)
-			//	get.game_color[array] %= 256;
 		}
 		if (!(get.all_digits) || (get.array) >= 3)
 		{
@@ -87,9 +84,11 @@ int	getting_color(char **map, char *var_name, int color[3])
 		}
 		get.before_mod = ft_atoi(get.game_color[get.array]);
 		get.before_mod %= 256;
-		//printf("get.before_mod AFTER doing 256!: %d\n", get.before_mod);
-		get.after_mod = ft_itoa(get.before_mod);
-		printf("get.after_mod value in string: %s\n", get.after_mod);
+		get.rgb_colors = ft_itoa(get.before_mod);
+		printf("get.after_mod value in string: %s\n", get.rgb_colors);
+		free(get.game_color[get.array]);
+		get.game_color[get.array] = ft_strdup(get.rgb_colors);
+		free(get.rgb_colors);
 	}
 	if (get.all_digits == 0)
 		return (1);
