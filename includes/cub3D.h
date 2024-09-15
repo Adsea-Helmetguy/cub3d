@@ -108,6 +108,7 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
+	char	**map3d;// the map
 	int		map_w;// map width/later player location
 	int		map_h;// map height/later player location
 	double		map_w_in_pixels;
@@ -226,7 +227,7 @@ void	open_testmap(t_game *game, char *map_path);
 int		check_cub_valid_or_not(t_game *game, char **readmap);
 
 //checkmap.c
-int		checkmap_valid(t_game *game, char **map);
+int		checkmap_valid(t_game *game, char **data_map2d);
 
 //fill_space.c
 int		fill_space_tab(t_game *game, char ***tmp_map);

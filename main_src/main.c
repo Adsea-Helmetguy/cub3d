@@ -114,6 +114,8 @@ int has_wall_at(t_game *game, double x, double y)
 		return (1);
 	map_x = floor(x / TILE_SIZE);
 	map_y = floor(y / TILE_SIZE);
+	if (map_x < 0 || map_y < 0 || map_x >= game->data.map_w || map_y >= game->data.map_h)
+		return (1);
 	if (game->data.map2d[map_y][map_x] == '1')
 		return (1);
 	return (0);
@@ -282,7 +284,7 @@ int	start_the_game(char **argv)
 	open_testmap(&game, argv[1]);	
 	init_variable_player(&game);
 
-
+	printf("map w: %i, map h: %i\n", game.data.map_w, game.data.map_h);
 
 
 	starting_view(&game); //mlx_init is here

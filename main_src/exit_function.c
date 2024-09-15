@@ -27,6 +27,8 @@ void	free_gameloop_end(char *message, int exit_code, t_game *game)
 		free(game->elements.east_texture);
 	if (game->data.map2d)
 		ftps_free(game->data.map2d);
+		if (game->data.map2d)
+		ftps_free(game->data.map3d);
 	if (game->textures)
 		free_textures(game->textures);
 	close(game->data.fd);
@@ -50,6 +52,8 @@ void	free_end_exit(char *message, int exit_code, t_game *game, char **str)
 		free(game->elements.east_texture);
 	if (game->data.map2d)
 		ftps_free(game->data.map2d);
+	if (game->data.map2d)
+		ftps_free(game->data.map3d);
 	close(game->data.fd);
 	print_msg(message, exit_code);
 }
@@ -66,6 +70,8 @@ void	free_before_game(char *message, int exit_code, t_game *game)
 		free(game->elements.east_texture);
 	if (game->data.map2d)
 		ftps_free(game->data.map2d);
+	if (game->data.map2d)
+		ftps_free(game->data.map3d);
 	close(game->data.fd);
 	print_msg(message, exit_code);
 }

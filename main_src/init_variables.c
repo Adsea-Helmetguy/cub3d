@@ -21,6 +21,7 @@ void	init_variables(t_game *game)
 	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
+	game->data.map3d = NULL;
 	game->player.p_x = 0;
 	game->player.p_y = 0;
 	game->data.map_w = 0;
@@ -35,7 +36,7 @@ void	init_variables(t_game *game)
 	//for player
 	game->player.pixel_x = 0;
 	game->player.pixel_y = 0;
-	game->player.angle = 90 * M_PI / 180;
+	game->player.angle = 270 * M_PI / 180;
 	//for mlx
 	game->mlx.addr = NULL;
 	game->mlx.bits_per_pixel = 0;
