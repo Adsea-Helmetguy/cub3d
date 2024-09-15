@@ -20,7 +20,7 @@ int	x_close_window(t_game *game)
 		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
 	if (game->mlx.mlx_ptr)
 	{
-		//mlx_destroy_display(game->mlx.mlx_ptr);
+		mlx_destroy_display(game->mlx.mlx_ptr);
 		free(game->mlx.mlx_ptr);
 	}
 	free_gameloop_end("Quitting game.\n", 0, game);

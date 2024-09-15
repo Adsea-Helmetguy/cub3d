@@ -41,6 +41,13 @@ void	init_variables(t_game *game)
 	game->mlx.bits_per_pixel = 0;
 	game->mlx.line_length = 0;
 	game->mlx.endian = 0;
+	//for keys
+	game->key.w_pressed = 0;
+	game->key.a_pressed = 0;
+	game->key.s_pressed = 0;
+	game->key.d_pressed = 0;
+	game->key.left_rotate = 0;
+	game->key.right_rotate = 0;
 }
 
 void	init_variable_player(t_game *game)

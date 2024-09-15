@@ -49,7 +49,7 @@ static int	*xpm_to_img(t_game *game, char *path)
 		}
 		y++;
 	}
-	//mlx_destroy_image(data->view.mlx, tmp.img);
+	mlx_destroy_image(game->mlx.mlx_ptr, tmp.img);
 	return (buffer);
 }
 

@@ -12,6 +12,41 @@
 
 #include "../includes/cub3D.h"
 
+int	keyhook_release(int keycode, t_game *game)
+{
+	if (keycode == W_KEY)
+	{
+		game->key.w_pressed = 0;
+		//printf("KEY W RELEASED = %d!!!\n", game->key.w_pressed);
+	}
+	if (keycode == A_KEY)
+	{
+		game->key.a_pressed = 0;
+		//printf("KEY A RELEASED = %d!!!\n", game->key.a_pressed);
+	}
+	if (keycode == S_KEY)
+	{
+		game->key.s_pressed = 0;
+		//printf("KEY S RELEASED = %d!!!\n", game->key.s_pressed);
+	}
+	if (keycode == D_KEY)
+	{
+		game->key.d_pressed = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
+	}
+	if (keycode == LEFT_KEY)
+	{
+		game->key.left_rotate = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.left_rotate);
+	}
+	if (keycode == RIGHT_KEY)
+	{
+		game->key.right_rotate = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.right_rotate);
+	}
+	return (0);
+}
+
 void	rotate_player(t_game *game, int i)	// rotate the player
 {
 	if (i == 1)
@@ -77,41 +112,6 @@ void	khook(t_game *game, double move_x, double move_y)	// hook the player
 	move_player(game, move_x, move_y); // move the player
 }
 
-int	keyhook_release(int keycode, t_game *game)
-{
-	if (keycode == W_KEY)
-	{
-		game->key.w_pressed = 0;
-		//printf("KEY W RELEASED = %d!!!\n", game->key.w_pressed);
-	}
-	if (keycode == A_KEY)
-	{
-		game->key.a_pressed = 0;
-		//printf("KEY A RELEASED = %d!!!\n", game->key.a_pressed);
-	}
-	if (keycode == S_KEY)
-	{
-		game->key.s_pressed = 0;
-		//printf("KEY S RELEASED = %d!!!\n", game->key.s_pressed);
-	}
-	if (keycode == D_KEY)
-	{
-		game->key.d_pressed = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
-	}
-	if (keycode == LEFT_KEY)
-	{
-		game->key.left_rotate = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.left_rotate);
-	}
-	if (keycode == RIGHT_KEY)
-	{
-		game->key.right_rotate = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.right_rotate);
-	}
-	return (0);
-}
-
 int	keyhook(int keycode, t_game *game)
 {
 //
@@ -131,10 +131,10 @@ int	keyhook(int keycode, t_game *game)
 		if (keycode == RIGHT_KEY)
 			game->key.right_rotate = 1;
 		khook(game, 0, 0);
-		gameplay(game);
+		//gameplay(game);
 	}
 	if (keycode == ESC)
 		x_close_window(game);
-	printf("%d, %c\n", keycode, keycode);
+	//printf("%d, %c\n", keycode, keycode);
 	return (0);
 }
