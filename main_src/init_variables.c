@@ -21,7 +21,6 @@ void	init_variables(t_game *game)
 	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
-	game->data.map3d = NULL;
 	game->player.p_x = 0;
 	game->player.p_y = 0;
 	game->data.map_w = 0;

@@ -108,7 +108,6 @@ typedef struct s_data //the data structure
 	int		is_map_valid;//checking if map is even valid
 	int		all_correct_elements;
 	char	**map2d;// the map
-	char	**map3d;// the map
 	int		map_w;// map width/later player location
 	int		map_h;// map height/later player location
 	double		map_w_in_pixels;

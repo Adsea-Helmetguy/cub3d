@@ -134,10 +134,10 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 //
 //
 //
-	game->data.map2d = fill_space_void(game, data_map2d);
-/*
+
+
 	ftps_free(game->data.map2d);
-	game->data.map2d = malloc(sizeof(char *) * (game->data.map_h));
+	game->data.map2d = malloc(sizeof(char *) * (game->data.map_h + 1));
 	array = -1;
 	while (++array < game->data.map_h)
 	{
@@ -147,7 +147,7 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 	game->data.map2d[array] = NULL;
 	printf("map_h value = %d\n", game->data.map_h);
 	printf("total array for the new map!!!: %d\n", array);
-*/
+
 //
 //
 //
