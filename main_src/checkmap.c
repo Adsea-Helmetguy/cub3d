@@ -92,49 +92,9 @@ static char 	**tmp_map2_helper(t_game *game, char **tmp_map)
 	return (tmp_map2);
 }
 
-//make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
-int	checkmap_valid(t_game *game, char **data_map2d)
+static checkmap_validhelper(t_game *game, char **tmp_map)
 {
-	char	**tmp_map;
-	char	**tmp_map2;
 	int	array;
-
-	if (!valid_char(game, data_map2d))
-		return (0);
-	tmp_map = fill_space_void(game, data_map2d);
-	array = -1;
-	while (tmp_map[++array])
-		printf("%s :tmp_map[%d]\n", tmp_map[array], array);
-	if (tmp_map && fill_space_tab(game, &tmp_map) != 1)
-	{
-		ftps_free(tmp_map);
-		return (0);
-	}
-	map_floodfill(&tmp_map, game, game->player.p_x, game->player.p_y);
-	map_floodfill2(&tmp_map, game, game->player.p_x, game->player.p_y);
-	//array = -1;
-	//while (tmp_map[++array])
-	//	printf("%s :tmp_map[%d]\n", tmp_map[array], array);
-//floodfill completed!
-//check if map is unclosed, creating tmp_map2
-	tmp_map2 = tmp_map2_helper(game, tmp_map);
-//At this point, i have gotten the box around the map!
-	game->data.is_map_valid = 1;
-	map_floodfill_checker(&tmp_map2, game, 1, 1);
-	//printf("\n\n\n\n\n\n");
-	//array = -1;
-	//while (tmp_map2[++array])
-	//	printf("%s\n", tmp_map2[array]);
-	if (game->data.is_map_valid == 0)
-		printf("map is invalid, game->data.is_map_valid == 0\n");
-	else
-		printf("map is valid, ALL GUD!!!\n");
-	//printf("\n-------------------newtmp_map-------------------------\n\n");
-//
-//
-//
-//
-
 
 	ftps_free(game->data.map2d);
 	game->data.map2d = malloc(sizeof(char *) * (game->data.map_h + 1));
@@ -147,7 +107,38 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 	game->data.map2d[array] = NULL;
 	printf("map_h value = %d\n", game->data.map_h);
 	printf("total array for the new map!!!: %d\n", array);
+}
 
+//make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
+int	checkmap_valid(t_game *game, char **data_map2d)
+{
+	char	**tmp_map;
+	char	**tmp_map2;
+	int	array;
+
+	if (!valid_char(game, data_map2d))
+		return (0);
+	tmp_map = fill_space_void(game, data_map2d);
+	if (tmp_map && fill_space_tab(game, &tmp_map) != 1)
+	{
+		ftps_free(tmp_map);
+		return (0);
+	}
+	map_floodfill(&tmp_map, game, game->player.p_x, game->player.p_y);
+	map_floodfill2(&tmp_map, game, game->player.p_x, game->player.p_y);
+	tmp_map2 = tmp_map2_helper(game, tmp_map);//box drawn around map!
+	game->data.is_map_valid = 1;
+	map_floodfill_checker(&tmp_map2, game, 1, 1);
+	if (game->data.is_map_valid == 0)
+		printf("map is invalid, game->data.is_map_valid == 0\n");
+	else
+		printf("map is valid, ALL GUD!!!\n");
+	//printf("\n-------------------newtmp_map-------------------------\n\n");
+//
+//
+//
+//
+	checkmap_validhelper(game, tmp_map);
 //
 //
 //
