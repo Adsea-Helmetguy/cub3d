@@ -46,7 +46,7 @@ int get_wall_color(t_game *game, double px, int ray, int face)
 	return game->textures[face][y * game->texture_size + x];
 }
 
-int px_color(double angle, double px, int flag, double wall_height, int ray, t_game *game) // get the color of the wall
+int px_color(double angle, double px, double wall_height, int ray, t_game *game) // get the color of the wall
 {
 	angle = nor_angle(angle); // normalize the angle
 	if (px < (SCREEN_HEIGHT - wall_height) / 2)
@@ -55,19 +55,19 @@ int px_color(double angle, double px, int flag, double wall_height, int ray, t_g
 		return (0x000000FF); // floor
 	else
 	{
-		if (flag == 0)
+		if (game->data.flag == 0)
 		{
-			if (angle > 90 && angle < 3 * (90))
-				return (get_wall_color(game,px,ray,WEST)); // west wall
+			if (angle > M_PI && angle < 3/2 * M_PI)
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST)); // west wall
 			else
-				return (get_wall_color(game,px,ray,EAST)); // east wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST)); // east wall
 		}
 		else
 		{
-			if (angle > 0 && angle < 180)
-				return (get_wall_color(game,px,ray,SOUTH)); // south wall
+			if (angle > 0 && angle < M_PI)
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,SOUTH)); // south wall
 			else
-				return (get_wall_color(game,px,ray,NORTH)); // north wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,NORTH)); // north wall
 		}
 	}
 }
@@ -82,7 +82,7 @@ void render(t_game *game, int ray, double angle) // render the wall
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
-		my_mlx_pixel_put(game, ray, px, px_color(angle, px, game->data.flag, wall_height, ray, game)); // put the pixel
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game)); // put the pixel
 		px++;
 	}
 }
