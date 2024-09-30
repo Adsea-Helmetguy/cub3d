@@ -129,6 +129,10 @@ typedef struct s_player
 	double	angle;  // player angle
 	void	*start;
 	void	**location;
+	double  hx;
+	double  hy;
+	double  vx;
+	double  vy;
 }				t_player;
 
 typedef struct s_raycasting //the ray structure

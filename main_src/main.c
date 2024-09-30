@@ -36,14 +36,23 @@ double nor_angle(double angle) // normalize the angle
 	return (angle);
 }
 
-int get_wall_color(t_game *game, double px, int ray, int face)
+int get_wall_color(t_game *game, double px, int ray, int face, int wall_height) // get the color of the wall
 {
 	int x;
-	int y;
-
-	x = (int)px % game->texture_size;
-	y = (int)(ray % game->texture_size);
-	return game->textures[face][y * game->texture_size + x];
+	double y;
+	(void)ray;
+	// printf("px: %f wall_height: %d size: %d\n", px, wall_height, game->texture_size);
+	y = px/wall_height* game->texture_size;
+	if (game->data.flag == 1)
+		x = (int)fmodf((game->player.hx * (game->texture_size / TILE_SIZE)), game->texture_size);
+	else
+		x = (int)fmodf((game->player.vy * \
+		(game->texture_size / TILE_SIZE)), game->texture_size);
+	// x = (int)fmodf((ray *game->texture_size/TILE_SIZE),game->texture_size);
+	// if (x > SCREEN_WIDTH / 2 - 500 && x < SCREEN_WIDTH / 2 + 300)
+	// 	printf("x: %d y: %f\n", x, y);
+	
+	return game->textures[face][x * game->texture_size + (int)y];
 }
 
 int px_color(double angle, double px, double wall_height, int ray, t_game *game) // get the color of the wall
@@ -58,16 +67,16 @@ int px_color(double angle, double px, double wall_height, int ray, t_game *game)
 		if (game->data.flag == 0)
 		{
 			if (angle > M_PI && angle < 3/2 * M_PI)
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST)); // west wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST, wall_height)); // west wall
 			else
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST)); // east wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST, wall_height)); // east wall
 		}
 		else
 		{
 			if (angle > 0 && angle < M_PI)
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,SOUTH)); // south wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,SOUTH, wall_height)); // south wall
 			else
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,NORTH)); // north wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,NORTH, wall_height)); // north wall
 		}
 	}
 }
@@ -141,14 +150,14 @@ double v_collision(t_game *game, double angle)
 	y_step = TILE_SIZE * tan(angle);
 	if ((!y_positive(angle) && y_step > 0) || (y_positive(angle) && y_step < 0))
 		y_step *= -1;
-	while (x_intercept >= 0 && x_intercept <= game->data.map_w * TILE_SIZE && y_intercept >= 0 && y_intercept <= game->data.map_h * TILE_SIZE)
+	while (!has_wall_at(game, x_intercept + adjust, y_intercept))
 	{
-		if (has_wall_at(game, x_intercept + adjust, y_intercept))
-			return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
 		x_intercept += x_step;
 		y_intercept += y_step;
 	}
-	return (INT_MAX);
+	game->player.vx = x_intercept;
+	game->player.vy = y_intercept;
+	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
 }
 
 double h_collision(t_game *game, double angle)
@@ -173,14 +182,14 @@ double h_collision(t_game *game, double angle)
 	x_step = TILE_SIZE / tan(angle);
 	if ((!x_positive(angle) && x_step > 0) || (x_positive(angle) && x_step < 0))
 		x_step *= -1;
-	while (x_intercept >= 0 && x_intercept <= game->data.map_w * TILE_SIZE && y_intercept >= 0 && y_intercept <= game->data.map_h * TILE_SIZE)
+	while (!has_wall_at(game, x_intercept, y_intercept + adjust))
 	{
-		if (has_wall_at(game, x_intercept, y_intercept + adjust))
-			return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
 		x_intercept += x_step;
 		y_intercept += y_step;
 	}
-	return (INT_MAX);
+	game->player.hx = x_intercept;
+	game->player.hy = y_intercept;
+	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
 }
 
 void drawrayonmap(t_game *game, double angle, double distance)
@@ -229,11 +238,11 @@ void raycasting(t_game *game)
 		if (h_col < v_col)
 		{
 			game->data.distance = h_col;
+			game->data.flag = 1;
 		}
 		else
 		{
 			game->data.distance = v_col;
-			game->data.flag = 1;
 		}
 		// printf("distance: %f\n", game->data.distance);
 		// drawrayonmap(game, angle, game->data.distance);
