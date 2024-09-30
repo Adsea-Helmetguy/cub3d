@@ -131,17 +131,10 @@ int	keyhook(int keycode, t_game *game)
 		if (keycode == RIGHT_KEY)
 			game->key.right_rotate = 1;
 		khook(game, 0, 0);
-<<<<<<< HEAD
-		// gameplay(game);
-	}
-	if (keycode == ESC)
-		x_close_window(game);
-=======
 		//gameplay(game);
 	}
 	if (keycode == ESC)
 		x_close_window(game);
 	//printf("%d, %c\n", keycode, keycode);
->>>>>>> 8c3532313f2e3c775960468d58fe8017c2060ec3
 	return (0);
 }
