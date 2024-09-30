@@ -49,8 +49,8 @@
 # define ESC 65307
 
 //define screen size
-# define SCREEN_WIDTH 1280 // screen width 640
-# define SCREEN_HEIGHT 960 // screen height 480
+# define SCREEN_WIDTH 640 // screen width 640
+# define SCREEN_HEIGHT 480 // screen height 480
 # define TILE_SIZE 100 // tile size
 
 //define player

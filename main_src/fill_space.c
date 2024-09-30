@@ -85,6 +85,14 @@ int	fill_space_tab(t_game *game, char ***tmp_map)
 				gottem += 1;
 				game->player.p_x = index;//width
 				game->player.p_y = array;//height
+				if ((*tmp_map)[array][index] == 'N')
+					game->player.angle = 270 * M_PI / 180;
+				else if ((*tmp_map)[array][index] == 'S')
+					game->player.angle = 90 * M_PI / 180;
+				else if ((*tmp_map)[array][index] == 'E')
+					game->player.angle = 0 * M_PI / 180;
+				else if ((*tmp_map)[array][index] == 'W')
+					game->player.angle = 180 * M_PI / 180;
 			}
 		}
 	}
