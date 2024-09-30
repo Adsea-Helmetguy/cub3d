@@ -20,8 +20,8 @@ char	**fill_space_void(t_game *game, char **map)
 	int	size;
 	int	index;
 
-	printf("value of height: %d\n", game->data.map_h);
-	printf("value of width: %d\n", game->data.map_w);
+//	printf("value of height: %d\n", game->data.map_h);
+//	printf("value of width: %d\n", game->data.map_w);
 	tmp_map = malloc(sizeof(char *) * (game->data.map_h + 1));
 	array = -1;
 	while (map && map[++array])
@@ -50,10 +50,10 @@ static void 	tab_helper(char ***tmp_map)
 	int		array;
 
 	array = -1;
-	printf("\n-------------------newtmp_map-------------------------\n\n");
+//	printf("\n-------------------newtmp_map-------------------------\n\n");
 	while ((*tmp_map) && (*tmp_map)[++array])
 	{
-		printf("tmp_map[%d]: %s\n", array, (*tmp_map)[array]);
+//		printf("tmp_map[%d]: %s\n", array, (*tmp_map)[array]);
 		index = -1;
 		while ((*tmp_map)[array] && (*tmp_map)[array][++index])
 		{
@@ -73,7 +73,7 @@ int	fill_space_tab(t_game *game, char ***tmp_map)
 	tab_helper(tmp_map);
 	array = -1;
 	gottem = 0;
-	printf("\n-------------------newtmp_map-------------------------\n\n");
+//	printf("\n-------------------newtmp_map-------------------------\n\n");
 	while ((*tmp_map) && (*tmp_map)[++array])
 	{
 		index = -1;

@@ -12,17 +12,39 @@
 
 #include "../includes/cub3D.h"
 
-int	closehook(t_game *game)
+int	keyhook_release(int keycode, t_game *game)
 {
-	if (game->mlx.img_ptr)
-		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	if (game->mlx.win_ptr)
-		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
-	if (game->mlx.mlx_ptr)
-		mlx_destroy_display(game->mlx.mlx_ptr);
-//	free_data(game);
-//	free(game.mlx.win_ptr);
-	exit(0);
+	if (keycode == W_KEY)
+	{
+		game->key.w_pressed = 0;
+		//printf("KEY W RELEASED = %d!!!\n", game->key.w_pressed);
+	}
+	if (keycode == A_KEY)
+	{
+		game->key.a_pressed = 0;
+		//printf("KEY A RELEASED = %d!!!\n", game->key.a_pressed);
+	}
+	if (keycode == S_KEY)
+	{
+		game->key.s_pressed = 0;
+		//printf("KEY S RELEASED = %d!!!\n", game->key.s_pressed);
+	}
+	if (keycode == D_KEY)
+	{
+		game->key.d_pressed = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
+	}
+	if (keycode == LEFT_KEY)
+	{
+		game->key.left_rotate = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.left_rotate);
+	}
+	if (keycode == RIGHT_KEY)
+	{
+		game->key.right_rotate = 0;
+		//printf("KEY D RELEASED = %d!!!\n", game->key.right_rotate);
+	}
+	return (0);
 }
 
 void	rotate_player(t_game *game, int i)	// rotate the player
@@ -90,41 +112,6 @@ void	khook(t_game *game, double move_x, double move_y)	// hook the player
 	move_player(game, move_x, move_y); // move the player
 }
 
-int	keyhook_release(int keycode, t_game *game)
-{
-	if (keycode == W_KEY)
-	{
-		game->key.w_pressed = 0;
-		//printf("KEY W RELEASED = %d!!!\n", game->key.w_pressed);
-	}
-	if (keycode == A_KEY)
-	{
-		game->key.a_pressed = 0;
-		//printf("KEY A RELEASED = %d!!!\n", game->key.a_pressed);
-	}
-	if (keycode == S_KEY)
-	{
-		game->key.s_pressed = 0;
-		//printf("KEY S RELEASED = %d!!!\n", game->key.s_pressed);
-	}
-	if (keycode == D_KEY)
-	{
-		game->key.d_pressed = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.d_pressed);
-	}
-	if (keycode == LEFT_KEY)
-	{
-		game->key.left_rotate = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.left_rotate);
-	}
-	if (keycode == RIGHT_KEY)
-	{
-		game->key.right_rotate = 0;
-		//printf("KEY D RELEASED = %d!!!\n", game->key.right_rotate);
-	}
-	return (0);
-}
-
 int	keyhook(int keycode, t_game *game)
 {
 //
@@ -144,9 +131,17 @@ int	keyhook(int keycode, t_game *game)
 		if (keycode == RIGHT_KEY)
 			game->key.right_rotate = 1;
 		khook(game, 0, 0);
+<<<<<<< HEAD
 		// gameplay(game);
 	}
 	if (keycode == ESC)
 		x_close_window(game);
+=======
+		//gameplay(game);
+	}
+	if (keycode == ESC)
+		x_close_window(game);
+	//printf("%d, %c\n", keycode, keycode);
+>>>>>>> 8c3532313f2e3c775960468d58fe8017c2060ec3
 	return (0);
 }

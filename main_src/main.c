@@ -24,7 +24,6 @@ void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
 	else if (y >= SCREEN_HEIGHT)
 		return ;
 	mlxpixel(game, x, y, color); // put the pixel
-	// mlx_pixel_put(game->mlx.mlx_ptr, game->mlx.win_ptr, x, y, color); // put the pixel
 }
 
 double nor_angle(double angle) // normalize the angle
@@ -124,6 +123,8 @@ int has_wall_at(t_game *game, double x, double y)
 		return (1);
 	map_x = floor(x / TILE_SIZE);
 	map_y = floor(y / TILE_SIZE);
+	if (map_x < 0 || map_y < 0 || map_x >= game->data.map_w || map_y >= game->data.map_h)
+		return (1);
 	if (game->data.map2d[map_y][map_x] == '1')
 		return (1);
 	return (0);
@@ -261,9 +262,7 @@ void raycasting(t_game *game)
 
 int gameplay(t_game *game)
 {
-	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	// mlx_delete_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
-	init_texture_pixels(game); //drawing the texture first before game
+
 	raycasting(game);
 	// cast_rays(game);
 	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
@@ -285,13 +284,11 @@ static void	starting_view(t_game *game)
 
 static void	starting_game(t_game *game)
 {
-	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, closehook, game);
+	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, x_close_window, game);
 	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
 	mlx_hook(game->mlx.win_ptr, 03, 1L<<1, keyhook_release, game);
-	gameplay(game);
-	//mlx_loop_hook(game->mlx.mlx_ptr, &gameplay, game);
-	//mixpixel_render(game);
-	//mlx_loop_hook(game->mlx.mlx_ptr, mixpixel_render, game);
+	//gameplay(game);
+	mlx_loop_hook(game->mlx.mlx_ptr, &gameplay, game);
 }
 
 int	start_the_game(char **argv)
@@ -299,26 +296,21 @@ int	start_the_game(char **argv)
 	t_game		game;
 
 	init_variables(&game);
-	//check game first before doing the mlx, look at notion map creation!
-	//https://www.notion.so/How-to-do-the-map-5a032dfe0f5549139bbd458b021a3175
-	open_testmap(&game, argv[1]);
+	open_testmap(&game, argv[1]);	
 	init_variable_player(&game);
-	starting_view(&game);//mlx_init is here
+
+	printf("map w: %i, map h: %i\n", game.data.map_w, game.data.map_h);
+
+
+	starting_view(&game); //mlx_init is here
 	if (game.error_code != 0)
 		return (game_checkerror_exit("cub3d testmap", &game));
-	starting_game(&game);
+	starting_game(&game); //gameplay is here!
 	//if (game.error_code != 0)
 	//	return (game_checkerror_exit("image_testmap", &game));
-	//mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
-	//mlx_key_hook(game.mlx.win_ptr, keyhook, &game);
-	mlx_hook(game.mlx.win_ptr, 02, 1L<<0, keyhook, &game);
-	mlx_hook(game.mlx.win_ptr, 03, 1L<<1, keyhook_release, &game);
-	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
-	mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
 	mlx_loop(game.mlx.mlx_ptr);
-	close(game.data.fd);
-	//free the element_values()
-	free_end_exit("just for valgrind\n", 0, &game, NULL);
+	//free_gameloop_end("Quitting game.\n", 0, &game); //free the element_values()
+	free_before_game("Quitting game.\n", 0, &game); //free the element_values()
 	return (0);
 }
 

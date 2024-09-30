@@ -14,40 +14,19 @@
 
 int	x_close_window(t_game *game)
 {
-//	int	array;
-/*
-	array = -1;
-	if (game->map.row)
+	if (game->mlx.win_ptr)
+		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
+	if (game->mlx.img_ptr)
+		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.img_ptr);
+	if (game->mlx.mlx_ptr)
 	{
-		while (game->map.row[++array])
-			free(game->map.row[array]);
-		free(game->map.row);
+		mlx_destroy_display(game->mlx.mlx_ptr);
+		free(game->mlx.mlx_ptr);
 	}
-	array = -1;
-	if (game->map.grid)
-	{
-		while (game->map.grid[++array])
-			free(game->map.grid[array]);
-		free(game->map.grid);
-	}
-	//free_sprites(game);
-*/
-	mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
-	mlx_destroy_display(game->mlx.mlx_ptr);
-	free(game->mlx.mlx_ptr);
+	free_gameloop_end("Quitting game.\n", 0, game);
+	//end_exit("Quitting game.\n", 0, game);
 	return (0);
 }
-
-/*
-void	free_sprites(t_game *game)
-{
-	mlx_destroy_image(game->mlx_ptr, game->map.coin);
-	mlx_destroy_image(game->mlx_ptr, game->map.wall);
-	mlx_destroy_image(game->mlx_ptr, game->player.start);
-	mlx_destroy_image(game->mlx_ptr, game->map.empty);
-	mlx_destroy_image(game->mlx_ptr, game->map.door_exit);
-}
-*/
 
 int	game_checkerror_exit(char *message, t_game *game)
 {

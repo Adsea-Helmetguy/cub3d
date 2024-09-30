@@ -74,6 +74,17 @@
 
 
 //strutures
+typedef struct		s_getcolor
+{
+	char	*element_color;
+	char	**game_color;
+	int			array;
+	int			index;
+	int			all_digits;
+	int			before_mod;
+	char	*rgb_colors;
+
+}				t_getcolor;
 
 typedef struct s_element //the data structure
 {
@@ -190,12 +201,6 @@ typedef struct s_img
 	int				size_line;
 	int				endian;
 }					t_img;
-//
-/*
-typedef struct		s_texture
-{
-}
-*/
 
 typedef struct s_game
 {
@@ -208,7 +213,6 @@ typedef struct s_game
 	t_img		img;
 //images for textures
 	int			**textures;
-	int			**texture_pixels;
 	int			texture_size;
 //
 	int			error_code;
@@ -219,19 +223,17 @@ typedef struct s_game
 //main.c
 int	start_the_game(char **argv);
 
-
 //testmap.c
 void	open_testmap(t_game *game, char *map_path);
 
-
 //check.c
-int	check_cub_valid_or_not(t_game *game, char **readmap);
+int		check_cub_valid_or_not(t_game *game, char **readmap);
 
 //checkmap.c
-int	checkmap_valid(t_game *game, char **map);
+int		checkmap_valid(t_game *game, char **data_map2d);
 
 //fill_space.c
-int	fill_space_tab(t_game *game, char ***tmp_map);
+int		fill_space_tab(t_game *game, char ***tmp_map);
 char	**fill_space_void(t_game *game, char **map);
 
 //floodfill.c
@@ -240,73 +242,64 @@ void	map_floodfill2(char ***tmp_map, t_game *game, int p_x, int p_y);
 void	map_floodfill_checker(char ***tmp_map, t_game *game, int p_x, int p_y);
 
 //freeing_struc.c
+void 	free_textures(int **game_textures);
 void	ftps_free(char **to_free);
-void	free_double_pointers(char **split_map, char **get_texture);
 
 //get_variables.c
 char	*get_variable_cub(t_game *game);
 void	get_variable_map(t_game *game, char **split_map);
-int	get_variable_element(t_game *game, char **readmap);
+int		get_variable_element(t_game *game, char **readmap);
 
 //search_value_color.c
-void	getting_color(char **map, char *var_name, int color[3]);
+int		getting_color(char **map, char *var_name, int color[3]);
 char	*search_for_value(char **split_map, char *var_name);
 
 //init_variables.c
 void	init_variables(t_game *game);
 void	init_variable_player(t_game *game);
 
-//invalid_window_size_checker.c
-void	invalid_window_size_checker(t_game *game);
-
-//
+//----------------------------------------------------------
+//----------------------------------------------------------
 //--------new additions----------
 //window_screen_creation.c
 void	window_screen_creation(t_game *game);
-
 //texture.c
 void	setup_texture(t_game *game);
-void	init_texture_pixels(t_game *game);
 void	init_texture_img(t_game *game, t_img *tmp, char *path);
-
 //mousekey_hook.c
-int	closehook(t_game *game);
+int		keyhook(int keycode, t_game *game);
+int		keyhook_release(int keycode, t_game *game);
+void	khook(t_game *game, double move_x, double move_y);
+void	move_player(t_game *game, double move_x, double move_y);
+void	rotate_player(t_game *game, int i);
 //game
-int gameplay(t_game *game);
+int 	gameplay(t_game *game);
 //--------new additions----------
-//
+//----------------------------------------------------------
+//----------------------------------------------------------
 
 //ft_strcmp.c
-int	ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
 
 //print_msg
 void	print_msg(char *message, int exit_code);
 
 //exit_function.c
-void	end_exit(char *message, int exit_code, t_game *game);
+void	free_gameloop_end(char *message, int exit_code, t_game *game);
 void	free_end_exit(char *message, int exit_code, t_game *game, char **str);
-
-//mousekey_hook.c
-int	keyhook(int keycode, t_game *game);
-int	keyhook_release(int keycode, t_game *game);
+void	free_before_game(char *message, int exit_code, t_game *game);
 
 //exit_utils.c
-int	x_close_window(t_game *game);
-int	game_checkerror_exit(char *message, t_game *game);
+int		x_close_window(t_game *game);
+int		game_checkerror_exit(char *message, t_game *game);
 
 //mlxpixel.c
 void	mlxpixel(t_game *game, int x, int y, int color);
 void	mlxpixel_on_screen(t_game *game);
 
-//mlximage.c
-void	mlximage_on_screen(t_game *game);
-
 //draw_display.c
 void	draw_display(t_game *game);
 
-
-int	rotate(double *x, double *y, double angle);
-int	move(t_game *game, double dx, double dy);
 
 
 #endif

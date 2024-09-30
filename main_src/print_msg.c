@@ -16,17 +16,16 @@ void	print_msg(char *message, int exit_code)
 {
 	if (exit_code != 0)
 	{
-		write(exit_code, "--------exit--------\n", 21);
-		perror(message);
-		printf("exitcode == 1!!\n");
-		write(exit_code, "--------exit--------\n", 21);
+		ft_putstr_fd("\n--------exitcode != 0--------\n", 2);
+		ft_putstr_fd(message, 2);
+		ft_putstr_fd("-------------bad-------------\n", 2);
 		exit(exit_code);
 	}
 	else
 	{
-		write(exit_code, "--------good--------\n", 21);
-		printf("%s", message);
-		write(exit_code, "--------good--------\n", 21);
+		ft_putstr_fd("\n--------exitcode = 0--------\n", 1);
+		ft_putstr_fd(message, 1);
+		ft_putstr_fd("------------good------------\n", 1);
 		exit(exit_code);
 	}
 }

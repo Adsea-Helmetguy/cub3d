@@ -28,6 +28,23 @@ void	ftps_free(char **to_free)
 	free(to_free);
 	to_free = NULL;
 }
+
+void	free_textures(int **game_textures)
+{
+    int index;
+
+	index = 0;
+	if (!game_textures)
+		return ;
+    while (index < 4) //Free (NORTH, SOUTH, EAST, WEST)
+    {
+        if (game_textures[index])
+            free(game_textures[index]);
+        index++;
+    }
+    if (game_textures)
+        free(game_textures); //Free the array with texture pointers
+}
 /*
 void	free_env(t_mini *mini)
 {

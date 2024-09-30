@@ -18,11 +18,11 @@ static int	valid_char(t_game *game, char **map)
 	int	array;
 
 	array = -1;
-	printf("\n\n\n\n\n\ncheckmap_valid\n---------------------------\n");
+	//printf("\n\n\n\n\n\ncheckmap_valid\n---------------------------\n");
 	while (map && map[++array])
 	{
 		index = 0;
-		printf("%s\n", map[array]);
+		//printf("%s\n", map[array]);
 		while (map[array] && map[array][index])
 		{
 			if (map[array][index] == '0' || map[array][index] == '1' || map[array][index] == 'N'
@@ -73,8 +73,6 @@ static char 	**tmp_map2_helper(t_game *game, char **tmp_map)
 	tmp_map2 = malloc(sizeof(char *) * (game->data.map_h + 5));
 	tmp_map2[0] = malloc(sizeof(char) * (game->data.map_w + 5));
 	tmp_map2[1] = malloc(sizeof(char) * (game->data.map_w + 5));
-	printf("map_w length: %d\n", game->data.map_w + 5);
-	printf("map_h length: %d\n", game->data.map_h + 5);
 	index = -1;
 	while (++index < (game->data.map_w + 4))
 		tmp_map2[0][index] = '1';
@@ -94,6 +92,23 @@ static char 	**tmp_map2_helper(t_game *game, char **tmp_map)
 	return (tmp_map2);
 }
 
+static checkmap_validhelper(t_game *game, char **tmp_map)
+{
+	int	array;
+
+	ftps_free(game->data.map2d);
+	game->data.map2d = malloc(sizeof(char *) * (game->data.map_h + 1));
+	array = -1;
+	while (++array < game->data.map_h)
+	{
+		game->data.map2d[array] = ft_strdup(tmp_map[array]);
+		printf("%s: game->data.new2d[%d]\n", game->data.map2d[array], array);
+	}
+	game->data.map2d[array] = NULL;
+	printf("map_h value = %d\n", game->data.map_h);
+	printf("total array for the new map!!!: %d\n", array);
+}
+
 //make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
 int	checkmap_valid(t_game *game, char **data_map2d)
 {
@@ -111,29 +126,23 @@ int	checkmap_valid(t_game *game, char **data_map2d)
 	}
 	map_floodfill(&tmp_map, game, game->player.p_x, game->player.p_y);
 	map_floodfill2(&tmp_map, game, game->player.p_x, game->player.p_y);
-//floodfill completed!
-//check if map is unclosed, creating tmp_map2
-	tmp_map2 = tmp_map2_helper(game, tmp_map);
-	printf("\n\n\n\n\nmapbox:\n");
-	array = -1;
-	while (tmp_map2[++array])
-		printf("%s :tmp_map2[%d]\n", tmp_map2[array], array);
-//
-//
-//
-//
-//At this point, i have gotten the box around the map!
+	tmp_map2 = tmp_map2_helper(game, tmp_map);//box drawn around map!
 	game->data.is_map_valid = 1;
 	map_floodfill_checker(&tmp_map2, game, 1, 1);
-	printf("\n\n\n\n\n\n");
-	array = -1;
-	while (tmp_map2[++array])
-		printf("%s\n", tmp_map2[array]);
 	if (game->data.is_map_valid == 0)
 		printf("map is invalid, game->data.is_map_valid == 0\n");
 	else
 		printf("map is valid, ALL GUD!!!\n");
-	printf("\n-------------------newtmp_map-------------------------\n\n");
+	//printf("\n-------------------newtmp_map-------------------------\n\n");
+//
+//
+//
+//
+	checkmap_validhelper(game, tmp_map);
+//
+//
+//
+//
 	if (tmp_map2)
 		ftps_free(tmp_map2);//once we are done with the tmp_map2
 	if (tmp_map)

@@ -12,8 +12,8 @@
 
 NAME = cub3D
 
-CC = cc
-CFLAGS = -Wall -Werror -Wextra -g
+CC = cc -g
+#CFLAGS = -Wall -Werror -Wextra -g
 
 SRC_DIR = ./main_src
 INC_DIR = ./includes
@@ -62,16 +62,13 @@ SRC_FILE_NAMES = main.c \
 		get_variables.c \
 		search_value_color.c \
 		init_variables.c \
-		invalid_window_size_checker.c \
 		ft_strcmp.c \
 		print_msg.c \
 		exit_function.c \
 		mousekey_hook.c \
 		mlxpixel.c \
-		mlximage.c \
 		draw_display.c \
 		exit_utils.c \
-		player_movement.c \
 		textures.c \
 		mlx_window_screen.c \
 		
