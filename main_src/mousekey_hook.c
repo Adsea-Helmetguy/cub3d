@@ -144,10 +144,9 @@ int	keyhook(int keycode, t_game *game)
 		if (keycode == RIGHT_KEY)
 			game->key.right_rotate = 1;
 		khook(game, 0, 0);
-		gameplay(game);
+		// gameplay(game);
 	}
 	if (keycode == ESC)
 		x_close_window(game);
-	printf("%d, %c\n", keycode, keycode);
 	return (0);
 }

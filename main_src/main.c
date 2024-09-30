@@ -139,14 +139,17 @@ double v_collision(t_game *game, double angle)
 	
 	adjust = 0;
 	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE); //floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
+	x_step = TILE_SIZE;
 	if (x_positive(angle))
 		x_intercept += TILE_SIZE;
-	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x) * tan(angle);
-	x_step = TILE_SIZE;
-	if (!x_positive(angle))
-		x_step *= -1;
-	if (!x_positive(angle))
+	else
+	{
 		adjust = -1;
+		x_step = -TILE_SIZE;
+	}
+	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x) * tan(angle);
+	if (angle == 0 || angle == M_PI)
+		return (SCREEN_HEIGHT);
 	y_step = TILE_SIZE * tan(angle);
 	if ((!y_positive(angle) && y_step > 0) || (y_positive(angle) && y_step < 0))
 		y_step *= -1;
@@ -171,14 +174,17 @@ double h_collision(t_game *game, double angle)
 	adjust = 0;
 	// printf("angle: %f tan angle:%f \n", angle, tan(angle));
 	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE); //floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
+	y_step = TILE_SIZE;
 	if (y_positive(angle))
 		y_intercept += TILE_SIZE;
-	x_intercept = game->player.pixel_x + ((y_intercept - game->player.pixel_y) / tan(angle));
-	y_step = TILE_SIZE;
-	if (!y_positive(angle))
-		y_step *= -1;
-	if (!y_positive(angle))
+	else
+	{
 		adjust = -1;
+		y_step = -TILE_SIZE;
+	}
+	x_intercept = game->player.pixel_x + ((y_intercept - game->player.pixel_y) / tan(angle));
+	if (angle == M_PI / 2 || angle == 3 * (M_PI / 2))
+		return (SCREEN_WIDTH);
 	x_step = TILE_SIZE / tan(angle);
 	if ((!x_positive(angle) && x_step > 0) || (x_positive(angle) && x_step < 0))
 		x_step *= -1;
@@ -308,6 +314,7 @@ int	start_the_game(char **argv)
 	mlx_hook(game.mlx.win_ptr, 02, 1L<<0, keyhook, &game);
 	mlx_hook(game.mlx.win_ptr, 03, 1L<<1, keyhook_release, &game);
 	mlx_hook(game.mlx.win_ptr, 17, 0, x_close_window, &game);
+	mlx_loop_hook(game.mlx.mlx_ptr, &gameplay, &game);
 	mlx_loop(game.mlx.mlx_ptr);
 	close(game.data.fd);
 	//free the element_values()
