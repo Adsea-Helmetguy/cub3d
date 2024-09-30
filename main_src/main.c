@@ -66,7 +66,7 @@ int px_color(double angle, double px, double wall_height, int ray, t_game *game)
 	{
 		if (game->data.flag == 0)
 		{
-			if (angle > M_PI && angle < 3/2 * M_PI)
+			if (angle > M_PI / 2 && angle < 3 * (M_PI / 2))
 				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST, wall_height)); // west wall
 			else
 				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST, wall_height)); // east wall
