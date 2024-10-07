@@ -87,6 +87,9 @@ void render(t_game *game, int ray, double angle) // render the wall
 
 	game->data.distance *= cos(nor_angle(angle - game->player.angle)); 
 	wall_height = ((SCREEN_WIDTH / 2 ) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
+	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 || wall_height == INFINITY || wall_height == -INFINITY)
+		wall_height = SCREEN_HEIGHT;
+	// printf("wall_height: %f %f\n", wall_height, TILE_SIZE/ game->data.distance);
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
