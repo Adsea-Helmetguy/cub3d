@@ -76,14 +76,14 @@ void	move_player(t_game *game, double move_x, double move_y)	// move the player
 	map_grid_y = (new_y / TILE_SIZE); // get the y position in the map
 	if (game->data.map2d[map_grid_y][map_grid_x] != '1' && \
 	(game->data.map2d[map_grid_y][game->player.pixel_x / TILE_SIZE] != '1' && \
-	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] != '1')) // check the wall hit and the diagonal wall hit
+	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] != '1'))// check the wall hit and the diagonal wall hit
 	{
-		game->player.pixel_x= new_x; // move the player
-		game->player.pixel_y= new_y; // move the player
+		game->player.pixel_x= new_x;// move the player
+		game->player.pixel_y= new_y;// move the player
 	}
 }
 
-void	khook(t_game *game, double move_x, double move_y)	// hook the player
+void	khook(t_game *game, double move_x, double move_y)// hook the player
 {
 	if (game->key.right_rotate == 1) //rotate right
 		rotate_player(game, 1);
@@ -114,7 +114,6 @@ void	khook(t_game *game, double move_x, double move_y)	// hook the player
 
 int	keyhook(int keycode, t_game *game)
 {
-//
 	if (keycode == W_KEY || keycode == A_KEY || keycode == S_KEY || keycode == D_KEY
 		|| keycode == LEFT_KEY || keycode == RIGHT_KEY)
 	{

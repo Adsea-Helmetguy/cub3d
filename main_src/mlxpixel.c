@@ -21,11 +21,20 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 */
+//
+//
 
+//focus on is:
+/*
+	the line height of the vertical lines drawn on the screen needs to go beyond the screen.
+	so that the walls won't be facing to you.
+*/
 void	mlxpixel(t_game *game, int x, int y, int color)
 {
 	char	*dst;
 
+	if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT)
+		return ;
 	dst = game->mlx.addr + (y * game->mlx.line_length + x * (game->mlx.bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }

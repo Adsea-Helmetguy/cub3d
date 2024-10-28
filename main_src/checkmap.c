@@ -92,7 +92,7 @@ static char 	**tmp_map2_helper(t_game *game, char **tmp_map)
 	return (tmp_map2);
 }
 
-static checkmap_validhelper(t_game *game, char **tmp_map)
+static void	checkmap_validhelper(t_game *game, char **tmp_map)
 {
 	int	array;
 
@@ -107,6 +107,7 @@ static checkmap_validhelper(t_game *game, char **tmp_map)
 	game->data.map2d[array] = NULL;
 	printf("map_h value = %d\n", game->data.map_h);
 	printf("total array for the new map!!!: %d\n", array);
+	
 }
 
 //make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub

@@ -105,8 +105,13 @@ $(GNL):
 $(MLX_LIB):
 	@make -sC $(MLX_DIR)
 
-$(OBJ_FILE_PATHS): $(SRC_DIR)/%.o : $(SRC_DIR)/%.c 
+$(OBJ_FILE_PATHS): $(SRC_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -I $(INC_DIR) -c $< -o $@
+
+#$(OBJ_DIR):
+#	mkdir -p $(OBJ_DIR)
+#Work in progress!
+
 
 #Compilation on Linux
 %.o: %.c

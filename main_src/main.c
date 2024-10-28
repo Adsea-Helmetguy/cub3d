@@ -13,7 +13,20 @@
 #include "../includes/cub3D.h"
 # include <math.h>
 
-void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
+/*
+Marcus(notes for charles):
+1)I edited get_wall_color and render functions here.
+
+2)In the mlxpixel.c file, i edited the mlxpixel function so that if it were
+to go out of screen WIDTH/HEIGHT, it will not draw those out and return.
+That means we can still call the mlxpixel function out, AND not go out of 
+the screen which prevents segfaults!
+
+Objective:
+1) Fix the wall go inside problem, we cannot be allowed to wall in.
+*/
+
+void my_mlx_pixel_put(t_game *game, int x, int y, int color)// put the pixel
 {
 	if (x < 0) // check the x position
 		return ;
@@ -26,7 +39,7 @@ void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
 	mlxpixel(game, x, y, color); // put the pixel
 }
 
-double nor_angle(double angle) // normalize the angle
+double nor_angle(double angle)// normalize the angle
 {
 	if (angle >= 2 * M_PI)
 		angle -= 2 * M_PI;
@@ -39,36 +52,56 @@ int get_wall_color(t_game *game, double px, int ray, int face, int wall_height) 
 {
 	int x;
 	double y;
+
 	(void)ray;
-	// printf("px: %f wall_height: %d size: %d\n", px, wall_height, game->texture_size);
 	y = px/wall_height* game->texture_size;
 	if (game->data.flag == 1)
 		x = (int)fmodf((game->player.hx * (game->texture_size / TILE_SIZE)), game->texture_size);
 	else
 		x = (int)fmodf((game->player.vy * \
 		(game->texture_size / TILE_SIZE)), game->texture_size);
-	// x = (int)fmodf((ray *game->texture_size/TILE_SIZE),game->texture_size);
-	// if (x > SCREEN_WIDTH / 2 - 500 && x < SCREEN_WIDTH / 2 + 300)
+	//x = (int)fmodf((ray *game->texture_size/TILE_SIZE),game->texture_size);
+	//if (x > SCREEN_WIDTH / 2 - 500 && x < SCREEN_WIDTH / 2 + 300)
 	// 	printf("x: %d y: %f\n", x, y);
-	
-	return game->textures[face][x * game->texture_size + (int)y];
+//
+//
+//
+//
+//new add-ons for charles to refer-fixed valgrind-
+//to add bounds check for x & y that they are within "0 to texture_size".
+	if (x < 0)
+		x = 0;
+	if (x >= game->texture_size)
+		x = game->texture_size - 1;
+	if (y < 0)
+		y = 0;
+	if (y >= game->texture_size)
+		y = game->texture_size - 1;
+	//printf("x: %d, y: %f, texture_size: %d\n", x, y, game->texture_size);
+	//doing the printf above may show the game down. For checking invalid read.
+//
+//
+//
+//
+//
+	return (game->textures[face][x * game->texture_size + (int)y]);
 }
 
 int px_color(double angle, double px, double wall_height, int ray, t_game *game) // get the color of the wall
 {
-	angle = nor_angle(angle); // normalize the angle
+	angle = nor_angle(angle);// normalize the angle
 	if (px < (SCREEN_HEIGHT - wall_height) / 2)
-		return (0x89CFF3FF); // ceiling
+		return (0x89CFF3FF);// ceiling
 	else if (px > (SCREEN_HEIGHT + wall_height) / 2)
-		return (0x000000FF); // floor
+		return (0x000000FF);// floor
 	else
 	{
 		if (game->data.flag == 0)
 		{
 			if (angle > M_PI / 2 && angle < 3 * (M_PI / 2))
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST, wall_height)); // west wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,WEST, wall_height));// west wall
 			else
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST, wall_height)); // east wall
+				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST, wall_height));// east wall
 		}
 		else
 		{
@@ -80,20 +113,26 @@ int px_color(double angle, double px, double wall_height, int ray, t_game *game)
 	}
 }
 
-void render(t_game *game, int ray, double angle) // render the wall
+void render(t_game *game, int ray, double angle)// render the wall
 {
 	double wall_height;
 	double px;
 
 	game->data.distance *= cos(nor_angle(angle - game->player.angle)); 
-	wall_height = ((SCREEN_WIDTH / 2 ) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
-	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 || wall_height == INFINITY || wall_height == -INFINITY)
+	wall_height = ((SCREEN_WIDTH / 2) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
+	/*
+	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 \
+	|| wall_height == INFINITY || wall_height == -INFINITY)
+		wall_height = SCREEN_HEIGHT;//issue somewhere here
+	*/
+	//charles you added too many limits for the above one, when the wall height beyond screen size,
+	//it will cap the height to screen height, squeezing it. uncomment it and look at greywall again.
+	if (game->data.distance == 0 || wall_height == INFINITY || wall_height == -INFINITY)
 		wall_height = SCREEN_HEIGHT;
-	// printf("wall_height: %f %f\n", wall_height, TILE_SIZE/ game->data.distance);
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
-		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game)); // put the pixel
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game));
 		px++;
 	}
 }
@@ -135,14 +174,14 @@ int has_wall_at(t_game *game, double x, double y)
 
 double v_collision(t_game *game, double angle)
 {
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-	int    adjust;
+	double	x_intercept;
+	double	y_intercept;
+	double	x_step;
+	double	y_step;
+	int		adjust;
 	
 	adjust = 0;
-	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE); //floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
+	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE);//floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
 	x_step = TILE_SIZE;
 	if (x_positive(angle))
 		x_intercept += TILE_SIZE;
@@ -169,15 +208,15 @@ double v_collision(t_game *game, double angle)
 
 double h_collision(t_game *game, double angle)
 {
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-	int 	adjust;
+	double	x_intercept;
+	double	y_intercept;
+	double	x_step;
+	double	y_step;
+	int		adjust;
 
 	adjust = 0;
-	// printf("angle: %f tan angle:%f \n", angle, tan(angle));
-	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE); //floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
+	//printf("angle: %f tan angle:%f \n", angle, tan(angle));
+	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE);//floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
 	y_step = TILE_SIZE;
 	if (y_positive(angle))
 		y_intercept += TILE_SIZE;
@@ -197,6 +236,11 @@ double h_collision(t_game *game, double angle)
 		x_intercept += x_step;
 		y_intercept += y_step;
 	}
+	if (!x_positive(angle))
+	{
+		x_intercept -= 1;// Step left instead of right
+		x_step = -TILE_SIZE;
+	}
 	game->player.hx = x_intercept;
 	game->player.hy = y_intercept;
 	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
@@ -210,7 +254,6 @@ void drawrayonmap(t_game *game, double angle, double distance)
 	double y_step;
 
 	// printf("angle: %f distance: %f\n", angle, distance);
-
 	x = game->player.pixel_x;
 	y = game->player.pixel_y;
 	x_step = cos(angle) * 5;
@@ -232,7 +275,7 @@ void raycasting(t_game *game)
 	double increment;
 	int ray;
 
-	ray= 0;
+	ray = 0;
 	angle = nor_angle(game->player.angle - (game->data.radfov / 2));
 	// printf("pixel x: %d pixel y: %d angle:%f \n", game->player.pixel_x, game->player.pixel_y, angle);
 	increment = (double)game->data.radfov / (double)SCREEN_WIDTH;

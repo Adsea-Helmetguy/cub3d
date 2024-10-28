@@ -1,6 +1,6 @@
-NO ./assets/textures/greystone.xpm
-SO ./assets/textures/pinkstone.xpm
-WE ./assets/textures/redbrick.xpm
+NO ./assets/textures/yandere.xpm
+SO ./assets/textures/wood.xpm
+WE ./assets/textures/cry.xpm
 EA ./assets/textures/wood.xpm
 
 F 3035,707,257
@@ -13,9 +13,9 @@ C 252,254,256
 11111111
 10000001
 10000001
-1000S001
+1000N001
 10000001
 10000001
 10000001
 10000001
-111111111
+11111111
