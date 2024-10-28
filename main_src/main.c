@@ -165,10 +165,13 @@ int has_wall_at(t_game *game, double x, double y)
 		return (1);
 	map_x = floor(x / TILE_SIZE);
 	map_y = floor(y / TILE_SIZE);
+
 	if (map_x < 0 || map_y < 0 || map_x >= game->data.map_w || map_y >= game->data.map_h)
 		return (1);
 	if (game->data.map2d[map_y][map_x] == '1')
 		return (1);
+	printf("Map_x value: %d\n", map_x);
+	printf("Map_Y value: %d\n\n\n", map_y);
 	return (0);
 }
 
@@ -216,7 +219,7 @@ double h_collision(t_game *game, double angle)
 
 	adjust = 0;
 	//printf("angle: %f tan angle:%f \n", angle, tan(angle));
-	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE);//floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
+	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE);
 	y_step = TILE_SIZE;
 	if (y_positive(angle))
 		y_intercept += TILE_SIZE;
@@ -284,10 +287,12 @@ void raycasting(t_game *game)
 	while (ray < SCREEN_WIDTH)
 	{
 		game->data.flag = 0;
-		// printf("angle: %f increment: %f\n", angle, increment);
+		//printf("angle: %f increment: %f\n", angle, increment);
 		h_col = h_collision(game, angle);
 		v_col = v_collision(game, angle);
-		// printf("angle:%f h_col: %f v_col: %f\n",angle,h_col, v_col);
+		//
+		//printf("angle:%f h_col: %f v_col: %f\n",angle, h_col, v_col);
+		//
 		if (h_col < v_col)
 		{
 			game->data.distance = h_col;
@@ -297,7 +302,9 @@ void raycasting(t_game *game)
 		{
 			game->data.distance = v_col;
 		}
-		// printf("distance: %f\n", game->data.distance);
+		//
+		//printf("distance: %f\n", game->data.distance);
+		//
 		// drawrayonmap(game, angle, game->data.distance);
 		render(game, ray, angle); // render the wall
 		ray++; // next ray
