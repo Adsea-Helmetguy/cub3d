@@ -1,7 +1,7 @@
-NO ./assets/textures/yandere.xpm
-SO ./assets/textures/wood.xpm
-WE ./assets/textures/cry.xpm
-EA ./assets/textures/wood.xpm
+NO ./assets/textures/north_south_east_west_files_xpm/north.xpm
+SO ./assets/textures/north_south_east_west_files_xpm/south.xpm
+WE ./assets/textures/north_south_east_west_files_xpm/west.xpm
+EA ./assets/textures/north_south_east_west_files_xpm/east.xpm
 
 F 3035,707,257
 C 252,254,256
