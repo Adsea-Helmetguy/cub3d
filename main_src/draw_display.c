@@ -113,7 +113,6 @@ static void	draw_player(t_game *game)
 		}
 		height++;
 	}
-	
 }
 
 void	draw_display(t_game *game)

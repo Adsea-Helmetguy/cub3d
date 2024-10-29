@@ -72,15 +72,29 @@ void	move_player(t_game *game, double move_x, double move_y)	// move the player
 
 	new_x = roundf(game->player.pixel_x + move_x); // get the new x position
 	new_y = roundf(game->player.pixel_y + move_y); // get the new y position
-	map_grid_x = (new_x / TILE_SIZE); // get the x position in the map
-	map_grid_y = (new_y / TILE_SIZE); // get the y position in the map
+	map_grid_x = ((new_x + 10) / TILE_SIZE); // get the x position in the map
+	map_grid_y = ((new_y + 10) / TILE_SIZE); // get the y position in the map
+	printf("map_grind_x: %d\n", map_grid_x);
+	printf("map_grind_y: %d\n\n", map_grid_y);
 	if (game->data.map2d[map_grid_y][map_grid_x] != '1' && \
-	(game->data.map2d[map_grid_y][game->player.pixel_x / TILE_SIZE] != '1' && \
-	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] != '1'))// check the wall hit and the diagonal wall hit
+	game->data.map2d[(int)((new_y - 10) / TILE_SIZE)][(int)((new_x - 10)/ TILE_SIZE)] != '1' && \
+	game->data.map2d[map_grid_y][game->player.pixel_x / TILE_SIZE] != '1' && \
+	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] != '1')// check the wall hit and the diagonal wall hit
 	{
-		game->player.pixel_x= new_x;// move the player
-		game->player.pixel_y= new_y;// move the player
+		game->player.pixel_x = new_x;// move the player
+		game->player.pixel_y = new_y;// move the player
 	}
+	printf("new_x: %d\n", new_x);
+	printf("new_y: %d\n\n", new_y);
+/*
+	if (game->data.map2d[map_grid_y][map_grid_x] == '1' && \
+	(game->data.map2d[map_grid_y][game->player.pixel_x / TILE_SIZE] == '1' && \
+	game->data.map2d[game->player.pixel_y / TILE_SIZE][map_grid_x] == '1'))// check the wall hit and the diagonal wall hit
+	{
+		game->player.pixel_x = new_x;// move the player
+		game->player.pixel_y = new_y;// move the player
+	}
+*/
 }
 
 void	khook(t_game *game, double move_x, double move_y)// hook the player

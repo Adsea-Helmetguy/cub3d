@@ -38,18 +38,6 @@ int get_wall_color(t_game *game, double px, int ray, int face, int wall_height) 
 	// x = (int)fmodf((ray *game->texture_size/TILE_SIZE),game->texture_size);
 	// if (x > SCREEN_WIDTH / 2 - 500 && x < SCREEN_WIDTH / 2 + 300)
 	// 	printf("x: %d y: %f\n", x, y);
-	//new add-ons for charles to refer-fixed valgrind-
-	//to add bounds check for x & y that they are within "0 to texture_size".
-		if (x < 0)
-			x = 0;
-		if (x >= game->texture_size)
-			x = game->texture_size - 1;
-		if (y < 0)
-			y = 0;
-		if (y >= game->texture_size)
-			y = game->texture_size - 1;
-	//printf("x: %d, y: %f, texture_size: %d\n", x, y, game->texture_size);
-	//doing the printf above may show the game down. For checking invalid read.
 	
 	return game->textures[face][x * game->texture_size + (int)y];
 }
@@ -80,30 +68,23 @@ int px_color(double angle, double px, double wall_height, int ray, t_game *game)
 	}
 }
 
-void render(t_game *game, int ray, double angle)// render the wall
+void render(t_game *game, int ray, double angle) // render the wall
 {
 	double wall_height;
 	double px;
 
 	game->data.distance *= cos(nor_angle(angle - game->player.angle)); 
-	wall_height = ((SCREEN_WIDTH / 2) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
-	/*
-	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 \
-	|| wall_height == INFINITY || wall_height == -INFINITY)
-		wall_height = SCREEN_HEIGHT;//issue somewhere here
-	*/
-	//charles you added too many limits for the above one, when the wall height beyond screen size,
-	//it will cap the height to screen height, squeezing it. uncomment it and look at greywall again.
-	if (game->data.distance == 0 || wall_height == INFINITY || wall_height == -INFINITY)
+	wall_height = ((SCREEN_WIDTH / 2 ) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
+	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 || wall_height == INFINITY || wall_height == -INFINITY)
 		wall_height = SCREEN_HEIGHT;
+	// printf("wall_height: %f %f\n", wall_height, TILE_SIZE/ game->data.distance);
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
-		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game));
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game)); // put the pixel
 		px++;
 	}
 }
-
 
 int x_positive(double angle) //facing right true facing left false
 {
@@ -348,4 +329,4 @@ int	main(int argc, char **argv)
 	if (start_the_game(argv))
 		return (1);
 	return (0);
-}
+
