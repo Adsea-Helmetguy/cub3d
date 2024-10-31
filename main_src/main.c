@@ -287,7 +287,7 @@ static void	starting_view(t_game *game)
 		game->error_code = 1;
 		return ;
 	}
-	setup_texture(game);//draw texture here
+	setup_texture(game);//draw texture here && fail if no texture found
 	window_screen_creation(game);
 	mlxpixel_on_screen(game);
 }
@@ -306,11 +306,10 @@ int	start_the_game(char **argv)
 	t_game		game;
 
 	init_variables(&game);
-	open_testmap(&game, argv[1]);	
+	open_testmap(&game, argv[1]);
 	init_variable_player(&game);
 
 	printf("map w: %i, map h: %i\n", game.data.map_w, game.data.map_h);
-
 
 	starting_view(&game); //mlx_init is here
 	if (game.error_code != 0)

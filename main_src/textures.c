@@ -16,10 +16,10 @@ void	init_texture_img(t_game *game, t_img *tmp, char *path)
 {
 	tmp->img = mlx_xpm_file_to_image(game->mlx.mlx_ptr, path,
 			&(game->texture_size), &(game->texture_size));
-	//if (image->img == NULL)
-	//	exit_and_free(data, error_msg(ERR_MLX_IMG, 21));
+	if (tmp->img == NULL)
+		close_window_invalidtextures(game);
 	tmp->addr = (int *)mlx_get_data_addr(tmp->img, &tmp->pixel_bits,
-			&tmp->size_line, &tmp->endian);
+			&tmp->size_line, &tmp->endian);//issue here
 	return ;
 }
 
@@ -30,7 +30,8 @@ static int	*xpm_to_img(t_game *game, char *path)
 	int		x;
 	int		y;
 
-	init_texture_img(game, &tmp, path);//tmp is updated here to be used
+	init_texture_img(game, &tmp, path);
+	//tmp is updated here to be used
 //	buffer = ft_calloc(1,
 //			sizeof * buffer * data->texture_det.size * data->texture_det.size);
 	//buffer = malloc(sizeof(int) * (game->texture_size * game->texture_size));
@@ -56,7 +57,7 @@ static int	*xpm_to_img(t_game *game, char *path)
 void	setup_texture(t_game *game)
 {
 	game->textures = malloc(sizeof(int *) * 5);
-	//if (!data->textures)
+	//if (!game->textures)
 	//	exit_and_free;
 	game->texture_size = 225;//cause my textures are 225 in size
 	//north=0,south=1,east=2,west=3,(final)=4(null);

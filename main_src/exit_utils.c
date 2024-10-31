@@ -28,6 +28,18 @@ int	x_close_window(t_game *game)
 	return (0);
 }
 
+int	close_window_invalidtextures(t_game *game)
+{
+	if (game->mlx.mlx_ptr)
+	{
+		mlx_destroy_display(game->mlx.mlx_ptr);
+		free(game->mlx.mlx_ptr);
+	}
+	free(game->textures);
+	free_before_game("UNABLE TO FIND TEXTURES!\n", -1, game);
+	return (0);
+}
+
 int	game_checkerror_exit(char *message, t_game *game)
 {
 	if (game->error_code != 0)

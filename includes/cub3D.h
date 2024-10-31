@@ -291,6 +291,7 @@ void	free_before_game(char *message, int exit_code, t_game *game);
 
 //exit_utils.c
 int		x_close_window(t_game *game);
+int		close_window_invalidtextures(t_game *game);
 int		game_checkerror_exit(char *message, t_game *game);
 
 //mlxpixel.c

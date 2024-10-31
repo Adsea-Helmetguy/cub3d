@@ -56,6 +56,8 @@ void	free_end_exit(char *message, int exit_code, t_game *game, char **str)
 
 void	free_before_game(char *message, int exit_code, t_game *game)
 {
+	int	array;
+
 	if (game->elements.north_texture)
 		free(game->elements.north_texture);
 	if (game->elements.south_texture)
