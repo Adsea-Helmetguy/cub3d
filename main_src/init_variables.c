@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_variable.c                                  :+:      :+:    :+:   */
+/*   init_variables.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 17:59:13 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/10 18:32:35 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/09 18:08:40 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ void	init_variables(t_game *game)
 	game->key.d_pressed = 0;
 	game->key.left_rotate = 0;
 	game->key.right_rotate = 0;
+	//for textures and Tiles
+	game->texture_size = TEXTURE_SIZE;//cause my textures are 225 in size
+	game->tile_size = TILE_SIZE;//cause my TILES START AS 100 in size
+	game->texture_width = 0;
+	game->texture_height = 0;
 }
 
 void	init_variable_player(t_game *game)

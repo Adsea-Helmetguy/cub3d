@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/17 17:50:49 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/09 20:00:54 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,6 @@
 # include <X11/keysym.h>
 //# include "MLX/MLX42.h" // include the mlx library
 
-
-# define TEXTURE_SIZE 225
-# define RICK_XPM "./assets/images/rick.xpm"
-# define WALL_XPM "./assets/images/wall.xpm"
-# define COIN_XPM "./assets/images/coin.xpm"
-# define EXIT_XPM "./assets/images/exit.xpm"
-# define EXITOPEN_XPM "./assets/images/exitopen.xpm"
-# define PACMAN_XPM "./assets/images/pacman.xpm"
-
 //define the keys
 # define W_KEY 119
 # define S_KEY 115
@@ -51,7 +42,8 @@
 //define screen size
 # define SCREEN_WIDTH 640 // screen width 640
 # define SCREEN_HEIGHT 480 // screen height 480
-# define TILE_SIZE 100 // tile size
+# define TEXTURE_SIZE 800 //Texture_size
+# define TILE_SIZE 225 // tile size
 
 //define player
 # define FOV_ANGLE 60 //how the player views the world
@@ -163,7 +155,7 @@ typedef struct s_raycasting //the ray structure
 	int	draw_start;
 	int	draw_end;
 	double	wall_x;
-	
+
 }				t_raycasting;
 
 typedef struct	s_key
@@ -214,6 +206,9 @@ typedef struct s_game
 //images for textures
 	int			**textures;
 	int			texture_size;
+	int			texture_width;
+	int			texture_height;
+	int			tile_size;
 //
 	int			error_code;
 	int			screen_x;

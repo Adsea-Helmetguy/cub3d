@@ -1,7 +1,7 @@
-NO ./assets/textures/greystone.xpm
-SO ./assets/textures/pinkstone.xpm
-WE ./assets/textures/redbrick.xpm
-EA ./assets/textures/wood.xpm
+NO ./assets/textures/test/cry.xpm
+SO ./assets/textures/test/cry.xpm
+WE ./assets/textures/test/cry.xpm
+EA ./assets/textures/test/cry.xpm
 
 F 77,92,53
 C 163,208,230

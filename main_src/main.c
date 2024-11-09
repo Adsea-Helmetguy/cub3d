@@ -1,7 +1,7 @@
 #include "../includes/cub3D.h"
-# include <math.h>
+#include <math.h>
 
-void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
 {
 	if (x < 0) // check the x position
 		return ;
@@ -14,7 +14,7 @@ void my_mlx_pixel_put(t_game *game, int x, int y, int color) // put the pixel
 	mlxpixel(game, x, y, color); // put the pixel
 }
 
-double nor_angle(double angle) // normalize the angle
+double	nor_angle(double angle) // normalize the angle
 {
 	if (angle >= 2 * M_PI)
 		angle -= 2 * M_PI;
@@ -23,39 +23,53 @@ double nor_angle(double angle) // normalize the angle
 	return (angle);
 }
 
-int get_wall_color(t_game *game, double px, int ray, int face, int wall_height) // get the color of the wall
+int	get_wall_color(t_game *game, double y, int face, int reverse)
+		// get the color of the wall
 {
 	int x;
-	double y;
-	(void)ray;
-	// printf("px: %f wall_height: %d size: %d\n", px, wall_height, game->texture_size);
-	y = px/wall_height* game->texture_size;
 	if (game->data.flag == 1)
-		x = (int)fmodf((game->player.hx * (game->texture_size / TILE_SIZE)), game->texture_size);
+	{
+		x = (int)fmodf((game->player.hx * (game->texture_width / TILE_SIZE)),
+				game->texture_width);
+	}
 	else
-		x = (int)fmodf((game->player.vy * \
-		(game->texture_size / TILE_SIZE)), game->texture_size);
+		x = (int)fmodf((game->player.vy * (game->texture_width / TILE_SIZE)),
+				game->texture_width);
+
+	// if (((x_positive(game->player.angle) && !y_positive(game->player.angle))
+			// || (!x_positive(game->player.angle)
+			// 	&& y_positive(game->player.angle))))
+	// 	x *= -1;
+	// x = abs(x);
+	// printf("hx=%f vy=%f\n",game->player.hx, game->player.vy );
 	// x = (int)fmodf((ray *game->texture_size/TILE_SIZE),game->texture_size);
 	// if (x > SCREEN_WIDTH / 2 - 500 && x < SCREEN_WIDTH / 2 + 300)
 	// 	printf("x: %d y: %f\n", x, y);
-	//new add-ons for charles to refer-fixed valgrind-
-	//to add bounds check for x & y that they are within "0 to texture_size".
-		if (x < 0)
-			x = 0;
-		if (x >= game->texture_size)
-			x = game->texture_size - 1;
-		if (y < 0)
-			y = 0;
-		if (y >= game->texture_size)
-			y = game->texture_size - 1;
-	//printf("x: %d, y: %f, texture_size: %d\n", x, y, game->texture_size);
-	//doing the printf above may show the game down. For checking invalid read.
-	
-	return game->textures[face][x * game->texture_size + (int)y];
+	// new add-ons for charles to refer-fixed valgrind-
+	// to add bounds check for x & y that they are within "0 to texture_size".
+	if (x <= 0)
+		x = 0;
+	if (x >= game->texture_width - 1)
+		x = game->texture_width - 1;
+	if (y <= 0)
+		y = 0;
+	if (y >= game->texture_height - 1)
+		y = game->texture_height - 1;
+	x = ((int)(x * reverse) % game->texture_width + game->texture_width) % game->texture_width;
+	// printf("x: %d, y: %f, texture_size: %d\n", x, y, game->texture_size);
+	// doing the printf above may show the game down. For checking invalid read.
+	// printf("x=%f y=%f \n", x, y);
+	// printf("Face: %i y: %d x: %d width:%i %i\n", face, (int)y, x, game->texture_width, (int)y * game->texture_width + (int)x);
+	return (game->textures[face][(int)y * game->texture_width + (int)x]);//game->texture_size is it height or width
 }
 
-int px_color(double angle, double px, double wall_height, int ray, t_game *game) // get the color of the wall
+int	px_color(double angle, double px, double wall_height, t_game *game)
+		// get the color of the wall
 {
+	double y;
+
+	y = (px - ((SCREEN_HEIGHT - wall_height) / 2)) / wall_height
+		* game->texture_height;//game->texture_size is it height or width
 	angle = nor_angle(angle); // normalize the angle
 	if (px < (SCREEN_HEIGHT - wall_height) / 2)
 		return (0x89CFF3FF); // ceiling
@@ -66,90 +80,87 @@ int px_color(double angle, double px, double wall_height, int ray, t_game *game)
 		if (game->data.flag == 0)
 		{
 			if (angle > M_PI / 2 && angle < 3 * (M_PI / 2))
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2 ,ray,WEST, wall_height)); // west wall
+				return (get_wall_color(game, y, WEST, -1)); // west wall
 			else
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,EAST, wall_height)); // east wall
+				return (get_wall_color(game, y, EAST, 1)); // east wall
 		}
 		else
 		{
 			if (angle > 0 && angle < M_PI)
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,SOUTH, wall_height)); // south wall
+				return (get_wall_color(game, y, SOUTH, -1)); // south wall
 			else
-				return (get_wall_color(game,px - (SCREEN_HEIGHT - wall_height) / 2,ray,NORTH, wall_height)); // north wall
+				return (get_wall_color(game, y, NORTH, 1)); // north wall
 		}
 	}
 }
 
-void render(t_game *game, int ray, double angle)// render the wall
+void	render(t_game *game, int ray, double angle) // render the wall
 {
 	double wall_height;
 	double px;
 
-	game->data.distance *= cos(nor_angle(angle - game->player.angle)); 
-	wall_height = ((SCREEN_WIDTH / 2) / tan(game->data.radfov / 2) * (TILE_SIZE / game->data.distance)); 
-	/*
-	if (game->data.distance == 0 || wall_height > SCREEN_HEIGHT || wall_height < 0 \
-	|| wall_height == INFINITY || wall_height == -INFINITY)
-		wall_height = SCREEN_HEIGHT;//issue somewhere here
-	*/
-	//charles you added too many limits for the above one, when the wall height beyond screen size,
-	//it will cap the height to screen height, squeezing it. uncomment it and look at greywall again.
-	if (game->data.distance == 0 || wall_height == INFINITY || wall_height == -INFINITY)
+	game->data.distance *= cos(nor_angle(angle - game->player.angle));
+	wall_height = ((SCREEN_WIDTH / 2) / tan(game->data.radfov / 2) * (TILE_SIZE
+				/ game->data.distance));
+	if (game->data.distance == 0 || wall_height == INFINITY || wall_height ==
+		-INFINITY)
 		wall_height = SCREEN_HEIGHT;
 	px = 0;
 	while (px < SCREEN_HEIGHT)
 	{
-		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, ray, game));
+		my_mlx_pixel_put(game, ray, px, px_color(angle, px, wall_height, game));
 		px++;
 	}
 }
 
-
-int x_positive(double angle) //facing right true facing left false
+int	x_positive(double angle) // facing right true facing left false
 {
 	if (angle >= M_PI / 2 && angle <= 3 * (M_PI / 2))
 		return (0);
 	return (1);
 }
 
-int y_positive(double angle) //facing down true facing up false
+int	y_positive(double angle) // facing down true facing up false
 {
 	if (angle > 0 && angle < M_PI)
 		return (1);
 	return (0);
 }
 
-double distance(double x1, double y1, double x2, double y2)
+double	distance(double x1, double y1, double x2, double y2)
 {
 	return (sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
 }
 
-int has_wall_at(t_game *game, double x, double y)
+int	has_wall_at(t_game *game, double x, double y)
 {
-	int map_x;
-	int map_y;
+	int	map_x;
+	int	map_y;
 
-	if (x < 0 || x >= game->data.map_w * TILE_SIZE || y < 0 || y >= game->data.map_h * TILE_SIZE)
+	if (x < 0 || x >= game->data.map_w * TILE_SIZE || y < 0
+		|| y >= game->data.map_h * TILE_SIZE)
 		return (1);
 	map_x = floor(x / TILE_SIZE);
 	map_y = floor(y / TILE_SIZE);
-	if (map_x < 0 || map_y < 0 || map_x >= game->data.map_w || map_y >= game->data.map_h)
+	if (map_x < 0 || map_y < 0 || map_x >= game->data.map_w
+		|| map_y >= game->data.map_h)
 		return (1);
 	if (game->data.map2d[map_y][map_x] == '1')
 		return (1);
 	return (0);
 }
 
-double v_collision(t_game *game, double angle)
+double	v_collision(t_game *game, double angle)
 {
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-	int    adjust;
-	
+	double	x_intercept;
+	double	y_intercept;
+	double	x_step;
+	double	y_step;
+	int		adjust;
+
 	adjust = 0;
-	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE); //floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
+	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE);
+		// floor(game->player.pixel_x / TILE_SIZE) * TILE_SIZE;
 	x_step = TILE_SIZE;
 	if (x_positive(angle))
 		x_intercept += TILE_SIZE;
@@ -158,7 +169,8 @@ double v_collision(t_game *game, double angle)
 		adjust = -1;
 		x_step = -TILE_SIZE;
 	}
-	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x) * tan(angle);
+	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x)
+		* tan(angle);
 	if (angle == 0 || angle == M_PI)
 		return (SCREEN_HEIGHT);
 	y_step = TILE_SIZE * tan(angle);
@@ -171,20 +183,22 @@ double v_collision(t_game *game, double angle)
 	}
 	game->player.vx = x_intercept;
 	game->player.vy = y_intercept;
-	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
+	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept,
+			y_intercept));
 }
 
-double h_collision(t_game *game, double angle)
+double	h_collision(t_game *game, double angle)
 {
-	double x_intercept;
-	double y_intercept;
-	double x_step;
-	double y_step;
-	int 	adjust;
+	double	x_intercept;
+	double	y_intercept;
+	double	x_step;
+	double	y_step;
+	int		adjust;
 
 	adjust = 0;
 	// printf("angle: %f tan angle:%f \n", angle, tan(angle));
-	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE); //floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
+	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE);
+		// floor(game->player.pixel_y / TILE_SIZE) * TILE_SIZE;
 	y_step = TILE_SIZE;
 	if (y_positive(angle))
 		y_intercept += TILE_SIZE;
@@ -193,7 +207,8 @@ double h_collision(t_game *game, double angle)
 		adjust = -1;
 		y_step = -TILE_SIZE;
 	}
-	x_intercept = game->player.pixel_x + ((y_intercept - game->player.pixel_y) / tan(angle));
+	x_intercept = game->player.pixel_x + ((y_intercept - game->player.pixel_y)
+			/ tan(angle));
 	if (angle == M_PI / 2 || angle == 3 * (M_PI / 2))
 		return (SCREEN_WIDTH);
 	x_step = TILE_SIZE / tan(angle);
@@ -206,18 +221,18 @@ double h_collision(t_game *game, double angle)
 	}
 	game->player.hx = x_intercept;
 	game->player.hy = y_intercept;
-	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept, y_intercept));
+	return (distance(game->player.pixel_x, game->player.pixel_y, x_intercept,
+			y_intercept));
 }
 
-void drawrayonmap(t_game *game, double angle, double distance)
+void	drawrayonmap(t_game *game, double angle, double distance)
 {
-	double x;
-	double y;
-	double x_step;
-	double y_step;
+	double	x;
+	double	y;
+	double	x_step;
+	double	y_step;
 
 	// printf("angle: %f distance: %f\n", angle, distance);
-
 	x = game->player.pixel_x;
 	y = game->player.pixel_y;
 	x_step = cos(angle) * 5;
@@ -231,19 +246,19 @@ void drawrayonmap(t_game *game, double angle, double distance)
 	}
 }
 
-void raycasting(t_game *game)
+void	raycasting(t_game *game)
 {
-	double h_col;
-	double v_col;
-	double angle;
-	double increment;
-	int ray;
+	double	h_col;
+	double	v_col;
+	double	angle;
+	double	increment;
+	int		ray;
 
-	ray= 0;
+	ray = 0;
 	angle = nor_angle(game->player.angle - (game->data.radfov / 2));
-	// printf("pixel x: %d pixel y: %d angle:%f \n", game->player.pixel_x, game->player.pixel_y, angle);
+	// printf("pixel x: %d pixel y: %d angle:%f \n", game->player.pixel_x,
+		// game->player.pixel_y, angle);
 	increment = (double)game->data.radfov / (double)SCREEN_WIDTH;
-
 	// while (angle < nor_angle(game->player.angle + (FOV_ANGLE / 2)))
 	while (ray < SCREEN_WIDTH)
 	{
@@ -264,18 +279,18 @@ void raycasting(t_game *game)
 		// printf("distance: %f\n", game->data.distance);
 		// drawrayonmap(game, angle, game->data.distance);
 		render(game, ray, angle); // render the wall
-		ray++; // next ray
+		ray++;                    // next ray
 		angle += increment;
 		angle = nor_angle(angle);
 	}
 }
 
-int gameplay(t_game *game)
+int	gameplay(t_game *game)
 {
-
 	raycasting(game);
 	// cast_rays(game);
-	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr, game->mlx.img_ptr, 0, 0);
+	mlx_put_image_to_window(game->mlx.mlx_ptr, game->mlx.win_ptr,
+		game->mlx.img_ptr, 0, 0);
 	return (0);
 }
 
@@ -287,50 +302,49 @@ static void	starting_view(t_game *game)
 		game->error_code = 1;
 		return ;
 	}
-	setup_texture(game);//draw texture here && fail if no texture found
+	setup_texture(game); // draw texture here && fail if no texture found
 	window_screen_creation(game);
 	mlxpixel_on_screen(game);
 }
 
 static void	starting_game(t_game *game)
 {
-	mlx_hook(game->mlx.win_ptr, 17, 1L<<17, x_close_window, game);
-	mlx_hook(game->mlx.win_ptr, 02, 1L<<0, keyhook, game);
-	mlx_hook(game->mlx.win_ptr, 03, 1L<<1, keyhook_release, game);
-	//gameplay(game);
+	mlx_hook(game->mlx.win_ptr, 17, 1L << 17, x_close_window, game);
+	mlx_hook(game->mlx.win_ptr, 02, 1L << 0, keyhook, game);
+	mlx_hook(game->mlx.win_ptr, 03, 1L << 1, keyhook_release, game);
+	// gameplay(game);
 	mlx_loop_hook(game->mlx.mlx_ptr, &gameplay, game);
 }
 
 int	start_the_game(char **argv)
 {
-	t_game		game;
+	t_game	game;
 
 	init_variables(&game);
 	open_testmap(&game, argv[1]);
 	init_variable_player(&game);
-
 	printf("map w: %i, map h: %i\n", game.data.map_w, game.data.map_h);
-
-	starting_view(&game); //mlx_init is here
+	starting_view(&game); // mlx_init is here
 	if (game.error_code != 0)
 		return (game_checkerror_exit("cub3d testmap", &game));
-	starting_game(&game); //gameplay is here!
-	//if (game.error_code != 0)
+	starting_game(&game); // gameplay is here!
+	// if (game.error_code != 0)
 	//	return (game_checkerror_exit("image_testmap", &game));
 	mlx_loop(game.mlx.mlx_ptr);
-	//free_gameloop_end("Quitting game.\n", 0, &game); //free the element_values()
-	free_before_game("Quitting game.\n", 0, &game); //free the element_values()
+	// free_gameloop_end("Quitting game.\n", 0, &game);
+		//free the element_values()
+	free_before_game("Quitting game.\n", 0, &game); // free the element_values()
 	return (0);
 }
 
 //./cub3D ./map/maplocation (only 1 argument)
-//e.g make re && ./cub3D assets/cub_maps/valid_cub/valid3.cub
-//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
-//e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
-//e.g //make re && valgrind --leak-check=full --show-leak-kinds=all ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
+// e.g make re && ./cub3D assets/cub_maps/valid_cub/valid3.cub
+// e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
+// e.g make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
+// e.g //make re && valgrind --leak-check=full --show-leak-kinds=all ./cub3D assets/cub_maps/invalid_cub/invalid1.cub
 //(success!)
-//use this:
-//https://medium.com/@afatir.ahmedfatir/cub3d-tutorial-af5dd31d2fcf
+// use this:
+// https://medium.com/@afatir.ahmedfatir/cub3d-tutorial-af5dd31d2fcf
 int	main(int argc, char **argv)
 {
 	if (argc != 2)
