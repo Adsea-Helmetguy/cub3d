@@ -27,15 +27,21 @@ int	get_wall_color(t_game *game, double y, int face, int reverse)
 		// get the color of the wall
 {
 	int x;
+	double scale;
+
+	scale = game->texture_width / (double)TILE_SIZE;
 	if (game->data.flag == 1)
 	{
-		x = (int)fmodf((game->player.hx * (game->texture_width / TILE_SIZE)),
-				game->texture_width);
+		//x = (int)fmod((game->player.hx * (game->texture_width / TILE_SIZE)),
+		//		game->texture_width);
+		x = (int)fmod((game->player.hx * scale), game->texture_width);
 	}
 	else
-		x = (int)fmodf((game->player.vy * (game->texture_width / TILE_SIZE)),
-				game->texture_width);
-
+	{
+		//x = (int)fmod((game->player.vy * (game->texture_width / TILE_SIZE)),
+		//		game->texture_width);
+		x = (int)fmod((game->player.vy * scale), game->texture_width);
+	}
 	// if (((x_positive(game->player.angle) && !y_positive(game->player.angle))
 			// || (!x_positive(game->player.angle)
 			// 	&& y_positive(game->player.angle))))
@@ -47,19 +53,21 @@ int	get_wall_color(t_game *game, double y, int face, int reverse)
 	// 	printf("x: %d y: %f\n", x, y);
 	// new add-ons for charles to refer-fixed valgrind-
 	// to add bounds check for x & y that they are within "0 to texture_size".
-	if (x <= 0)
-		x = 0;
-	if (x >= game->texture_width - 1)
-		x = game->texture_width - 1;
-	if (y <= 0)
-		y = 0;
-	if (y >= game->texture_height - 1)
-		y = game->texture_height - 1;
+	// if (x <= 0)
+	// 	x = 0;
+	// if (x >= game->texture_width - 1)
+	// 	x = game->texture_width - 1;
+	// if (y <= 0)
+	// 	y = 0;
+	// if (y >= game->texture_height - 1)
+	// 	y = game->texture_height - 1;
 	x = ((int)(x * reverse) % game->texture_width + game->texture_width) % game->texture_width;
-	// printf("x: %d, y: %f, texture_size: %d\n", x, y, game->texture_size);
-	// doing the printf above may show the game down. For checking invalid read.
-	// printf("x=%f y=%f \n", x, y);
-	// printf("Face: %i y: %d x: %d width:%i %i\n", face, (int)y, x, game->texture_width, (int)y * game->texture_width + (int)x);
+
+	//int y_tex;//(for rescaling purposes charles)
+	//double scale2;
+
+	//scale2 = game->texture_height / (double)TILE_SIZE;
+	//y_tex = (int)fmod((y * scale2), game->texture_height);
 	return (game->textures[face][(int)y * game->texture_width + (int)x]);//game->texture_size is it height or width
 }
 
@@ -102,7 +110,7 @@ void	render(t_game *game, int ray, double angle) // render the wall
 	game->data.distance *= cos(nor_angle(angle - game->player.angle));
 	wall_height = ((SCREEN_WIDTH / 2) / tan(game->data.radfov / 2) * (TILE_SIZE
 				/ game->data.distance));
-	if (game->data.distance == 0 || wall_height == INFINITY || wall_height ==
+	if (game->data.distance == 0 || wall_height == INFINITY || wall_height == \
 		-INFINITY)
 		wall_height = SCREEN_HEIGHT;
 	px = 0;

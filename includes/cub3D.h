@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2024/11/09 20:00:54 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/09 22:03:33 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 //define player
 # define FOV_ANGLE 60 //how the player views the world
 # define ROTATE_SPEED 0.045 // rotation speed
-# define MOVE_SPEED 20 // player speed
+# define MOVE_SPEED 80 // player speed
 # define RIGHT 0
 # define LEFT 1
 # define UP 2
