@@ -1,17 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   check_cub_valid_or_not.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:29:24 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/03 15:57:44 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 17:20:38 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
+//count till i hit the newline and return the strlen
+//then i use that value to plusplus to go forward
 static	int	count_till_newline(char *findmap)
 {
 	int	index;
@@ -26,52 +28,54 @@ static	int	count_till_newline(char *findmap)
 			break ;
 		}
 	}
-	//count till i hit the newline and return the strlen 
-	//then i use that value to plusplus to go forward
 	return (index);
 }
 
-static	char	*check_beforemap(char *findmap)
+static char	*lines_checker(int correct_lines, char *findmap)
 {
-	int	index;
-	int	correct_lines;
 	char	*map_get;
 
 	map_get = NULL;
-	correct_lines = 0;
-	while (correct_lines != 6)
-	{
-		index = 0;
-		if (ft_strncmp(findmap, "NO ", 3) == 0 || ft_strncmp(findmap, "SO ", 3) == 0
-			|| ft_strncmp(findmap, "WE ", 3) == 0 || ft_strncmp(findmap, "EA ", 3) == 0
-			|| ft_strncmp(findmap, "F ", 2) == 0 || ft_strncmp(findmap, "C ", 2) == 0
-			|| ft_strncmp(findmap, "\n", 1) == 0)
-		{
-			correct_lines++;
-			index = count_till_newline(findmap);
-			//printf("new index = %d\n", index);
-			findmap += index;
-		}
-		else
-		{
-			//printf("INVALID VALUE!!!Error\n");
-			break ;
-		}
-	}
-	//printf("Correct lines = %d\n", correct_lines);
 	if (correct_lines == 6)
 	{
-		while (ft_strncmp(findmap, "\n", 1) == 0)//might need to edit this
-			findmap++;//incase if the above uses break and correct lines arent 6
+		while (ft_strncmp(findmap, "\n", 1) == 0)
+			findmap++;
 		printf("findmap[0] = %c\n", findmap[0]);
 		map_get = ft_strdup(findmap);
 	}
 	return (map_get);
 }
 
+static	char	*check_beforemap(char *map)
+{
+	int		index;
+	int		correct_lines;
+	char	*map_getter;
+
+	map_getter = NULL;
+	correct_lines = 0;
+	while (correct_lines != 6)
+	{
+		index = 0;
+		if (ft_strncmp(map, "NO ", 3) == 0 || ft_strncmp(map, "SO ", 3) == 0
+			|| ft_strncmp(map, "WE ", 3) == 0 || ft_strncmp(map, "EA ", 3) == 0
+			|| ft_strncmp(map, "F ", 2) == 0 || ft_strncmp(map, "C ", 2) == 0
+			|| ft_strncmp(map, "\n", 1) == 0)
+		{
+			correct_lines++;
+			index = count_till_newline(map);
+			map += index;
+		}
+		else
+			break ;
+	}
+	map_getter = lines_checker(correct_lines, map);
+	return (map_getter);
+}
+
 static int	check_any_newlines_inbetween(char *map)
 {
-	int 	index;
+	int	index;
 
 	index = 0;
 	while (map && map[index])
@@ -86,7 +90,6 @@ static int	check_any_newlines_inbetween(char *map)
 		else
 			return (0);
 	}
-	//printf("\n---------no newlines inbetween maps, GOOD!--------\n");
 	return (1);
 }
 
@@ -104,7 +107,6 @@ int	check_cub_valid_or_not(t_game *game, char **readmap)
 		free(map_stuff);
 		return (0);
 	}
-	//printf("\n\n\nstartmap\n----------\n%s\n----------\n", map_stuff);
 	if (map_stuff && !check_any_newlines_inbetween(map_stuff))
 	{
 		free(map_stuff);

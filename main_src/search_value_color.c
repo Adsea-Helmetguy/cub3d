@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   search_value_color.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 16:39:08 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/01 16:39:17 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 18:35:57 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 static char	*search_for_color(char **split_map, char *var_name)
 {
-	int	array;
+	int		array;
 	char	**get_color;
 	char	*element_color;
 
 	get_color = NULL;
 	element_color = NULL;
 	array = -1;
-	while(split_map && split_map[++array] && array < 6)
+	while (split_map && split_map[++array] && array < 6)
 	{
 		if (get_color)
 			ftps_free(get_color);
 		get_color = ft_split(split_map[array], ' ');
 		if (!get_color || !get_color[1] || !get_color[0])
-			continue;
+			continue ;
 		if (!get_color[2] && ft_strcmp(get_color[0], var_name) == 0
 			&& ft_isdigit(get_color[1][0]))
 		{
@@ -45,7 +45,7 @@ int	getting_color(char **map, char *var_name, int color[3])
 
 	get.game_color = NULL;
 	get.element_color = search_for_color(map, var_name);
-//	printf("value of element_color: %s\n", element_color);
+	//	printf("value of element_color: %s\n", element_color);
 	if (!get.element_color)
 	{
 		printf("Error: Color for %s not found in map file\n", var_name);
@@ -59,12 +59,9 @@ int	getting_color(char **map, char *var_name, int color[3])
 		printf("Error: Failed to split the color values\n");
 		return (1);
 	}
-
-
-
 	get.array = -1;
 	get.all_digits = 1;
-	//check if they are all numbers/digits
+	// check if they are all numbers/digits
 	while (get.game_color && get.game_color[++(get.array)])
 	{
 		get.index = -1;
@@ -117,19 +114,20 @@ char	*search_for_value(char **split_map, char *var_name)
 	get_texture = NULL;
 	element_value = NULL;
 	array = -1;
-	while(split_map && split_map[++array] && array < 6)
+	while (split_map && split_map[++array] && array < 6)
 	{
 		if (get_texture)
 			ftps_free(get_texture);
 		get_texture = ft_split(split_map[array], ' ');
 		if (!get_texture[2] && ft_strcmp(get_texture[0], var_name) == 0
-			&& ft_strcmp(get_texture[1] + (ft_strlen(get_texture[1]) - 4), ".xpm") == 0)
+			&& ft_strcmp(get_texture[1] + (ft_strlen(get_texture[1]) - 4),
+				".xpm") == 0)
 		{
 			element_value = ft_strdup(get_texture[1]);
 			break ;
 		}
 	}
-	//free get_texture here!
+	// free get_texture here!
 	if (get_texture)
 		ftps_free(get_texture);
 	return (element_value);

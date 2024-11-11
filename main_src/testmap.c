@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   testmap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 22:10:17 by mlow              #+#    #+#             */
-/*   Updated: 2023/12/06 01:21:16 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 17:01:48 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,5 @@ void	open_testmap(t_game *game, char *map_path)
 		free_end_exit("Error\n", 1, game, &readmap);
 	if (!get_variable_element(game, &readmap))
 		free_end_exit("Error\n", 1, game, &readmap);
-//	printf("\n\nVariable values:\n=========================================\n");
-	// printf("player_width(x): %d\nplayer_height(y): %d\nmap_width: %d\nmap_height: %d\n"
-		// , game->data.p_x, game->data.p_y, game->data.map_w, game->data.map_h);
-//	printf("==========NOW for player details=========\n");
 	free(readmap);
-	//close(game->data.fd);
 }

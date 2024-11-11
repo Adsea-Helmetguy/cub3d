@@ -1,11 +1,11 @@
 
-NO ./assets/textures/test/sleep.xpm
+NO ./assets/textures/seb/seb.xpm
 
-SO ./assets/textures/test/cry.xpm
+SO ./assets/textures/seb/seb1.xpm
 
-WE ./assets/textures/test/yandere.xpm
+WE ./assets/textures/seb/seb2.xpm
 
-EA ./assets/textures/test/kill.xpm
+EA ./assets/textures/seb/seb3.xpm
 
 F 77,92,53
 C 163,208,230

@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_window_screen.c                                :+:      :+:    :+:   */
+/*   ray_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/09 12:16:47 by mlow              #+#    #+#             */
-/*   Updated: 2024/11/11 18:35:39 by cwijaya          ###   ########.fr       */
+/*   Created: 2024/11/11 18:19:37 by cwijaya           #+#    #+#             */
+/*   Updated: 2024/11/11 18:31:44 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
-void	window_screen_creation(t_game *game)
+double	nor_angle(double angle)
 {
-	game->mlx.win_ptr = mlx_new_window(game->mlx.mlx_ptr, SCREEN_WIDTH,
-			SCREEN_HEIGHT, "Cub3d");
-	if (!(game->mlx.win_ptr))
-	{
-		game->error_code = 1; // Set some error flag
-		return ;
-	}
-	game->data.map_w_in_pixels = (double)SCREEN_WIDTH;
-	game->data.map_h_in_pixels = (double)SCREEN_HEIGHT;
+	if (angle >= 2 * M_PI)
+		angle -= 2 * M_PI;
+	else if (angle < 0)
+		angle += 2 * M_PI;
+	return (angle);
+}
+
+int	x_positive(double angle)
+{
+	if (angle >= M_PI / 2 && angle <= 3 * (M_PI / 2))
+		return (0);
+	return (1);
+}
+
+int	y_positive(double angle)
+{
+	if (angle > 0 && angle < M_PI)
+		return (1);
+	return (0);
 }

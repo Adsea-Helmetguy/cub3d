@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mlow <marvin@42.fr>                        +#+  +:+       +#+         #
+#    By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/27 18:14:15 by mlow              #+#    #+#              #
-#    Updated: 2023/11/29 16:11:30 by mlow             ###   ########.fr        #
+#    Updated: 2024/11/11 18:29:23 by cwijaya          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ GNL_FLAGS = -L $(GNL_SRC_DIR) -lft_get_next_line
 
 #MLX file names and paths
 MLX_DIR = ./minilibx-linux
-MLX_LIB = $(MLX_DIR)/libmlx.a #could be /usr/lib, 
+MLX_LIB = $(MLX_DIR)/libmlx.a #could be /usr/lib,
 
 #MLX_INC_HEADER_DIR = -I/usr/include -I $(MLX_DIR)
 MLX_FLAGS  = -L $(MLX_LIB) -L/minilibx-linux/mlx -L/usr/lib/X11 -lXext -lX11
@@ -67,13 +67,15 @@ SRC_FILE_NAMES = main.c \
 		exit_function.c \
 		mousekey_hook.c \
 		mlxpixel.c \
-		draw_display.c \
 		exit_utils.c \
 		textures.c \
 		mlx_window_screen.c \
-		
-		
-		
+		raycasting.c \
+		ray_utils.c \
+		render.c \
+
+
+
 
 # ************************************************************************** */
 #	FILE_LOCATION                                                        */
@@ -92,14 +94,14 @@ all: $(NAME)
 $(NAME): $(MLX_LIB) $(OBJ_FILE_PATHS) $(LIBFT) $(PRINTF) $(GNL)
 	$(CC) $(CFLAGS) $(OBJ_FILE_PATHS) $(MLX_LIB) -Lminilibx-linux -lm -L$(MLX_FLAGS) $(LIB_FLAGS) $(PRINTF_FLAGS) $(GNL_FLAGS) -o $(NAME)
 
-$(LIBFT): 
+$(LIBFT):
 	@make -sC $(LIBFT_SRC_DIR)
 #make -C goes to that path directory's makefile and make using that makefile
 
-$(PRINTF): 
+$(PRINTF):
 	@make -sC $(PRINTF_SRC_DIR)
-	
-$(GNL): 
+
+$(GNL):
 	@make -sC $(GNL_SRC_DIR)
 
 $(MLX_LIB):
@@ -119,7 +121,7 @@ $(OBJ_FILE_PATHS): $(SRC_DIR)/%.o : $(SRC_DIR)/%.c
 
 
 #Creating rules to compile individual source files for bonus to object files
-clean: 
+clean:
 	rm -f $(OBJ_FILE_PATHS) $(GNL_OBJ_FILE_PATHS)
 	@make clean -sC $(LIBFT_SRC_DIR)
 	@make clean -sC $(PRINTF_SRC_DIR)

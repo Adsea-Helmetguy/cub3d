@@ -1,32 +1,12 @@
-
-NO ./assets/textures/greystone.xpm
-
-SO ./assets/textures/pinkstone.xpm
-
-WE ./assets/textures/redbrick.xpm
-
-EA ./assets/textures/wood.xpm
-
-F 77,92,53
-C 163,208,230
+changes made so far:
+init_texture_img
+static	char	*check_beforemap(char *findmap)
 
 
 
 
 
-111111111111
-100100000001
-100000000001
-11100N000001
-111000000001
-111000000001000000000001111111111111111111111111
-111000000001000000000000000100000000000000000111
-111000000001000000000001100100000000000000001101
-111111111111111111111111100100000000000111111001
-                        10010   00000001   11001
-                         1010   00000001   1101
-                         1000000000000011111111
-                          11110000000000001111
-                             10001111110001
-                             11001    10011
-                              1111    1111
+
+
+
+make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./cub3D assets/cub_maps/valid_cub/illusion.cub 

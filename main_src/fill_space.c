@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill_image_testmap.c                               :+:      :+:    :+:   */
+/*   fill_space.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:29:06 by mlow              #+#    #+#             */
-/*   Updated: 2024/08/11 17:29:19 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 17:45:08 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@
 char	**fill_space_void(t_game *game, char **map)
 {
 	char	**tmp_map;
-	int	array;
-	int	size;
-	int	index;
+	int		array;
+	int		size;
+	int		index;
 
-//	printf("value of height: %d\n", game->data.map_h);
-//	printf("value of width: %d\n", game->data.map_w);
 	tmp_map = malloc(sizeof(char *) * (game->data.map_h + 1));
 	array = -1;
 	while (map && map[++array])
@@ -44,23 +42,51 @@ char	**fill_space_void(t_game *game, char **map)
 	return (tmp_map);
 }
 
-static void 	tab_helper(char ***tmp_map)
+static void	tab_helper(char ***tmp_map)
 {
 	int		index;
 	int		array;
 
 	array = -1;
-//	printf("\n-------------------newtmp_map-------------------------\n\n");
 	while ((*tmp_map) && (*tmp_map)[++array])
 	{
-//		printf("tmp_map[%d]: %s\n", array, (*tmp_map)[array]);
 		index = -1;
 		while ((*tmp_map)[array] && (*tmp_map)[array][++index])
 		{
-			if ((*tmp_map)[array][index] == ' ' || (*tmp_map)[array][index] == '~')
+			if ((*tmp_map)[array][index] == ' '
+				|| (*tmp_map)[array][index] == '~')
 				(*tmp_map)[array][index] = '~';
 		}
 	}
+}
+
+static int	total_gottem(int array, int gottem, char ***tmp_map, t_game *game)
+{
+	int	i;
+
+	while ((*tmp_map) && (*tmp_map)[++array])
+	{
+		i = -1;
+		while ((*tmp_map)[array][++i])
+		{
+			if ((*tmp_map)[array][i] == 'N' || (*tmp_map)[array][i] == 'S'
+				|| (*tmp_map)[array][i] == 'E' || (*tmp_map)[array][i] == 'W')
+			{
+				gottem += 1;
+				game->player.p_x = i;
+				game->player.p_y = array;
+				if ((*tmp_map)[array][i] == 'N')
+					game->player.angle = 270 * M_PI / 180;
+				else if ((*tmp_map)[array][i] == 'S')
+					game->player.angle = 90 * M_PI / 180;
+				else if ((*tmp_map)[array][i] == 'E')
+					game->player.angle = 0 * M_PI / 180;
+				else if ((*tmp_map)[array][i] == 'W')
+					game->player.angle = 180 * M_PI / 180;
+			}
+		}
+	}
+	return (gottem);
 }
 
 //fill all the space/tabs with invalid chars
@@ -72,32 +98,8 @@ int	fill_space_tab(t_game *game, char ***tmp_map)
 
 	tab_helper(tmp_map);
 	array = -1;
-	gottem = 0;
-//	printf("\n-------------------newtmp_map-------------------------\n\n");
-	while ((*tmp_map) && (*tmp_map)[++array])
-	{
-		index = -1;
-		while ((*tmp_map)[array][++index])
-		{
-			if ((*tmp_map)[array][index] == 'N' || (*tmp_map)[array][index] == 'S'
-				|| (*tmp_map)[array][index] == 'E' || (*tmp_map)[array][index] == 'W')
-			{
-				gottem += 1;
-				game->player.p_x = index;//width
-				game->player.p_y = array;//height
-				if ((*tmp_map)[array][index] == 'N')
-					game->player.angle = 270 * M_PI / 180;
-				else if ((*tmp_map)[array][index] == 'S')
-					game->player.angle = 90 * M_PI / 180;
-				else if ((*tmp_map)[array][index] == 'E')
-					game->player.angle = 0 * M_PI / 180;
-				else if ((*tmp_map)[array][index] == 'W')
-					game->player.angle = 180 * M_PI / 180;
-			}
-		}
-	}
+	gottem = total_gottem(array, 0, tmp_map, game);
 	if (gottem != 1)
-		printf("map fails, wrong number of either \"N,S,E,W\"!!! Found(%d).\n", gottem);
-	// printf("game->player.p_y: %d\ngame->player.p_x: %d\n", game->player.p_y, game->player.p_x);
+		printf("Wrong number of \"N,S,E,W\"!!! Found(%d).\n", gottem);
 	return (gottem);
 }

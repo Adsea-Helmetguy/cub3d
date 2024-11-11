@@ -1,7 +1,7 @@
-NO ./assets/textures/test/redbrick.xpm
-SO ./assets/textures/test/redbrick.xpm
-WE ./assets/textures/test/redbrick.xpm
-EA ./assets/textures/test/redbrick.xpm
+NO ./assets/textures/test/money.xpm
+SO ./assets/textures/test/money.xpm
+WE ./assets/textures/test/money.xpm
+EA ./assets/textures/test/money.xpm
 
 F 77,92,53
 C 163,208,230

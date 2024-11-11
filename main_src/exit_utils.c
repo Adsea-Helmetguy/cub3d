@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 00:03:45 by mlow              #+#    #+#             */
-/*   Updated: 2023/12/06 00:20:26 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 17:33:39 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	x_close_window(t_game *game)
 		free(game->mlx.mlx_ptr);
 	}
 	free_gameloop_end("Quitting game.\n", 0, game);
-	//end_exit("Quitting game.\n", 0, game);
 	return (0);
 }
 
@@ -47,6 +46,7 @@ int	game_checkerror_exit(char *message, t_game *game)
 		printf("ERROR!! ");
 		printf("%s", message);
 		printf(" error_code != 0\n");
+		free_before_game("Quitting game.\n", 0, game);
 	}
 	return (1);
 }

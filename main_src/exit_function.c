@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_utils.c                                       :+:      :+:    :+:   */
+/*   exit_function.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlow <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 00:03:45 by mlow              #+#    #+#             */
-/*   Updated: 2023/12/06 00:20:26 by mlow             ###   ########.fr       */
+/*   Updated: 2024/11/11 16:58:44 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3D.h"
 
-//	make re && clear && valgrind --leak-check=full --show-leak-kinds=all 
-//	--track-origins=yes 
+//	make re && clear && valgrind --leak-check=full --show-leak-kinds=all
+//	--track-origins=yes
 //	./cub3D assets/cub_maps/invalid_cub/invalid_rgb2.cub
 void	free_gameloop_end(char *message, int exit_code, t_game *game)
 {

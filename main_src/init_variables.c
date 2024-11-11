@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 17:59:13 by mlow              #+#    #+#             */
-/*   Updated: 2024/11/09 18:08:40 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/11 16:48:06 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 void	init_variables(t_game *game)
 {
-	//what are the things we need for the game to work?
 	game->screen_x = 0;
 	game->screen_y = 0;
-	game->error_code = 0;
-	//game->data->map2d = malloc(sizeof(char *) * (h_map));
 	game->error_code = 0;
 	game->data.map2d = NULL;
 	game->player.p_x = 0;
@@ -27,43 +24,43 @@ void	init_variables(t_game *game)
 	game->data.map_h = 0;
 	game->data.fd = 0;
 	game->data.radfov = FOV_ANGLE * M_PI / 180;
-	//elements
 	game->elements.north_texture = NULL;
 	game->elements.south_texture = NULL;
 	game->elements.west_texture = NULL;
 	game->elements.east_texture = NULL;
-	//for player
 	game->player.pixel_x = 0;
 	game->player.pixel_y = 0;
 	game->player.angle = 270 * M_PI / 180;
-	//for mlx
+	init_variables2(game);
+}
+
+void	init_variables2(t_game *game)
+{
+	int	face;
+
 	game->mlx.addr = NULL;
 	game->mlx.bits_per_pixel = 0;
 	game->mlx.line_length = 0;
 	game->mlx.endian = 0;
-	//for keys
 	game->key.w_pressed = 0;
 	game->key.a_pressed = 0;
 	game->key.s_pressed = 0;
 	game->key.d_pressed = 0;
 	game->key.left_rotate = 0;
 	game->key.right_rotate = 0;
-	//for textures and Tiles
-	game->texture_size = TEXTURE_SIZE;//cause my textures are 225 in size
-	game->tile_size = TILE_SIZE;//cause my TILES START AS 100 in size
-	game->texture_width = 0;
-	game->texture_height = 0;
+	face = 0;
+	while (face < 4)
+	{
+		game->texture_width[face] = 0;
+		game->texture_height[face] = 0;
+		face++;
+	}
 }
 
 void	init_variable_player(t_game *game)
 {
 	game->player.pixel_x = game->player.p_x * TILE_SIZE + TILE_SIZE / 2;
 	game->player.pixel_y = game->player.p_y * TILE_SIZE + TILE_SIZE / 2;
-	//"+ TILE_SIZE / 2" is to centre our player in the centre of the title.
-	//printf("player width: %d\nplayer height: %d\n", game->player.pixel_x, game->player.pixel_y);
-	//player field of view and angle
-	//game->player.fov_rd = (FOV * M_PI) / 180;
-	//game->player.angle = M_PI;
 	if (game->data.map_h == 0 || game->data.map_w == 0)
 		game->error_code = 1;
 	else
