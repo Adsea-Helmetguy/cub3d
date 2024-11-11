@@ -45,7 +45,6 @@ int	getting_color(char **map, char *var_name, int color[3])
 
 	get.game_color = NULL;
 	get.element_color = search_for_color(map, var_name);
-	//	printf("value of element_color: %s\n", element_color);
 	if (!get.element_color)
 	{
 		printf("Error: Color for %s not found in map file\n", var_name);
@@ -55,13 +54,11 @@ int	getting_color(char **map, char *var_name, int color[3])
 	free(get.element_color);
 	if (!(get.game_color))
 	{
-		// Handle split failure
 		printf("Error: Failed to split the color values\n");
 		return (1);
 	}
 	get.array = -1;
 	get.all_digits = 1;
-	// check if they are all numbers/digits
 	while (get.game_color && get.game_color[++(get.array)])
 	{
 		get.index = -1;
@@ -127,7 +124,6 @@ char	*search_for_value(char **split_map, char *var_name)
 			break ;
 		}
 	}
-	// free get_texture here!
 	if (get_texture)
 		ftps_free(get_texture);
 	return (element_value);

@@ -18,7 +18,7 @@ void	window_screen_creation(t_game *game)
 			SCREEN_HEIGHT, "Cub3d");
 	if (!(game->mlx.win_ptr))
 	{
-		game->error_code = 1; // Set some error flag
+		game->error_code = 1;
 		return ;
 	}
 	game->data.map_w_in_pixels = (double)SCREEN_WIDTH;
