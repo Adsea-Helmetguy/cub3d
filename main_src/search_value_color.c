@@ -57,7 +57,7 @@ static int	obtain_color(char **map, char *var_name, t_getcolor *get)
 	}
 	get->array = -1;
 	get->all_digits = 1;
-	return (0);	
+	return (0);
 }
 
 static void	check_obtained_color(char **map, char *var_name, t_getcolor *get)
