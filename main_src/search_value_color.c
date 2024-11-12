@@ -39,51 +39,63 @@ static char	*search_for_color(char **split_map, char *var_name)
 	return (element_color);
 }
 
-int	getting_color(char **map, char *var_name, int color[3])
+static int	obtain_color(char **map, char *var_name, t_getcolor *get)
 {
-	t_getcolor	get;
-
-	get.game_color = NULL;
-	get.element_color = search_for_color(map, var_name);
-	if (!get.element_color)
+	get->game_color = NULL;
+	get->element_color = search_for_color(map, var_name);
+	if (!get->element_color)
 	{
 		printf("Error: Color for %s not found in map file\n", var_name);
 		return (1);
 	}
-	get.game_color = ft_split(get.element_color, ',');
-	free(get.element_color);
-	if (!(get.game_color))
+	get->game_color = ft_split(get->element_color, ',');
+	free(get->element_color);
+	if (!(get->game_color))
 	{
 		printf("Error: Failed to split the color values\n");
 		return (1);
 	}
-	get.array = -1;
-	get.all_digits = 1;
-	while (get.game_color && get.game_color[++(get.array)])
+	get->array = -1;
+	get->all_digits = 1;
+	return (0);	
+}
+
+static void	check_obtained_color(char **map, char *var_name, t_getcolor *get)
+{
+	while (get->game_color && get->game_color[++(get->array)])
 	{
-		get.index = -1;
+		get->index = -1;
 		printf("for %s\n", var_name);
-		while (get.game_color[get.array][++(get.index)])
+		while (get->game_color[get->array][++(get->index)])
 		{
-			if (ft_isdigit(get.game_color[get.array][get.index]) == 0)
+			if (ft_isdigit(get->game_color[get->array][get->index]) == 0)
 			{
-				get.all_digits = 0;
+				get->all_digits = 0;
 				break ;
 			}
 		}
-		if (!(get.all_digits) || (get.array) >= 3)
+		if (!(get->all_digits) || (get->array) >= 3)
 		{
-			get.all_digits = 0;
+			get->all_digits = 0;
 			break ;
 		}
-		get.before_mod = ft_atoi(get.game_color[get.array]);
-		get.before_mod %= 256;
-		get.rgb_colors = ft_itoa(get.before_mod);
-		printf("get.after_mod value in string: %s\n", get.rgb_colors);
-		free(get.game_color[get.array]);
-		get.game_color[get.array] = ft_strdup(get.rgb_colors);
-		free(get.rgb_colors);
+		get->before_mod = ft_atoi(get->game_color[get->array]);
+		get->before_mod %= 256;
+		get->rgb_colors = ft_itoa(get->before_mod);
+		printf("get->after_mod value in string: %s\n", get->rgb_colors);
+		free(get->game_color[get->array]);
+		get->game_color[get->array] = ft_strdup(get->rgb_colors);
+		free(get->rgb_colors);
 	}
+}
+
+int	getting_color(char **map, char *var_name, int color[3])
+{
+	t_getcolor	get;
+
+	if (obtain_color(map, var_name, &get) != 0)
+		return (1);
+	check_obtained_color(map, var_name, &get);
 	if (get.all_digits == 0)
 	{
 		if (get.game_color)
