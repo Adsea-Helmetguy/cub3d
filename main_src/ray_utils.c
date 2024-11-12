@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:19:37 by cwijaya           #+#    #+#             */
-/*   Updated: 2024/11/12 15:24:14 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/12 15:52:54 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	init_h(double angle, double *x_step, double *y_step, double *y_intercept)
 	adjust = 0;
 	*y_step = TILE_SIZE;
 	if (y_positive(angle))
-		y_intercept += TILE_SIZE;
+		*y_intercept += TILE_SIZE;
 	else
 	{
 		adjust = -1;
