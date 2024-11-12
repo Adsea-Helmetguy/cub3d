@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:21:32 by cwijaya           #+#    #+#             */
-/*   Updated: 2024/11/11 18:33:12 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/12 14:44:44 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,22 @@ int	get_wall_color(t_game *game, double px, double wall_height, int face)
 	return (game->textures[face][(int)y * game->texture_width[face] + (int)x]);
 }
 
+int	create_rgb(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
 // get_color_of_wall
 int	px_color(double angle, double px, double wall_height, t_game *game)
 {
 	angle = nor_angle(angle);
 	if (px < (SCREEN_HEIGHT - wall_height) / 2)
-		return (0x89CFF3FF);
+		return (create_rgb(game->elements.ceiling_color[0],
+				game->elements.ceiling_color[1],
+				game->elements.ceiling_color[2]));
 	else if (px > (SCREEN_HEIGHT + wall_height) / 2)
-		return (0x000000FF);
+		return (create_rgb(game->elements.floor_color[0],
+				game->elements.floor_color[1], game->elements.floor_color[2]));
 	else
 	{
 		if (game->data.flag == 0)

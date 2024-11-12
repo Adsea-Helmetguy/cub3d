@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:02:59 by cwijaya           #+#    #+#             */
-/*   Updated: 2024/11/11 18:22:28 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/12 14:49:02 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,9 @@ void	raycasting(t_game *game)
 			game->data.flag = 1;
 		}
 		else
-		{
 			game->data.distance = v_col;
-		}
 		render(game, ray, angle);
 		ray++;
-		angle += increment;
-		angle = nor_angle(angle);
+		angle = nor_angle(angle + increment);
 	}
 }

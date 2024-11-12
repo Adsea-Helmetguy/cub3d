@@ -3,8 +3,8 @@ SO ./assets/textures/test/cry.xpm
 WE ./assets/textures/test/cry.xpm
 EA ./assets/textures/test/cry.xpm
 
-F 77,92,53
-C 163,208,230
+F 0,255,0
+C 0,0,255
 
 
 
