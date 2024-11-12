@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 17:53:48 by mlow              #+#    #+#             */
-/*   Updated: 2024/11/11 18:28:34 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/12 15:21:06 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,10 @@ int					x_positive(double angle);
 int					y_positive(double angle);
 double				nor_angle(double angle);
 void				render(t_game *game, int ray, double angle);
+
+// ray_utils.c
+int	init_h(double angle, double *x_step, double *y_step, double *y_intercept);
+int	init_v(double angle, double *x_step, double *y_step, double *x_intercept);
 
 #endif
 /*

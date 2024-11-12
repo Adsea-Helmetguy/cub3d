@@ -6,7 +6,7 @@
 /*   By: cwijaya <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:02:59 by cwijaya           #+#    #+#             */
-/*   Updated: 2024/11/12 14:49:02 by cwijaya          ###   ########.fr       */
+/*   Updated: 2024/11/12 15:24:25 by cwijaya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,12 @@ double	v_collision(t_game *game, double angle)
 	double	y_step;
 	int		adjust;
 
-	adjust = 0;
 	x_intercept = game->player.pixel_x - (game->player.pixel_x % TILE_SIZE);
-	x_step = TILE_SIZE;
-	if (x_positive(angle))
-		x_intercept += TILE_SIZE;
-	else
-	{
-		adjust = -1;
-		x_step = -TILE_SIZE;
-	}
+	adjust = init_v(angle, &x_step, &y_step, &x_intercept);
 	y_intercept = game->player.pixel_y + (x_intercept - game->player.pixel_x)
 		* tan(angle);
 	if (angle == 0 || angle == M_PI)
 		return (SCREEN_HEIGHT);
-	y_step = TILE_SIZE * tan(angle);
-	if ((!y_positive(angle) && y_step > 0) || (y_positive(angle) && y_step < 0))
-		y_step *= -1;
 	while (!has_wall_at(game, x_intercept + adjust, y_intercept))
 	{
 		x_intercept += x_step;
@@ -79,23 +68,12 @@ double	h_collision(t_game *game, double angle)
 	double	y_step;
 	int		adjust;
 
-	adjust = 0;
 	y_intercept = game->player.pixel_y - (game->player.pixel_y % TILE_SIZE);
-	y_step = TILE_SIZE;
-	if (y_positive(angle))
-		y_intercept += TILE_SIZE;
-	else
-	{
-		adjust = -1;
-		y_step = -TILE_SIZE;
-	}
+	adjust = init_h(angle, &x_step, &y_step, &y_intercept);
 	x_intercept = game->player.pixel_x + ((y_intercept - game->player.pixel_y)
 			/ tan(angle));
 	if (angle == M_PI / 2 || angle == 3 * (M_PI / 2))
 		return (SCREEN_WIDTH);
-	x_step = TILE_SIZE / tan(angle);
-	if ((!x_positive(angle) && x_step > 0) || (x_positive(angle) && x_step < 0))
-		x_step *= -1;
 	while (!has_wall_at(game, x_intercept, y_intercept + adjust))
 	{
 		x_intercept += x_step;
