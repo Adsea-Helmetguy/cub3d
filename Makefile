@@ -56,6 +56,7 @@ SRC_FILE_NAMES = main.c \
 		testmap.c \
 		check_cub_valid_or_not.c \
 		checkmap.c \
+		checkmap2.c \
 		fill_space.c \
 		floodfill.c \
 		freeing_struc.c \

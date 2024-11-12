@@ -39,7 +39,7 @@ static int	valid_char(t_game *game, char **map)
 	return (1);
 }
 
-static char	*ft_strdup_checkmap(const char *s)
+char	*ft_strdup_checkmap(const char *s)
 {
 	char		*dest;
 	size_t		i;
@@ -61,34 +61,6 @@ static char	*ft_strdup_checkmap(const char *s)
 	dest[i + 3] = '1';
 	dest[i + 4] = '\0';
 	return (dest);
-}
-
-static char	**tmp_map2_helper(t_game *game, char **tmp_map)
-{
-	char	**tmp_map2;
-	int		array;
-	int		index;
-
-	tmp_map2 = malloc(sizeof(char *) * (game->data.map_h + 5));
-	tmp_map2[0] = malloc(sizeof(char) * (game->data.map_w + 5));
-	tmp_map2[1] = malloc(sizeof(char) * (game->data.map_w + 5));
-	index = -1;
-	while (++index < (game->data.map_w + 4))
-		tmp_map2[0][index] = '1';
-	tmp_map2[0][index] = '\0';
-	tmp_map2[1][0] = '1';
-	index = 0;
-	while (++index < (game->data.map_w + 3))
-		tmp_map2[1][index] = '~';
-	tmp_map2[1][index] = '1';
-	tmp_map2[1][index + 1] = '\0';
-	array = -1;
-	while (tmp_map[++array])
-		tmp_map2[array + 2] = ft_strdup_checkmap(tmp_map[array]);
-	tmp_map2[array + 2] = ft_strdup(tmp_map2[1]);
-	tmp_map2[array + 3] = ft_strdup(tmp_map2[0]);
-	tmp_map2[array + 4] = NULL;
-	return (tmp_map2);
 }
 
 static void	checkmap_validhelper(t_game *game, char **tmp_map)

@@ -221,7 +221,9 @@ void				open_testmap(t_game *game, char *map_path);
 int					check_cub_valid_or_not(t_game *game, char **readmap);
 
 // checkmap.c
-int					checkmap_valid(t_game *game, char **data_map2d);
+int				checkmap_valid(t_game *game, char **data_map2d);
+char			*ft_strdup_checkmap(const char *s);
+char			**tmp_map2_helper(t_game *game, char **tmp_map);
 
 // fill_space.c
 int					fill_space_tab(t_game *game, char ***tmp_map);
@@ -293,6 +295,7 @@ void				free_before_game(char *message, int exit_code,
 int					x_close_window(t_game *game);
 int					close_window_invalidtextures(t_game *game);
 int					game_checkerror_exit(char *message, t_game *game);
+int					tmp_error_exit(char *message, t_game *game, char ***tmp_map2);
 
 // mlxpixel.c
 void				mlxpixel(t_game *game, int x, int y, int color);
@@ -306,8 +309,8 @@ double				nor_angle(double angle);
 void				render(t_game *game, int ray, double angle);
 
 // ray_utils.c
-int	init_h(double angle, double *x_step, double *y_step, double *y_intercept);
-int	init_v(double angle, double *x_step, double *y_step, double *x_intercept);
+int					init_h(double angle, double *x_step, double *y_step, double *y_intercept);
+int					init_v(double angle, double *x_step, double *y_step, double *x_intercept);
 
 #endif
 /*
