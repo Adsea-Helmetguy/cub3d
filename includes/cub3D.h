@@ -295,7 +295,7 @@ void				free_before_game(char *message, int exit_code,
 int					x_close_window(t_game *game);
 int					close_window_invalidtextures(t_game *game);
 int					game_checkerror_exit(char *message, t_game *game);
-int					tmp_error_exit(char *message, t_game *game, char ***tmp_map2);
+int					array_free_exit(char *message, t_game *game, char ***to_free);
 
 // mlxpixel.c
 void				mlxpixel(t_game *game, int x, int y, int color);

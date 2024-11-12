@@ -46,7 +46,6 @@ void	rotate_player(t_game *game, int i)
 }
 
 void	move_player(t_game *game, double move_x, double move_y)
-		// move the player
 {
 	int	map_grid_y;
 	int	map_grid_x;
@@ -57,8 +56,6 @@ void	move_player(t_game *game, double move_x, double move_y)
 	new_y = roundf(game->player.pixel_y + move_y);
 	map_grid_x = ((new_x + 10) / TILE_SIZE);
 	map_grid_y = ((new_y + 10) / TILE_SIZE);
-	printf("map_grind_x: %d\n", map_grid_x);
-	printf("map_grind_y: %d\n\n", map_grid_y);
 	if (game->data.map2d[map_grid_y][map_grid_x] != '1'
 		&& game->data.map2d[(int)((new_y - 10) / TILE_SIZE)][(int)((new_x - 10)
 			/ TILE_SIZE)] != '1'
@@ -69,8 +66,6 @@ void	move_player(t_game *game, double move_x, double move_y)
 		game->player.pixel_x = new_x;
 		game->player.pixel_y = new_y;
 	}
-	printf("new_x: %d\n", new_x);
-	printf("new_y: %d\n\n", new_y);
 }
 
 void	khook(t_game *game, double move_x, double move_y)

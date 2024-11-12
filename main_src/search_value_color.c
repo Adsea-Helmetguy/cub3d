@@ -60,7 +60,7 @@ static int	obtain_color(char **map, char *var_name, t_getcolor *get)
 	return (0);
 }
 
-static void	check_obtained_color(char **map, char *var_name, t_getcolor *get)
+static void	check_obtained_color(char *var_name, t_getcolor *get)
 {
 	while (get->game_color && get->game_color[++(get->array)])
 	{
@@ -95,7 +95,7 @@ int	getting_color(char **map, char *var_name, int color[3])
 
 	if (obtain_color(map, var_name, &get) != 0)
 		return (1);
-	check_obtained_color(map, var_name, &get);
+	check_obtained_color(var_name, &get);
 	if (get.all_digits == 0)
 	{
 		if (get.game_color)

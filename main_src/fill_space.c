@@ -13,32 +13,42 @@
 #include "../includes/cub3D.h"
 
 //fill the void/null spaces with invalid chars till map_w
+static void	fill_space_helper(t_game *game, char ***tmp_map, int ay, char **map)
+{
+	int	index;
+	int	size;
+
+	while (map && map[++ay])
+	{
+		size = ft_strlen(map[ay]);
+		if (size == game->data.map_w)
+			(*tmp_map)[ay] = ft_strdup(map[ay]);
+		else if (size != game->data.map_w)
+		{
+			(*tmp_map)[ay] = malloc(sizeof(char) * (game->data.map_w + 1));
+			if (!(*tmp_map)[ay])
+				array_free_exit("malloc @fill_space_void", game, tmp_map);
+			index = -1;
+			while (map[ay][++index] != '\0')
+				(*tmp_map)[ay][index] = map[ay][index];
+			while ((*tmp_map)[ay] && (index < game->data.map_w))
+				(*tmp_map)[ay][index++] = '~';
+			(*tmp_map)[ay][index] = '\0';
+		}
+	}
+	(*tmp_map)[ay] = NULL;
+}
+
 char	**fill_space_void(t_game *game, char **map)
 {
 	char	**tmp_map;
 	int		array;
-	int		size;
-	int		index;
 
 	tmp_map = malloc(sizeof(char *) * (game->data.map_h + 1));
+	if (!tmp_map)
+		game_checkerror_exit("malloc @fill_space_void", game);
 	array = -1;
-	while (map && map[++array])
-	{
-		size = ft_strlen(map[array]);
-		if (size == game->data.map_w)
-			tmp_map[array] = ft_strdup(map[array]);
-		else if (size != game->data.map_w)
-		{
-			tmp_map[array] = malloc(sizeof(char) * (game->data.map_w + 1));
-			index = -1;
-			while (map[array][++index] != '\0')
-				tmp_map[array][index] = map[array][index];
-			while (tmp_map[array] && (index < game->data.map_w))
-				tmp_map[array][index++] = '~';
-			tmp_map[array][index] = '\0';
-		}
-	}
-	tmp_map[array] = NULL;
+	fill_space_helper(game, &tmp_map, array, map);
 	return (tmp_map);
 }
 
@@ -89,11 +99,9 @@ static int	total_gottem(int array, int gottem, char ***tmp_map, t_game *game)
 	return (gottem);
 }
 
-//fill all the space/tabs with invalid chars
 int	fill_space_tab(t_game *game, char ***tmp_map)
 {
 	int	array;
-	int	index;
 	int	gottem;
 
 	tab_helper(tmp_map);

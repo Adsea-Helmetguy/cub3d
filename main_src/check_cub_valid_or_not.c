@@ -40,7 +40,6 @@ static char	*lines_checker(int correct_lines, char *findmap)
 	{
 		while (ft_strncmp(findmap, "\n", 1) == 0)
 			findmap++;
-		printf("findmap[0] = %c\n", findmap[0]);
 		map_get = ft_strdup(findmap);
 	}
 	return (map_get);

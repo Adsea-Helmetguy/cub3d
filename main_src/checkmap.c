@@ -69,23 +69,18 @@ static void	checkmap_validhelper(t_game *game, char **tmp_map)
 
 	ftps_free(game->data.map2d);
 	game->data.map2d = malloc(sizeof(char *) * (game->data.map_h + 1));
+	if (!(game->data.map2d))
+		game_checkerror_exit("malloc @checkmapvalidhelper", game);
 	array = -1;
 	while (++array < game->data.map_h)
-	{
 		game->data.map2d[array] = ft_strdup(tmp_map[array]);
-		printf("%s: game->data.new2d[%d]\n", game->data.map2d[array], array);
-	}
 	game->data.map2d[array] = NULL;
-	printf("map_h value = %d\n", game->data.map_h);
-	printf("total array for the new map!!!: %d\n", array);
 }
 
-//make re && ./cub3D assets/cub_maps/invalid_cub/invalid7.cub
 int	checkmap_valid(t_game *game, char **data_map2d)
 {
 	char	**tmp_map;
 	char	**tmp_map2;
-	int		array;
 
 	if (!valid_char(game, data_map2d))
 		return (0);

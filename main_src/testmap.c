@@ -20,7 +20,6 @@ void	open_testmap(t_game *game, char *map_path)
 	if (game->data.fd < 0)
 		print_msg("Unable to open map.fd, path not found\n", 1);
 	readmap = get_variable_cub(game);
-	printf("%lu\n", ft_strlen(readmap));
 	if (!readmap || !readmap[0])
 		free_end_exit("MAP IS EMPTY!!!", 1, game, &readmap);
 	if (!check_cub_valid_or_not(game, &readmap))

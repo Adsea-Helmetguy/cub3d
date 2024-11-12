@@ -51,15 +51,15 @@ int	game_checkerror_exit(char *message, t_game *game)
 	return (1);
 }
 
-int	tmp_error_exit(char *message, t_game *game, char ***tmp_map2)
+int	array_free_exit(char *message, t_game *game, char ***to_free)
 {
 	if (game->error_code != 0)
 	{
 		printf("ERROR!! ");
 		printf("%s", message);
 		printf(" error_code != 0\n");
-		if (*tmp_map2)
-			ftps_free(*tmp_map2);
+		if (*to_free)
+			ftps_free(*to_free);
 		free_before_game("Quitting game.\n", 0, game);
 	}
 	return (1);

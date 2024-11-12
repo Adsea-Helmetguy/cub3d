@@ -12,8 +12,6 @@
 
 #include "../includes/cub3D.h"
 
-// original:
-// void	init_texture_img(t_game *game, t_img *tmp, char *path)
 void	init_texture_img(t_game *game, t_img *tmp, char *path, int face)
 {
 	tmp->img = mlx_xpm_file_to_image(game->mlx.mlx_ptr, path,
@@ -22,13 +20,6 @@ void	init_texture_img(t_game *game, t_img *tmp, char *path, int face)
 		close_window_invalidtextures(game);
 	tmp->addr = (int *)mlx_get_data_addr(tmp->img, &tmp->pixel_bits,
 			&tmp->size_line, &tmp->endian);
-	// add values for width and height here for the img.
-	/*
-		# define NORTH 0
-		# define SOUTH 1
-		# define EAST 2
-		# define WEST 3
-	*/
 	return ;
 }
 
@@ -42,8 +33,8 @@ static int	*xpm_img(t_game *game, char *path, int face)
 	init_texture_img(game, &tmp, path, face);
 	buffer = malloc(sizeof(int) * (game->texture_width[face]
 				* game->texture_height[face]));
-	// if (!buffer)
-	//	exit_and_free(data, error_msg(ERR_MALC, 25));
+	if (!buffer)
+		game_checkerror_exit("malloc @xpm_img issue", game);
 	y = 0;
 	while (y < game->texture_width[face])
 	{
@@ -63,9 +54,8 @@ static int	*xpm_img(t_game *game, char *path, int face)
 void	setup_texture(t_game *game)
 {
 	game->textures = malloc(sizeof(int *) * 5);
-	// if (!game->textures)
-	//	exit_and_free;
-	// north=0,south=1,east=2,west=3,(final)=4(null);
+	if (!game->textures)
+		game_checkerror_exit("malloc @setup_texture issue", game);
 	game->textures[NORTH] = xpm_img(game, game->elements.north_texture, NORTH);
 	game->textures[SOUTH] = xpm_img(game, game->elements.south_texture, SOUTH);
 	game->textures[EAST] = xpm_img(game, game->elements.east_texture, EAST);

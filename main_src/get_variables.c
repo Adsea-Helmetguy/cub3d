@@ -48,20 +48,14 @@ void	get_variable_map(t_game *game, char **split_map)
 	while (split_map && split_map[++array])
 		row++;
 	game->data.map2d = malloc(sizeof(char *) * (row + 1));
-	printf("row + 1: %d\n", row);
-	printf("\n----------map!---------------\n");
-	printf("Inside the split_map while loop!\n");
+	if (!(game->data.map2d))
+		game_checkerror_exit("malloc @checkmapvalidhelper", game);
 	array = 5;
 	row = -1;
 	while (split_map && split_map[++array])
-	{
 		game->data.map2d[++row] = ft_strdup(split_map[array]);
-		printf("game->data.map2d[%d]->%s\n", row, game->data.map2d[row]);
-	}
 	game->data.map2d[++row] = NULL;
 	game->data.map_h = row;
-	printf("game->data.map3d[%d]->(null)\n", row);
-	printf("row value: %d\n", row);
 }
 
 static int	checkcolor_value(char **split_map, int value_return, t_game *game)
@@ -102,7 +96,6 @@ int	get_variable_element(t_game *game, char **readmap)
 {
 	char	**split_map;
 	int		value_return;
-	int		row;
 
 	value_return = 1;
 	split_map = ft_split(*readmap, '\n');
