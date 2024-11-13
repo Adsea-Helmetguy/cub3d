@@ -1,7 +1,6 @@
-R 1920 1080
-
 NO ./textures/greystone.xpm
 SO ./textures/purplestone.xpm
+R 1920 1080
 WE ./textures/redbrick.xpm
 EA ./textures/wood.xpm
 
